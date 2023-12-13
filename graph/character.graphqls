@@ -1,0 +1,42 @@
+# Character schemas
+
+type User {
+  id: ID!
+  name: String!
+}
+
+type Campaign {
+    id: ID!
+    user: [User!]
+    # Restrictions may need to be resolved in two parts, in the resolver. Or
+    they can alter queries on the frontend
+    restrictions: []
+}
+
+
+# Try to keep broad so WtWf and MtA can be added
+interface Character {
+    id: ID
+    name: String!
+    player: User!
+    chronicle: [Campaign]!
+    nature: String
+    demeanor: String
+    x: 
+}
+
+type Vampire implements Character {
+    id: ID
+    name: String!
+    player: User!
+    chronicle: [Campaign]!
+    nature: String
+    demeanor: String
+    concept: String
+    clan: Clan!
+    generation: Generation!
+    Sire: Character
+    attributes: [Characteristics!]!
+    abilities: [Characteristics!]!
+    advantages: [Characteristics!]!
+}
