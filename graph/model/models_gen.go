@@ -18,34 +18,94 @@ type Character interface {
 	GetDemeanor() *string
 }
 
-type Campaign struct {
-	ID   string  `json:"id"`
-	User []*User `json:"user,omitempty"`
+type Entry interface {
+	IsEntry()
+	GetName() string
+	GetDescription() string
 }
 
-type Characteristics struct {
-	Name     string   `json:"name"`
-	Type     CharType `json:"type"`
-	BaseDesc string   `json:"baseDesc"`
-	Val      int      `json:"val"`
-	ValDesc  []string `json:"ValDesc"`
+type Age struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
+
+func (Age) IsEntry()                    {}
+func (this Age) GetName() string        { return this.Name }
+func (this Age) GetDescription() string { return this.Description }
+
+type Campaign struct {
+	ID           string      `json:"id"`
+	User         []*User     `json:"user,omitempty"`
+	Restrictions []*string   `json:"restrictions,omitempty"`
+	Characters   []Character `json:"characters,omitempty"`
+}
+
+type Characteristic struct {
+	Name        string   `json:"name"`
+	Type        CharType `json:"type"`
+	Description string   `json:"description"`
+	ValDesc     []string `json:"ValDesc"`
+}
+
+func (Characteristic) IsEntry()                    {}
+func (this Characteristic) GetName() string        { return this.Name }
+func (this Characteristic) GetDescription() string { return this.Description }
 
 type Clan struct {
-	Name string `json:"name"`
+	Name           string            `json:"name"`
+	Description    string            `json:"description"`
+	AssociatedSect []*Sect           `json:"associatedSect"`
+	Haven          string            `json:"haven"`
+	Background     string            `json:"background"`
+	Character      string            `json:"character"`
+	Discipline     []*Characteristic `json:"discipline,omitempty"`
+	Weakness       string            `json:"weakness"`
+	Organizations  *string           `json:"organizations,omitempty"`
+	SubClan        []*Clan           `json:"subClan,omitempty"`
+	IsHighClan     *bool             `json:"isHighClan,omitempty"`
+	IsSubclan      *bool             `json:"isSubclan,omitempty"`
 }
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+func (Clan) IsEntry()                    {}
+func (this Clan) GetName() string        { return this.Name }
+func (this Clan) GetDescription() string { return this.Description }
+
+type Generation struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+func (Generation) IsEntry()                    {}
+func (this Generation) GetName() string        { return this.Name }
+func (this Generation) GetDescription() string { return this.Description }
+
+type NewCharacteristic struct {
+	Name        string   `json:"name"`
+	Type        CharType `json:"type"`
+	Description string   `json:"description"`
+	ValDesc     []string `json:"ValDesc"`
 }
+
+type Sect struct {
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Titles      []Entry  `json:"titles,omitempty"`
+	Practices   []string `json:"practices,omitempty"`
+	Rituals     []string `json:"rituals,omitempty"`
+}
+
+func (Sect) IsEntry()                    {}
+func (this Sect) GetName() string        { return this.Name }
+func (this Sect) GetDescription() string { return this.Description }
+
+type Title struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+func (Title) IsEntry()                    {}
+func (this Title) GetName() string        { return this.Name }
+func (this Title) GetDescription() string { return this.Description }
 
 type User struct {
 	ID   string `json:"id"`
@@ -53,19 +113,19 @@ type User struct {
 }
 
 type Vampire struct {
-	ID         *string            `json:"id,omitempty"`
-	Name       string             `json:"name"`
-	Player     *User              `json:"player"`
-	Chronicle  []*Campaign        `json:"chronicle"`
-	Nature     *string            `json:"nature,omitempty"`
-	Demeanor   *string            `json:"demeanor,omitempty"`
-	Concept    *string            `json:"concept,omitempty"`
-	Clan       *Clan              `json:"clan"`
-	Generation Generation         `json:"generation"`
-	Sire       Character          `json:"Sire,omitempty"`
-	Attributes []*Characteristics `json:"attributes"`
-	Abilities  []*Characteristics `json:"abilities"`
-	Advantages []*Characteristics `json:"advantages"`
+	ID         *string           `json:"id,omitempty"`
+	Name       string            `json:"name"`
+	Player     *User             `json:"player"`
+	Chronicle  []*Campaign       `json:"chronicle"`
+	Nature     *string           `json:"nature,omitempty"`
+	Demeanor   *string           `json:"demeanor,omitempty"`
+	Concept    *string           `json:"concept,omitempty"`
+	Clan       *Clan             `json:"clan"`
+	Generation *Generation       `json:"generation"`
+	Sire       *Vampire          `json:"Sire,omitempty"`
+	Attributes []*Characteristic `json:"attributes"`
+	Abilities  []*Characteristic `json:"abilities"`
+	Advantages []*Characteristic `json:"advantages"`
 }
 
 func (Vampire) IsCharacter()          {}
@@ -84,57 +144,6 @@ func (this Vampire) GetChronicle() []*Campaign {
 }
 func (this Vampire) GetNature() *string   { return this.Nature }
 func (this Vampire) GetDemeanor() *string { return this.Demeanor }
-
-type Generation string
-
-const (
-	GenerationSecondGen              Generation = "SecondGen"
-	GenerationThirdGen               Generation = "ThirdGen"
-	GenerationFourthFifthGen         Generation = "Fourth_FifthGen"
-	GenerationSixthEighthGen         Generation = "Sixth_EighthGen"
-	GenerationNinthTenthGen          Generation = "Ninth_TenthGen"
-	GenerationEleventhThirteenthGen  Generation = "Eleventh_ThirteenthGen"
-	GenerationFourteenthFifteenthGen Generation = "Fourteenth_FifteenthGen"
-)
-
-var AllGeneration = []Generation{
-	GenerationSecondGen,
-	GenerationThirdGen,
-	GenerationFourthFifthGen,
-	GenerationSixthEighthGen,
-	GenerationNinthTenthGen,
-	GenerationEleventhThirteenthGen,
-	GenerationFourteenthFifteenthGen,
-}
-
-func (e Generation) IsValid() bool {
-	switch e {
-	case GenerationSecondGen, GenerationThirdGen, GenerationFourthFifthGen, GenerationSixthEighthGen, GenerationNinthTenthGen, GenerationEleventhThirteenthGen, GenerationFourteenthFifteenthGen:
-		return true
-	}
-	return false
-}
-
-func (e Generation) String() string {
-	return string(e)
-}
-
-func (e *Generation) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Generation(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Generation", str)
-	}
-	return nil
-}
-
-func (e Generation) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
 
 type CharType string
 

@@ -1,0 +1,90 @@
+# Pk on name, secondary on Entrytype
+interface Entry {
+    name: String!
+    description: String!
+}
+
+type Generation implements Entry {
+    name: String!
+    description: String!
+}
+
+type Age implements Entry {
+    name: String!
+    description: String!
+}
+
+type Title implements Entry {
+    name: String!
+    description: String!
+}
+
+type Clan implements Entry {
+    name: String!
+    description: String!
+    associatedSect: [Sect]!
+    haven: String!
+    background: String!
+    character: String!
+    discipline: [Characteristic!]
+    weakness: String!
+    organizations: String
+    subClan: [Clan!]
+    strongholds: [String!]
+    isHighClan: Boolean
+    isSubclan: Boolean
+}
+
+type Sect implements Entry{
+    name: String!
+    description: String!
+    titles: [Entry!]
+    practices: [String!]
+    rituals: [String!]
+    strongholds: [String!]
+}
+
+
+type Tradition implements Entry{
+    name: String!
+    description: String!
+    traditions: [Entry!]
+}
+
+
+type Characteristic implements Entry{
+    name: String!
+    type: charType!
+    description: String!
+    DescbyVal: [String!]!
+}
+
+type ValDesc {
+    val:
+}
+
+
+enum charType {
+    attribute
+    talent
+    discipline
+    skill
+    background
+}
+
+
+type Query {
+    characteristic: [Characteristic!]!
+}
+
+input NewCharacteristic {
+    name: String!
+    type: charType!
+    description: String!
+    ValDesc: [String!]! 
+}
+
+type Mutation {
+    createCharacteristic (input: NewCharacteristic!): Characteristic!
+    seed(input: String): String!
+}
