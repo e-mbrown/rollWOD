@@ -59,10 +59,6 @@ type Characteristic implements Entry{
     DescbyVal: [String!]!
 }
 
-type ValDesc {
-    val:
-}
-
 
 enum charType {
     attribute

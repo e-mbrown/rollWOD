@@ -7,8 +7,8 @@ package graph
 import (
 	"context"
 
-	"github.com/rollwod/graph/model"
-	"github.com/rollwod/seed"
+	"github.com/e-mbrown/rollWOD/graph/model"
+	"github.com/e-mbrown/rollWOD/pkg/seed"
 )
 
 // CreateCharacteristic is the resolver for the createCharacteristic field.
@@ -17,33 +17,12 @@ func (r *mutationResolver) CreateCharacteristic(ctx context.Context, input model
 		Name:        input.Name,
 		Type:        input.Type,
 		Description: input.Description,
-		ValDesc:     input.ValDesc,
+		DescbyVal:   input.ValDesc,
 	}
 
 	r.characteristics = append(r.characteristics, char)
 
 	return char, nil
-}
-
-// Seed is the resolver for the seed field.
-func (r *mutationResolver) Seed(ctx context.Context, input *string) (string, error) {
-	data := seed.InfoMap
-
-	for k, v := range data {
-		for ik, iv := range v {
-			entry := model.NewCharacteristic {
-				Name:        ik,
-				Type:        model.CharType(k),
-				Description: iv.BaseDesc,
-				ValDesc:     iv.ValDescString(),
-			}
-			_, err :=r.Mutation().CreateCharacteristic(ctx, entry)
-			if err != nil {
-				return "false", err
-			}
-		}
-	}
-	return "true", nil
 }
 
 // Characteristic is the resolver for the characteristic field.

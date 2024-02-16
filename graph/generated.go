@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/rollwod/graph/model"
+	"github.com/e-mbrown/rollWOD/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -60,10 +60,10 @@ type ComplexityRoot struct {
 	}
 
 	Characteristic struct {
+		DescbyVal   func(childComplexity int) int
 		Description func(childComplexity int) int
 		Name        func(childComplexity int) int
 		Type        func(childComplexity int) int
-		ValDesc     func(childComplexity int) int
 	}
 
 	Clan struct {
@@ -77,6 +77,7 @@ type ComplexityRoot struct {
 		IsSubclan      func(childComplexity int) int
 		Name           func(childComplexity int) int
 		Organizations  func(childComplexity int) int
+		Strongholds    func(childComplexity int) int
 		SubClan        func(childComplexity int) int
 		Weakness       func(childComplexity int) int
 	}
@@ -100,12 +101,19 @@ type ComplexityRoot struct {
 		Name        func(childComplexity int) int
 		Practices   func(childComplexity int) int
 		Rituals     func(childComplexity int) int
+		Strongholds func(childComplexity int) int
 		Titles      func(childComplexity int) int
 	}
 
 	Title struct {
 		Description func(childComplexity int) int
 		Name        func(childComplexity int) int
+	}
+
+	Tradition struct {
+		Description func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Traditions  func(childComplexity int) int
 	}
 
 	User struct {
@@ -199,6 +207,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Campaign.User(childComplexity), true
 
+	case "Characteristic.DescbyVal":
+		if e.complexity.Characteristic.DescbyVal == nil {
+			break
+		}
+
+		return e.complexity.Characteristic.DescbyVal(childComplexity), true
+
 	case "Characteristic.description":
 		if e.complexity.Characteristic.Description == nil {
 			break
@@ -219,13 +234,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Characteristic.Type(childComplexity), true
-
-	case "Characteristic.ValDesc":
-		if e.complexity.Characteristic.ValDesc == nil {
-			break
-		}
-
-		return e.complexity.Characteristic.ValDesc(childComplexity), true
 
 	case "Clan.associatedSect":
 		if e.complexity.Clan.AssociatedSect == nil {
@@ -296,6 +304,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Clan.Organizations(childComplexity), true
+
+	case "Clan.strongholds":
+		if e.complexity.Clan.Strongholds == nil {
+			break
+		}
+
+		return e.complexity.Clan.Strongholds(childComplexity), true
 
 	case "Clan.subClan":
 		if e.complexity.Clan.SubClan == nil {
@@ -384,6 +399,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Sect.Rituals(childComplexity), true
 
+	case "Sect.strongholds":
+		if e.complexity.Sect.Strongholds == nil {
+			break
+		}
+
+		return e.complexity.Sect.Strongholds(childComplexity), true
+
 	case "Sect.titles":
 		if e.complexity.Sect.Titles == nil {
 			break
@@ -404,6 +426,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Title.Name(childComplexity), true
+
+	case "Tradition.description":
+		if e.complexity.Tradition.Description == nil {
+			break
+		}
+
+		return e.complexity.Tradition.Description(childComplexity), true
+
+	case "Tradition.name":
+		if e.complexity.Tradition.Name == nil {
+			break
+		}
+
+		return e.complexity.Tradition.Name(childComplexity), true
+
+	case "Tradition.traditions":
+		if e.complexity.Tradition.Traditions == nil {
+			break
+		}
+
+		return e.complexity.Tradition.Traditions(childComplexity), true
 
 	case "User.id":
 		if e.complexity.User.ID == nil {
@@ -615,7 +658,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "character.graphqls" "conpendium.graphqls"
+//go:embed "character.graphqls" "compendium.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -628,7 +671,7 @@ func sourceData(filename string) string {
 
 var sources = []*ast.Source{
 	{Name: "character.graphqls", Input: sourceData("character.graphqls"), BuiltIn: false},
-	{Name: "conpendium.graphqls", Input: sourceData("conpendium.graphqls"), BuiltIn: false},
+	{Name: "compendium.graphqls", Input: sourceData("compendium.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -641,8 +684,8 @@ func (ec *executionContext) field_Mutation_createCharacteristic_args(ctx context
 	args := map[string]interface{}{}
 	var arg0 model.NewCharacteristic
 	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewCharacteristic2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐNewCharacteristic(ctx, tmp)
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithFunmarshalNNewCharacteristic2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐNewCharacteristicield("input"))
+		arg0, err = ec.(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -876,7 +919,7 @@ func (ec *executionContext) _Campaign_user(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Campaign_user(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -964,7 +1007,7 @@ func (ec *executionContext) _Campaign_characters(ctx context.Context, field grap
 	}
 	res := resTmp.([]model.Character)
 	fc.Result = res
-	return ec.marshalOCharacter2ᚕgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacterᚄ(ctx, field.Selections, res)
+	return ec.marshalOCharacter2ᚕgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacterᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Campaign_characters(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1052,7 +1095,7 @@ func (ec *executionContext) _Characteristic_type(ctx context.Context, field grap
 	}
 	res := resTmp.(model.CharType)
 	fc.Result = res
-	return ec.marshalNcharType2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharType(ctx, field.Selections, res)
+	return ec.marshalNcharType2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Characteristic_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1112,8 +1155,8 @@ func (ec *executionContext) fieldContext_Characteristic_description(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Characteristic_ValDesc(ctx context.Context, field graphql.CollectedField, obj *model.Characteristic) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Characteristic_ValDesc(ctx, field)
+func (ec *executionContext) _Characteristic_DescbyVal(ctx context.Context, field graphql.CollectedField, obj *model.Characteristic) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Characteristic_DescbyVal(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1126,7 +1169,7 @@ func (ec *executionContext) _Characteristic_ValDesc(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ValDesc, nil
+		return obj.DescbyVal, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1143,7 +1186,7 @@ func (ec *executionContext) _Characteristic_ValDesc(ctx context.Context, field g
 	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Characteristic_ValDesc(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Characteristic_DescbyVal(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Characteristic",
 		Field:      field,
@@ -1272,7 +1315,7 @@ func (ec *executionContext) _Clan_associatedSect(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Sect)
 	fc.Result = res
-	return ec.marshalNSect2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐSect(ctx, field.Selections, res)
+	return ec.marshalNSect2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐSect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Clan_associatedSect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1293,6 +1336,8 @@ func (ec *executionContext) fieldContext_Clan_associatedSect(ctx context.Context
 				return ec.fieldContext_Sect_practices(ctx, field)
 			case "rituals":
 				return ec.fieldContext_Sect_rituals(ctx, field)
+			case "strongholds":
+				return ec.fieldContext_Sect_strongholds(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Sect", field.Name)
 		},
@@ -1457,7 +1502,7 @@ func (ec *executionContext) _Clan_discipline(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalOCharacteristic2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
+	return ec.marshalOCharacteristic2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Clan_discipline(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1474,8 +1519,8 @@ func (ec *executionContext) fieldContext_Clan_discipline(ctx context.Context, fi
 				return ec.fieldContext_Characteristic_type(ctx, field)
 			case "description":
 				return ec.fieldContext_Characteristic_description(ctx, field)
-			case "ValDesc":
-				return ec.fieldContext_Characteristic_ValDesc(ctx, field)
+			case "DescbyVal":
+				return ec.fieldContext_Characteristic_DescbyVal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Characteristic", field.Name)
 		},
@@ -1593,7 +1638,7 @@ func (ec *executionContext) _Clan_subClan(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Clan)
 	fc.Result = res
-	return ec.marshalOClan2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐClanᚄ(ctx, field.Selections, res)
+	return ec.marshalOClan2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐClanᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Clan_subClan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1624,12 +1669,55 @@ func (ec *executionContext) fieldContext_Clan_subClan(ctx context.Context, field
 				return ec.fieldContext_Clan_organizations(ctx, field)
 			case "subClan":
 				return ec.fieldContext_Clan_subClan(ctx, field)
+			case "strongholds":
+				return ec.fieldContext_Clan_strongholds(ctx, field)
 			case "isHighClan":
 				return ec.fieldContext_Clan_isHighClan(ctx, field)
 			case "isSubclan":
 				return ec.fieldContext_Clan_isSubclan(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Clan", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Clan_strongholds(ctx context.Context, field graphql.CollectedField, obj *model.Clan) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Clan_strongholds(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Strongholds, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Clan_strongholds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Clan",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1833,7 +1921,7 @@ func (ec *executionContext) _Mutation_createCharacteristic(ctx context.Context, 
 	}
 	res := resTmp.(*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristic(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristic(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createCharacteristic(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1850,8 +1938,8 @@ func (ec *executionContext) fieldContext_Mutation_createCharacteristic(ctx conte
 				return ec.fieldContext_Characteristic_type(ctx, field)
 			case "description":
 				return ec.fieldContext_Characteristic_description(ctx, field)
-			case "ValDesc":
-				return ec.fieldContext_Characteristic_ValDesc(ctx, field)
+			case "DescbyVal":
+				return ec.fieldContext_Characteristic_DescbyVal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Characteristic", field.Name)
 		},
@@ -1953,7 +2041,7 @@ func (ec *executionContext) _Query_characteristic(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_characteristic(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1970,8 +2058,8 @@ func (ec *executionContext) fieldContext_Query_characteristic(ctx context.Contex
 				return ec.fieldContext_Characteristic_type(ctx, field)
 			case "description":
 				return ec.fieldContext_Characteristic_description(ctx, field)
-			case "ValDesc":
-				return ec.fieldContext_Characteristic_ValDesc(ctx, field)
+			case "DescbyVal":
+				return ec.fieldContext_Characteristic_DescbyVal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Characteristic", field.Name)
 		},
@@ -2221,7 +2309,7 @@ func (ec *executionContext) _Sect_titles(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]model.Entry)
 	fc.Result = res
-	return ec.marshalOEntry2ᚕgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐEntryᚄ(ctx, field.Selections, res)
+	return ec.marshalOEntry2ᚕgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐEntryᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Sect_titles(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2319,6 +2407,47 @@ func (ec *executionContext) fieldContext_Sect_rituals(ctx context.Context, field
 	return fc, nil
 }
 
+func (ec *executionContext) _Sect_strongholds(ctx context.Context, field graphql.CollectedField, obj *model.Sect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Sect_strongholds(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Strongholds, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Sect_strongholds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Sect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Title_name(ctx context.Context, field graphql.CollectedField, obj *model.Title) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Title_name(ctx, field)
 	if err != nil {
@@ -2402,6 +2531,135 @@ func (ec *executionContext) fieldContext_Title_description(ctx context.Context, 
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Tradition_name(ctx context.Context, field graphql.CollectedField, obj *model.Tradition) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Tradition_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Tradition_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Tradition",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Tradition_description(ctx context.Context, field graphql.CollectedField, obj *model.Tradition) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Tradition_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Tradition_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Tradition",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Tradition_traditions(ctx context.Context, field graphql.CollectedField, obj *model.Tradition) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Tradition_traditions(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Traditions, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]model.Entry)
+	fc.Result = res
+	return ec.marshalOEntry2ᚕgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐEntryᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Tradition_traditions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Tradition",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("FieldContext.Child cannot be called on type INTERFACE")
 		},
 	}
 	return fc, nil
@@ -2608,7 +2866,7 @@ func (ec *executionContext) _Vampire_player(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_player(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2658,7 +2916,7 @@ func (ec *executionContext) _Vampire_chronicle(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Campaign)
 	fc.Result = res
-	return ec.marshalNCampaign2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCampaign(ctx, field.Selections, res)
+	return ec.marshalNCampaign2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCampaign(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_chronicle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2835,7 +3093,7 @@ func (ec *executionContext) _Vampire_clan(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.Clan)
 	fc.Result = res
-	return ec.marshalNClan2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
+	return ec.marshalNClan2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_clan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2866,6 +3124,8 @@ func (ec *executionContext) fieldContext_Vampire_clan(ctx context.Context, field
 				return ec.fieldContext_Clan_organizations(ctx, field)
 			case "subClan":
 				return ec.fieldContext_Clan_subClan(ctx, field)
+			case "strongholds":
+				return ec.fieldContext_Clan_strongholds(ctx, field)
 			case "isHighClan":
 				return ec.fieldContext_Clan_isHighClan(ctx, field)
 			case "isSubclan":
@@ -2905,7 +3165,7 @@ func (ec *executionContext) _Vampire_generation(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Generation)
 	fc.Result = res
-	return ec.marshalNGeneration2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐGeneration(ctx, field.Selections, res)
+	return ec.marshalNGeneration2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐGeneration(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_generation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2952,7 +3212,7 @@ func (ec *executionContext) _Vampire_Sire(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.Vampire)
 	fc.Result = res
-	return ec.marshalOVampire2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐVampire(ctx, field.Selections, res)
+	return ec.marshalOVampire2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐVampire(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_Sire(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3024,7 +3284,7 @@ func (ec *executionContext) _Vampire_attributes(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_attributes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3041,8 +3301,8 @@ func (ec *executionContext) fieldContext_Vampire_attributes(ctx context.Context,
 				return ec.fieldContext_Characteristic_type(ctx, field)
 			case "description":
 				return ec.fieldContext_Characteristic_description(ctx, field)
-			case "ValDesc":
-				return ec.fieldContext_Characteristic_ValDesc(ctx, field)
+			case "DescbyVal":
+				return ec.fieldContext_Characteristic_DescbyVal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Characteristic", field.Name)
 		},
@@ -3078,7 +3338,7 @@ func (ec *executionContext) _Vampire_abilities(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_abilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3095,8 +3355,8 @@ func (ec *executionContext) fieldContext_Vampire_abilities(ctx context.Context, 
 				return ec.fieldContext_Characteristic_type(ctx, field)
 			case "description":
 				return ec.fieldContext_Characteristic_description(ctx, field)
-			case "ValDesc":
-				return ec.fieldContext_Characteristic_ValDesc(ctx, field)
+			case "DescbyVal":
+				return ec.fieldContext_Characteristic_DescbyVal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Characteristic", field.Name)
 		},
@@ -3132,7 +3392,7 @@ func (ec *executionContext) _Vampire_advantages(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_advantages(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3149,8 +3409,8 @@ func (ec *executionContext) fieldContext_Vampire_advantages(ctx context.Context,
 				return ec.fieldContext_Characteristic_type(ctx, field)
 			case "description":
 				return ec.fieldContext_Characteristic_description(ctx, field)
-			case "ValDesc":
-				return ec.fieldContext_Characteristic_ValDesc(ctx, field)
+			case "DescbyVal":
+				return ec.fieldContext_Characteristic_DescbyVal(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Characteristic", field.Name)
 		},
@@ -4958,7 +5218,7 @@ func (ec *executionContext) unmarshalInputNewCharacteristic(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
-			data, err := ec.unmarshalNcharType2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharType(ctx, v)
+			data, err := ec.unmarshalNcharType2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5046,6 +5306,13 @@ func (ec *executionContext) _Entry(ctx context.Context, sel ast.SelectionSet, ob
 			return graphql.Null
 		}
 		return ec._Sect(ctx, sel, obj)
+	case model.Tradition:
+		return ec._Tradition(ctx, sel, &obj)
+	case *model.Tradition:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Tradition(ctx, sel, obj)
 	case model.Characteristic:
 		return ec._Characteristic(ctx, sel, &obj)
 	case *model.Characteristic:
@@ -5177,8 +5444,8 @@ func (ec *executionContext) _Characteristic(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "ValDesc":
-			out.Values[i] = ec._Characteristic_ValDesc(ctx, field, obj)
+		case "DescbyVal":
+			out.Values[i] = ec._Characteristic_DescbyVal(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -5257,6 +5524,8 @@ func (ec *executionContext) _Clan(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._Clan_organizations(ctx, field, obj)
 		case "subClan":
 			out.Values[i] = ec._Clan_subClan(ctx, field, obj)
+		case "strongholds":
+			out.Values[i] = ec._Clan_strongholds(ctx, field, obj)
 		case "isHighClan":
 			out.Values[i] = ec._Clan_isHighClan(ctx, field, obj)
 		case "isSubclan":
@@ -5483,6 +5752,8 @@ func (ec *executionContext) _Sect(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._Sect_practices(ctx, field, obj)
 		case "rituals":
 			out.Values[i] = ec._Sect_rituals(ctx, field, obj)
+		case "strongholds":
+			out.Values[i] = ec._Sect_strongholds(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5527,6 +5798,52 @@ func (ec *executionContext) _Title(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var traditionImplementors = []string{"Tradition", "Entry"}
+
+func (ec *executionContext) _Tradition(ctx context.Context, sel ast.SelectionSet, obj *model.Tradition) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, traditionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Tradition")
+		case "name":
+			out.Values[i] = ec._Tradition_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._Tradition_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "traditions":
+			out.Values[i] = ec._Tradition_traditions(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6019,7 +6336,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCampaign2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCampaign(ctx context.Context, sel ast.SelectionSet, v []*model.Campaign) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaign2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCampaign(ctx context.Context, sel ast.SelectionSet, v []*model.Campaign) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6043,7 +6360,7 @@ func (ec *executionContext) marshalNCampaign2ᚕᚖgithubᚗcomᚋrollwodᚋgrap
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOCampaign2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCampaign(ctx, sel, v[i])
+			ret[i] = ec.marshalOCampaign2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCampaign(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6057,7 +6374,7 @@ func (ec *executionContext) marshalNCampaign2ᚕᚖgithubᚗcomᚋrollwodᚋgrap
 	return ret
 }
 
-func (ec *executionContext) marshalNCharacter2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacter(ctx context.Context, sel ast.SelectionSet, v model.Character) graphql.Marshaler {
+func (ec *executionContext) marshalNCharacter2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacter(ctx context.Context, sel ast.SelectionSet, v model.Character) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6067,11 +6384,11 @@ func (ec *executionContext) marshalNCharacter2githubᚗcomᚋrollwodᚋgraphᚋm
 	return ec._Character(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCharacteristic2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v model.Characteristic) graphql.Marshaler {
+func (ec *executionContext) marshalNCharacteristic2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v model.Characteristic) graphql.Marshaler {
 	return ec._Characteristic(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristicᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Characteristic) graphql.Marshaler {
+func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Characteristic) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6095,7 +6412,7 @@ func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋrollwod�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCharacteristic2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristic(ctx, sel, v[i])
+			ret[i] = ec.marshalNCharacteristic2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristic(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6115,7 +6432,7 @@ func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋrollwod�
 	return ret
 }
 
-func (ec *executionContext) marshalNCharacteristic2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v *model.Characteristic) graphql.Marshaler {
+func (ec *executionContext) marshalNCharacteristic2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v *model.Characteristic) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6125,7 +6442,7 @@ func (ec *executionContext) marshalNCharacteristic2ᚖgithubᚗcomᚋrollwodᚋg
 	return ec._Characteristic(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNClan2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v *model.Clan) graphql.Marshaler {
+func (ec *executionContext) marshalNClan2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v *model.Clan) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6135,7 +6452,7 @@ func (ec *executionContext) marshalNClan2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmod
 	return ec._Clan(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEntry2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐEntry(ctx context.Context, sel ast.SelectionSet, v model.Entry) graphql.Marshaler {
+func (ec *executionContext) marshalNEntry2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐEntry(ctx context.Context, sel ast.SelectionSet, v model.Entry) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6145,7 +6462,7 @@ func (ec *executionContext) marshalNEntry2githubᚗcomᚋrollwodᚋgraphᚋmodel
 	return ec._Entry(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGeneration2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐGeneration(ctx context.Context, sel ast.SelectionSet, v *model.Generation) graphql.Marshaler {
+func (ec *executionContext) marshalNGeneration2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐGeneration(ctx context.Context, sel ast.SelectionSet, v *model.Generation) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6170,12 +6487,12 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewCharacteristic2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐNewCharacteristic(ctx context.Context, v interface{}) (model.NewCharacteristic, error) {
+func (ec *executionContext) unmarshalNNewCharacteristic2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐNewCharacteristic(ctx context.Context, v interface{}) (model.NewCharacteristic, error) {
 	res, err := ec.unmarshalInputNewCharacteristic(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSect2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v []*model.Sect) graphql.Marshaler {
+func (ec *executionContext) marshalNSect2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v []*model.Sect) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6199,7 +6516,7 @@ func (ec *executionContext) marshalNSect2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSect2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐSect(ctx, sel, v[i])
+			ret[i] = ec.marshalOSect2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐSect(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6260,7 +6577,7 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6523,13 +6840,13 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) unmarshalNcharType2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharType(ctx context.Context, v interface{}) (model.CharType, error) {
+func (ec *executionContext) unmarshalNcharType2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharType(ctx context.Context, v interface{}) (model.CharType, error) {
 	var res model.CharType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNcharType2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharType(ctx context.Context, sel ast.SelectionSet, v model.CharType) graphql.Marshaler {
+func (ec *executionContext) marshalNcharType2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharType(ctx context.Context, sel ast.SelectionSet, v model.CharType) graphql.Marshaler {
 	return v
 }
 
@@ -6559,14 +6876,14 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOCampaign2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCampaign(ctx context.Context, sel ast.SelectionSet, v *model.Campaign) graphql.Marshaler {
+func (ec *executionContext) marshalOCampaign2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCampaign(ctx context.Context, sel ast.SelectionSet, v *model.Campaign) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Campaign(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOCharacter2ᚕgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacterᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Character) graphql.Marshaler {
+func (ec *executionContext) marshalOCharacter2ᚕgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacterᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Character) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6593,7 +6910,7 @@ func (ec *executionContext) marshalOCharacter2ᚕgithubᚗcomᚋrollwodᚋgraph�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCharacter2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacter(ctx, sel, v[i])
+			ret[i] = ec.marshalNCharacter2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacter(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6613,7 +6930,7 @@ func (ec *executionContext) marshalOCharacter2ᚕgithubᚗcomᚋrollwodᚋgraph�
 	return ret
 }
 
-func (ec *executionContext) marshalOCharacteristic2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristicᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Characteristic) graphql.Marshaler {
+func (ec *executionContext) marshalOCharacteristic2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Characteristic) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6640,7 +6957,7 @@ func (ec *executionContext) marshalOCharacteristic2ᚕᚖgithubᚗcomᚋrollwod�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCharacteristic2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐCharacteristic(ctx, sel, v[i])
+			ret[i] = ec.marshalNCharacteristic2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐCharacteristic(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6660,7 +6977,7 @@ func (ec *executionContext) marshalOCharacteristic2ᚕᚖgithubᚗcomᚋrollwod�
 	return ret
 }
 
-func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐClanᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Clan) graphql.Marshaler {
+func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐClanᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Clan) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6687,7 +7004,7 @@ func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNClan2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐClan(ctx, sel, v[i])
+			ret[i] = ec.marshalNClan2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐClan(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6707,7 +7024,7 @@ func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOEntry2ᚕgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Entry) graphql.Marshaler {
+func (ec *executionContext) marshalOEntry2ᚕgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Entry) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6734,7 +7051,7 @@ func (ec *executionContext) marshalOEntry2ᚕgithubᚗcomᚋrollwodᚋgraphᚋmo
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNEntry2githubᚗcomᚋrollwodᚋgraphᚋmodelᚐEntry(ctx, sel, v[i])
+			ret[i] = ec.marshalNEntry2githubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐEntry(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6770,7 +7087,7 @@ func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalOSect2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v *model.Sect) graphql.Marshaler {
+func (ec *executionContext) marshalOSect2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v *model.Sect) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6863,7 +7180,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6890,7 +7207,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6910,7 +7227,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋrollwodᚋgraphᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOVampire2ᚖgithubᚗcomᚋrollwodᚋgraphᚋmodelᚐVampire(ctx context.Context, sel ast.SelectionSet, v *model.Vampire) graphql.Marshaler {
+func (ec *executionContext) marshalOVampire2ᚖgithubᚗcomᚋe-mbrown/rollWODᚋgraphᚋmodelᚐVampire(ctx context.Context, sel ast.SelectionSet, v *model.Vampire) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

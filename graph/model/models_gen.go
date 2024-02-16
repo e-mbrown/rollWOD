@@ -44,7 +44,7 @@ type Characteristic struct {
 	Name        string   `json:"name"`
 	Type        CharType `json:"type"`
 	Description string   `json:"description"`
-	ValDesc     []string `json:"ValDesc"`
+	DescbyVal   []string `json:"DescbyVal"`
 }
 
 func (Characteristic) IsEntry()                    {}
@@ -62,6 +62,7 @@ type Clan struct {
 	Weakness       string            `json:"weakness"`
 	Organizations  *string           `json:"organizations,omitempty"`
 	SubClan        []*Clan           `json:"subClan,omitempty"`
+	Strongholds    []string          `json:"strongholds,omitempty"`
 	IsHighClan     *bool             `json:"isHighClan,omitempty"`
 	IsSubclan      *bool             `json:"isSubclan,omitempty"`
 }
@@ -92,6 +93,7 @@ type Sect struct {
 	Titles      []Entry  `json:"titles,omitempty"`
 	Practices   []string `json:"practices,omitempty"`
 	Rituals     []string `json:"rituals,omitempty"`
+	Strongholds []string `json:"strongholds,omitempty"`
 }
 
 func (Sect) IsEntry()                    {}
@@ -106,6 +108,16 @@ type Title struct {
 func (Title) IsEntry()                    {}
 func (this Title) GetName() string        { return this.Name }
 func (this Title) GetDescription() string { return this.Description }
+
+type Tradition struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Traditions  []Entry `json:"traditions,omitempty"`
+}
+
+func (Tradition) IsEntry()                    {}
+func (this Tradition) GetName() string        { return this.Name }
+func (this Tradition) GetDescription() string { return this.Description }
 
 type User struct {
 	ID   string `json:"id"`
@@ -151,17 +163,21 @@ const (
 	CharTypeAttribute  CharType = "attribute"
 	CharTypeTalent     CharType = "talent"
 	CharTypeDiscipline CharType = "discipline"
+	CharTypeSkill      CharType = "skill"
+	CharTypeBackground CharType = "background"
 )
 
 var AllCharType = []CharType{
 	CharTypeAttribute,
 	CharTypeTalent,
 	CharTypeDiscipline,
+	CharTypeSkill,
+	CharTypeBackground,
 }
 
 func (e CharType) IsValid() bool {
 	switch e {
-	case CharTypeAttribute, CharTypeTalent, CharTypeDiscipline:
+	case CharTypeAttribute, CharTypeTalent, CharTypeDiscipline, CharTypeSkill, CharTypeBackground:
 		return true
 	}
 	return false

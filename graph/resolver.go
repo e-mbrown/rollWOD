@@ -2,7 +2,7 @@ package graph
 
 //go:generate go run github.com/99designs/gqlgen generate
 
-import "github.com/rollwod/graph/model"
+import "github.com/e-mbrown/rollWOD/graph/model"
 
 // This file will not be regenerated automatically.
 //
