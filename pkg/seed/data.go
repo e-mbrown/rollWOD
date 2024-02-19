@@ -38,7 +38,7 @@ type Sect struct {
 type Traditions struct {
 	Name        string
 	Description string
-	Tradition   map[int]Entry
+	Tradition   []Entry
 }
 
 var clanMap = map[string]clan{
@@ -84,7 +84,7 @@ var clanMap = map[string]clan{
 		often have to spend a great deal of effort maintaining
 		their Virtues and Humanity`,
 		AssociatedSect: []Sect{
-			sectMap["Independent"],
+			SectMap["Independent"],
 		},
 		Haven: `Assamites often share communal havens
 		with others of their local cell, remote structures that
@@ -109,7 +109,7 @@ var clanMap = map[string]clan{
 	"FollowersofSet": {
 		Name: "Follower of Set",
 		AssociatedSect: []Sect{
-			sectMap["Camarilla"], sectMap["Sabbat"],
+			SectMap["Camarilla"], SectMap["Sabbat"],
 		},
 		Description: `Addiction, debasement, corruption, and desperation strike fear into many Kindred who worry that theirs will become an unlife of ruin, but to the Followers of Set, these and more are the tools of the trade. Pimps, pushers, and
 		priests, the Setites cater to
@@ -223,7 +223,7 @@ var clanMap = map[string]clan{
 		that make them more than just thugs. Contacts, Allies,
 		and Herd are common Backgrounds.`,
 		AssociatedSect: []Sect{
-			sectMap["Camarilla"], sectMap["Sabbat"],
+			SectMap["Camarilla"], SectMap["Sabbat"],
 		},
 		Haven: `Brujah may feel kinship to a city, but they rare-
 		ly develop such ties to individual locations. Thus, at any
@@ -260,7 +260,7 @@ var clanMap = map[string]clan{
 		their appearance, as does an extended unlife in the places where
 		they make their havens, which are frequently short of modern conveniences`,
 		AssociatedSect: []Sect{
-			sectMap["Independent"], sectMap["Sabbat"], sectMap["Camarilla"], sectMap["Anarch Movement"],
+			SectMap["Independent"], SectMap["Sabbat"], SectMap["Camarilla"], SectMap["Anarch Movement"],
 		},
 		Haven: `Gangrel often lair where they can, taking
 		refuge when the sun threatens to rise. Those who do
@@ -311,7 +311,7 @@ var clanMap = map[string]clan{
 		family often appear “of a type,” and in the traditional garb of
 		their regional family branch.`,
 		AssociatedSect: []Sect{
-			sectMap["Independent"],
+			SectMap["Independent"],
 		},
 		Haven: `The family wealth of the Giovanni is evident in their havens, which may take the form of villas or lavish estates. The Necromancers often have valuables invested in their havens as well, such as galleries of fine art or displays of jewelry. Many Giovanni also maintain secondary havens, where they may have elaborate necromantic crypts or just flats where they can lie low if necessary.
 		`,
@@ -365,7 +365,7 @@ var clanMap = map[string]clan{
 		drawing on years of ceremony and faithful ritual. Rare
 		is the Lasombra who cannot at least manipulate shadows to affect a dramatic entrance or enigmatic pose.`,
 		AssociatedSect: []Sect{
-			sectMap["Sabbat"],
+			SectMap["Sabbat"],
 		},
 		Haven: ` The obligation of their leadership leads many
 		young Lasombra to maintain communal havens with other members of their pack. Wealthier Keepers and
@@ -436,7 +436,7 @@ var clanMap = map[string]clan{
 		Kindred (or, indeed, any vessels with whom they may
 		meet) to interact with Malkavians. `,
 		AssociatedSect: []Sect{
-			sectMap["Camarilla"],
+			SectMap["Camarilla"],
 		},
 		Haven: `Consistency is rare among Malkavians.
 		Quite simply, they establish havens where they think
@@ -521,7 +521,7 @@ var clanMap = map[string]clan{
 		to be an object of utter revulsion and not let it shape
 		one’s disposition toward one’s “Kindred” in some way.`,
 		AssociatedSect: []Sect{
-			sectMap["Camarilla"], sectMap["Autarkis"], sectMap["Anarchs"],
+			SectMap["Camarilla"], SectMap["Autarkis"], SectMap["Anarchs"],
 		},
 		Haven: `Nosferatu Kindred often make their havens
 		far from the scorn and spite of other vampires. Whether they construct warrens in the sewers suggested by their
@@ -592,7 +592,7 @@ var clanMap = map[string]clan{
 		rection, but it can also prove to be a Deceiver’s salva-
 		tion and ease the vagaries of an outcast unlife`,
 		AssociatedSect: []Sect{
-			sectMap["Independent"],
+			SectMap["Independent"],
 		},
 		Haven: `Many Ravnos take to the
 		road instead of establishing perma-
@@ -696,7 +696,7 @@ var clanMap = map[string]clan{
 		ciety.
 		`,
 		AssociatedSect: []Sect{
-			sectMap["Camarilla"],
+			SectMap["Camarilla"],
 		},
 		Haven: `The Degenerates
 		spare no expense in appoint-
@@ -805,7 +805,7 @@ var clanMap = map[string]clan{
 		the vitae that is such a focal point of their
 		unlives.`,
 		AssociatedSect: []Sect{
-			sectMap["Camarilla"],
+			SectMap["Camarilla"],
 		},
 		Haven: `Many Tremere rely on a central chantry the
 		Clan maintains in cities where it has a notable pres-
@@ -881,7 +881,7 @@ var clanMap = map[string]clan{
 		even less
 		recognizable`,
 		AssociatedSect: []Sect{
-			sectMap["Sabbat"],
+			SectMap["Sabbat"],
 		},
 		Haven: `Young
 		Tzimisce
@@ -986,7 +986,7 @@ var clanMap = map[string]clan{
 		one resource that makes Kindred society egalitarian:
 		precious blood.`,
 		AssociatedSect: []Sect{
-			sectMap["Camarilla"],
+			SectMap["Camarilla"],
 		},
 		Haven: `A Ventrue’s haven
 		displays both her great power
@@ -1044,7 +1044,7 @@ var clanMap = map[string]clan{
 	},
 }
 
-var sectMap = map[string]Sect{
+var SectMap = map[string]Sect{
 	"Camarilla": {
 		Name: "Camarilla",
 		Description: `The Camarilla is also known as “The Ivory Tower,”
@@ -1394,43 +1394,43 @@ var sectMap = map[string]Sect{
 	},
 }
 
-var tradition = []Traditions{
+var TraditionMap = []Traditions{
 	{
 		Name: "The Traditions",
 		Description: `Vampires observe a set of customs that exists some-
 		where between being coded into their undead natures
 		and a social contract that’s ratified every night among
 		the courts of the Damned. `,
-		Tradition: map[int]Entry{
-			1: {
+		Tradition: []Entry{
+			{
 				Name: "The Masquerade",
 				Description: `Thou shall not reveal thy true nature to those not of the Blood.
 				Doing such shall renounce thy claims of Blood`,
 			},
-			2: {
+			{
 				Name: "The Domain",
 				Description: `Thy domain is thine own concern.
 				All others owe thee respect while in it.
 				None may challenge thy word while in thy domain.`,
 			},
-			3: {
+			{
 				Name: "The Progeny",
 				Description: `Thou shall only Sire another with the permission of thine Elder.
 				If thou createst another without thine Elder’s leave, both thou and thy Progeny shall be slain.`,
 			},
-			4: {
+			{
 				Name: "The Accounting",
 				Description: `Those thou create are thine own children.
 				Until thy Progeny shall be Released, thou shall command them in all things.
 				Their sins are thine to endure.`,
 			},
-			5: {
+			{
 				Name: "Hospitality",
 				Description: `Honor one another’s domain.
 				When thou comest to a foreign city, thou shall present thyself to the one who ruleth there.
 				Without the word of acceptance, thou art nothing.`,
 			},
-			6: {
+			{
 				Name: "Destruction",
 				Description: `Thou art forbidden to destroy another of thy kind.
 				The right of destruction belongeth only to thine Elder.
@@ -1444,74 +1444,74 @@ var tradition = []Traditions{
 		where between being coded into their undead natures
 		and a social contract that’s ratified every night among
 		the courts of the Damned. `,
-		Tradition: map[int]Entry{
-			1: {
+		Tradition: []Entry{
+			{
 				Name: "Code 1",
 				Description: `The Sabbat shall remain united in its support of the Sect’s Regent.
 				If necessary, a new Regent shall be elected. The Regent shall support relief from
 				tyranny, granting all Sabbat freedom.`,
 			},
-			2: {
+			{
 				Name:        "Code 2",
 				Description: `All Sabbat shall do their best to serve their leaders as long as said leaders serve the will of the Regent.`,
 			},
-			3: {
+			{
 				Name:        "Code 3",
 				Description: `All Sabbat shall faithfully observe all the auctoritas ritae.`,
 			},
-			4: {
+			{
 				Name:        "Code 4",
 				Description: `All Sabbat shall keep their word of honor to one another.`,
 			},
-			5: {
+			{
 				Name:        "Code 5",
 				Description: `All Sabbat shall treat their peers fairly and equally, upholding the strength and unity of the Sabbat. If necessary, they shall provide for the needs of their brethren.`,
 			},
-			6: {
+			{
 				Name:        "Code 6",
 				Description: `All Sabbat must put the good of the Sect and the race of Cainites before their own personal needs, despite all costs.`,
 			},
-			7: {
+			{
 				Name:        "Code 7",
 				Description: `Those who are not honorable under this code will be considered less than equal and therefore unworthy of assistance.`,
 			},
-			8: {
+			{
 				Name:        "Code 8",
 				Description: `As it has always been, so shall it always be. The Lextalionis shall be the model for undying justice by which all Sabbat shall abide.`,
 			},
-			9: {
+			{
 				Name:        "Code 9",
 				Description: `All Sabbat shall protect one another from the enemies of the Sect. Personal enemies shall remain a personal responsibility, unless they undermine Sect security.`,
 			},
-			10: {
+			{
 				Name:        "Code 10",
 				Description: `All Sect members shall protect Sabbat territory from all other powers.`,
 			},
-			11: {
+			{
 				Name:        "Code 11",
 				Description: `The spirit of freedom shall be the fundamental principle of the Sect. All Sabbat shall expect and demand freedom from their leaders.`,
 			},
-			12: {
+			{
 				Name: "Code 12",
 				Description: `The Ritus of Monomacy shall be used to settle disputes among all Sabbat.
 				`,
 			},
-			13: {
+			{
 				Name: "Code 13",
 				Description: `All Sabbat shall support the Black Hand.
 				`,
 			},
-			14: {
+			{
 				Name: "Addendum 14",
 				Description: `All Sabbat have the right to monitor the behavior and activities of their fellow Sect members in order to maintain freedom and security.
 				`,
 			},
-			15: {
+			{
 				Name: "Addendum 15",
 				Description: `All Sabbat possess the right to call a council of their peers and immediate leaders.
 				`,
 			},
-			16: {
+			{
 				Name: "Addendum 16",
 				Description: `All Sabbat shall act against Sect members who use the powers and authority the Sabbat has given them for personal gain at the expense of the Sabbat. Action shall be taken only through accepted means, approved by a quorum of Prisci.
 				`,
@@ -1521,8 +1521,8 @@ var tradition = []Traditions{
 	{
 		Name:        "Auctoritas Ritae",
 		Description: ` The overarching term that describes all mandatory rituals within the Sabbat culture. Includes The Blood Bath, The Blood Feast, Creation Rites, Fire Dance, Games of Instincts, Monomacy, the Sermons of Caine, The War Party, and the Wild Hunt`,
-		Tradition: map[int]Entry{
-			1: {
+		Tradition: []Entry{
+			{
 				Name: "The Blood Bath",
 				Description: `This ritus is performed whenever Sect leaders wish to recognize a Sabbat vampire’s claim to a title, such as Bishop or Cardinal. The Blood Bath formalizes the vampire’s new status in the Sect. As many Sabbat as possible who will serve under this new leader must attend the ceremony, for failing to do so without an adequate reason is a grave slight to the leader in question.Starting with the priest conducting the ritus, attendant
 				Sect leaders and other Sabbat take turns coming for-
@@ -1538,21 +1538,21 @@ var tradition = []Traditions{
 				crated as a Vaulderie), symbolizing that they willingly
 				partake of everything the new leader has to offer.`,
 			},
-			2: {
+			{
 				Name: "The Blood Feast",
 				Description: `The Blood Feast is a ritual “meal,”
 				in which captured vessels are suspended from the ceil-
 				ing, bound to sculptures, or otherwise immobilized and
 				fed from at the leisure of all vampires present. The feast itself is as much social gathering as it is a structured ritus, and many Sabbat make grand entrances, wearing the best of their finery.`,
 			},
-			3: {
+			{
 				Name: "The Blood Feast",
 				Description: `The Blood Feast is a ritual “meal,”
 				in which captured vessels are suspended from the ceil-
 				ing, bound to sculptures, or otherwise immobilized and
 				fed from at the leisure of all vampires present. The feast itself is as much social gathering as it is a structured ritus, and many Sabbat make grand entrances, wearing the best of their finery.`,
 			},
-			4: {
+			{
 				Name: "Creation Rites",
 				Description: `After the Embrace, the new vampire is eligible for the Creation Rites only after he has demonstrated his worth to the Sect. The ritus itself
 				is quite simple — the priest merely touches a flaming
@@ -1561,27 +1561,27 @@ var tradition = []Traditions{
 				Rites, however, varies widely, and it is wholly in the
 				hands of the Cainite’s sire.`,
 			},
-			5: {
+			{
 				Name:        "Fire Dance",
 				Description: `To most vampires, fire is something to be feared and avoided, yet not to the Sabbat. While they still fear it, they are not above turning it loose on their enemies. To be fully Sabbat, one must face the Rötschreck and master it.`,
 			},
-			6: {
+			{
 				Name:        "Games of Instinct",
 				Description: `The vampires of the Sabbat engage in numerous sanctioned “games,” adjudicated by their Pack Priests to maintain their predatory edge. These games take various forms, and different packs practice different styles — everything from parodies of children’s games or sports to completely unique vampiric tests of skill can be made into a Game of Instinct. `,
 			},
-			7: {
+			{
 				Name:        "Monomacy",
 				Description: `Monomacy is usually practiced by only ranking members of packs, a challenge of ritual combat is issued to the high ranking member simultaneously with the challenge to the rival. The priest then decides whether or not the grudge is worth Monomacy, and whether or not she chooses to preside over the ritual. The challenged vampire may decline. In theory, there is nothing wrong with declining a challenge, but unless the challenger is of such little consequence as to be below the challengee’s notice, declining usually involves a great loss of face.`,
 			},
-			8: {
+			{
 				Name:        "Sermons of Caine",
 				Description: `Pack members take turns reciting from the Book of Nod, while the others sit in a semicircle holding lit candles and meditating on the passages. The sermons are sometimes followed by the Vaulderie, and, among more intellectual packs, intense deliberation. Pack members often discuss the passages read during the ritus almost until dawn`,
 			},
-			9: {
+			{
 				Name:        "The War Party",
 				Description: `War parties consist of multiple packs that vie for the blood of a non-Sabbat elder. Packs participating in the War Party compete against one another for the privi lege of killing and diablerizing the elder, but rarely do the packs come into deadly conflict with each other, reserving their violence for their target. In preparation for a War Party, the participating packs gather and celebrate. They may also perform the Fire Dance, listen to Sermons of Caine, and participate in a Blood Feast or Vaulderie. The chief of the War Party, usually the most accomplished or highest-ranking priest among the packs, offers the assembled packs the challenge.`,
 			},
-			10: {
+			{
 				Name:        "The Wild Hunt",
 				Description: `One of the greatest crimes a Sabbat can commit is to turn traitor, and the Sect protects its secrets. If a member reveals a Sect secret to the enemy, she is punished severely. If a Sabbat leaks information of a vital nature, a priest may call for a Wild Hunt. The Wild Hunt is much like the blood hunt, but ends with the eradication of the offending Sabbat Sect member, as well as anyone — Kindred or kine — who may have knowledge of the betrayal. The gravity of the Wild Hunt depends upon the traitor in question — the packs are expected to police their own ranks, while high-profile turncoats receive the attention of Archbishops, Prisci, Cardinals, and all those who serve them.`,
 			},
@@ -1590,8 +1590,8 @@ var tradition = []Traditions{
 	{
 		Name:        "Ignoblis Ritae",
 		Description: ` The overarching term that describes all low or common rituals within the Sabbat culture. These rituals vary widely from pack to pack. Includes the Acceptance Ritus, Contrition Ritus, Stealth Ritus, Sun Dance`,
-		Tradition: map[int]Entry{
-			1: {
+		Tradition: []Entry{
+			{
 				Name: "Acceptance Ritus",
 				Description: `The Sabbat shall remain united in its support of the Sect’s Regent.
 				If necessary, a new Regent shall be elected. The Regent shall support relief from
@@ -11222,473 +11222,472 @@ var InfoMap = map[string]map[string]Characteristic{
 			},
 		},
 	},
-}
-
-var BackgroundMap = map[string]Characteristic{
-	"allies": {
-		BaseDesc: `Allies are mortals who support and help you — fami-
-		ly, friends, or even a mortal organization that owes you
-		some loyalty. Although allies aid you willingly, with-
-		out coaxing or coercion, they are not always available
-		to offer assistance; they have their own concerns and
-		can do only so much for the sake of your relationship.
-		However, they might have some useful Background
-		Traits of their own, and could provide you with indi-
-		rect access to their contacts, influence, or resources.`,
-		ValDesc: map[string]interface{}{
-			"1": "One ally of moderate influence and power",
-			"2": "Two allies, both of moderate power",
-			"3": "Three allies, one of whom is quite influential",
-			"4": "Four allies, one of whom is very influential",
-			"5": "Five allies, one of whom is extremely influential",
+	"background": map[string]Characteristic{
+		"allies": {
+			BaseDesc: `Allies are mortals who support and help you — fami-
+			ly, friends, or even a mortal organization that owes you
+			some loyalty. Although allies aid you willingly, with-
+			out coaxing or coercion, they are not always available
+			to offer assistance; they have their own concerns and
+			can do only so much for the sake of your relationship.
+			However, they might have some useful Background
+			Traits of their own, and could provide you with indi-
+			rect access to their contacts, influence, or resources.`,
+			ValDesc: map[string]interface{}{
+				"1": "One ally of moderate influence and power",
+				"2": "Two allies, both of moderate power",
+				"3": "Three allies, one of whom is quite influential",
+				"4": "Four allies, one of whom is very influential",
+				"5": "Five allies, one of whom is extremely influential",
+			},
 		},
-	},
-	"alternateIdentity": {
-		BaseDesc: `You maintain an alternate identity, complete with
-		papers, birth certificates, or any other documentation
-		you desire. Only a few may know your real name or
-		identity. Your alternate persona may be highly in-
-		volved in organized crime, a member of the opposite
-		Sect, a con artist who uses alternate identities for her
-		game, or you may simply gather information about the
-		enemy. Indeed, some vampires may know you as one
-		individual while others believe you to be someone else
-		entirely.`,
-		ValDesc: map[string]interface{}{
-			"1": `You are new at this identity game.
-			Sometimes you slip and forget your
-			other persona.`,
-			"2": `You are well grounded in your
-			alternate identity. You are
-			convincing enough to play the part
-			of a doctor, lawyer, funeral salesman,
-			drug-smuggler, or a capable spy.`,
-			"3": `You have a fair reputation as your
-			alternate persona and get name-
-			recognition in the area where you
-			have infiltrated`,
-			"4": `Your alternate identity has respect
-			and trust within your area of
-			infiltration.`,
-			"5": `You command respect in your area of
-			infiltration, and you may even have
-			accumulated a bit of influence. You
-			have the trust (or at least the
-			recognition) of many powerful
-			individuals within your area.`,
+		"alternateIdentity": {
+			BaseDesc: `You maintain an alternate identity, complete with
+			papers, birth certificates, or any other documentation
+			you desire. Only a few may know your real name or
+			identity. Your alternate persona may be highly in-
+			volved in organized crime, a member of the opposite
+			Sect, a con artist who uses alternate identities for her
+			game, or you may simply gather information about the
+			enemy. Indeed, some vampires may know you as one
+			individual while others believe you to be someone else
+			entirely.`,
+			ValDesc: map[string]interface{}{
+				"1": `You are new at this identity game.
+				Sometimes you slip and forget your
+				other persona.`,
+				"2": `You are well grounded in your
+				alternate identity. You are
+				convincing enough to play the part
+				of a doctor, lawyer, funeral salesman,
+				drug-smuggler, or a capable spy.`,
+				"3": `You have a fair reputation as your
+				alternate persona and get name-
+				recognition in the area where you
+				have infiltrated`,
+				"4": `Your alternate identity has respect
+				and trust within your area of
+				infiltration.`,
+				"5": `You command respect in your area of
+				infiltration, and you may even have
+				accumulated a bit of influence. You
+				have the trust (or at least the
+				recognition) of many powerful
+				individuals within your area.`,
+			},
 		},
-	},
-	"blackHandMembership": {
-		BaseDesc: `You are a member of the feared Black Hand, the
-		body of soldiers and assassins that serves the Sabbat
-		fervently. You may call upon members of the Black Hand to
-		aid you, should you ever need it. You may find yourself
-		assigned to perform assassinations, lend martial aid, or
-		even further the political ends of the Hand as a diplo-
-		mat or spy. You may also be required to attend crusades
-		that take you away from your pack. All members of the
-		Black Hand must heed the call of another Hand mem-
-		ber, especially the superiors of the faction.
-		Being a member of the Black Hand is a prestigious
-		matter, when dealing with other Sabbat, should
-		you choose to reveal your affiliation you may add your rating in this Background to any
-		Social dice pools. Most Hand members,
-		however, choose not to reveal their allegiance.`,
-		ValDesc: map[string]interface{}{
-			"1": `You are a grunt; you may call upon
-			one Black Hand member once per
-			story.`,
-			"2": `You are known and respected in the
-			Black Hand; you may call upon two
-			Black Hand members once per story.`,
-			"3": `You are held in the Black Hand’s
-			regard; you may call upon five Black
-			Hand members once per story.`,
-			"4": `You are a hero among members of
-			the Black Hand; you may call upon
-			seven Black Hand members twice per
-			story (if it seems you’re becoming
-			soft, you may lose points in this
-			Background). You may also lead large
-			numbers of Hand members into action
-			should it ever become necessary.`,
-			"5": `You are part of Black Hand legend;
-			you may call upon 12 Black Hand
-			members twice per story (but see the
-			preceding caution). You may also lead
-			large numbers of Hand members into
-			action should it ever become
-			necessary. The Seraphim may even
-			seek your counsel on matters of
-			import.`,
+		"blackHandMembership": {
+			BaseDesc: `You are a member of the feared Black Hand, the
+			body of soldiers and assassins that serves the Sabbat
+			fervently. You may call upon members of the Black Hand to
+			aid you, should you ever need it. You may find yourself
+			assigned to perform assassinations, lend martial aid, or
+			even further the political ends of the Hand as a diplo-
+			mat or spy. You may also be required to attend crusades
+			that take you away from your pack. All members of the
+			Black Hand must heed the call of another Hand mem-
+			ber, especially the superiors of the faction.
+			Being a member of the Black Hand is a prestigious
+			matter, when dealing with other Sabbat, should
+			you choose to reveal your affiliation you may add your rating in this Background to any
+			Social dice pools. Most Hand members,
+			however, choose not to reveal their allegiance.`,
+			ValDesc: map[string]interface{}{
+				"1": `You are a grunt; you may call upon
+				one Black Hand member once per
+				story.`,
+				"2": `You are known and respected in the
+				Black Hand; you may call upon two
+				Black Hand members once per story.`,
+				"3": `You are held in the Black Hand’s
+				regard; you may call upon five Black
+				Hand members once per story.`,
+				"4": `You are a hero among members of
+				the Black Hand; you may call upon
+				seven Black Hand members twice per
+				story (if it seems you’re becoming
+				soft, you may lose points in this
+				Background). You may also lead large
+				numbers of Hand members into action
+				should it ever become necessary.`,
+				"5": `You are part of Black Hand legend;
+				you may call upon 12 Black Hand
+				members twice per story (but see the
+				preceding caution). You may also lead
+				large numbers of Hand members into
+				action should it ever become
+				necessary. The Seraphim may even
+				seek your counsel on matters of
+				import.`,
+			},
 		},
-	},
-	"contacts": {
-		BaseDesc: `You know people all over the city. When you start
-		making phone calls around your network, the amount
-		of information you can dig up is impressive. Rather
-		than friends you can rely on to help you, like Allies,
-		Contacts are largely people whom you can bribe, ma-
-		nipulate, or coerce into offering information. You also
-		have a few major Contacts — associates who can give
-		you accurate information in their fields of expertise.
-		You should describe each major contact in some detail
-		before the game begins.
-		In addition to your major contacts, you also have a
-		number of minor contacts spread throughout the city.
-		Your major contact might be in the district attorney’s
-		office, while your minor contacts might include beat
-		cops, DMV clerks, club bouncers, or members of an
-		online social network. You don’t need to detail these
-		various “passing acquaintances” before play.`,
-		ValDesc: map[string]interface{}{
-			"1": `One major contact`,
-			"2": `Two major contacts`,
-			"3": `Three major contacts`,
-			"4": `Four major contacts`,
-			"5": ` Five major contacts`,
+		"contacts": {
+			BaseDesc: `You know people all over the city. When you start
+			making phone calls around your network, the amount
+			of information you can dig up is impressive. Rather
+			than friends you can rely on to help you, like Allies,
+			Contacts are largely people whom you can bribe, ma-
+			nipulate, or coerce into offering information. You also
+			have a few major Contacts — associates who can give
+			you accurate information in their fields of expertise.
+			You should describe each major contact in some detail
+			before the game begins.
+			In addition to your major contacts, you also have a
+			number of minor contacts spread throughout the city.
+			Your major contact might be in the district attorney’s
+			office, while your minor contacts might include beat
+			cops, DMV clerks, club bouncers, or members of an
+			online social network. You don’t need to detail these
+			various “passing acquaintances” before play.`,
+			ValDesc: map[string]interface{}{
+				"1": `One major contact`,
+				"2": `Two major contacts`,
+				"3": `Three major contacts`,
+				"4": `Four major contacts`,
+				"5": ` Five major contacts`,
+			},
 		},
-	},
-	"domain": {
-		BaseDesc: `Domain is physical territory (usually within the
-			chronicle’s central city) to which your character con-
-			trols access for the purpose of feeding. Some Kindred
-			refer to their domain as hunting grounds, and most
-			jealously guard their domains, even invoking the Tra-
-			dition of the same name to protect their claims. As
-			part of this Background, the character’s claim to the
-			domain is recognized by the Prince or some other Kin-
-			dred authority in the city where it is located.
-			The Kindred who claims the domain can’t keep the
-			living inhabitants from going about their business,
-			nor does she exercise any direct influence over them,
-			but she can keep watch herself and mind their com-
-			ings and goings. She can also have Allies or Retainers
-			specifically look for unfamiliar vampires and alert her
-			when they find some.Each level of Domain reduces the difficulty of hunt-
-			ing checks by one for your character and those whom
-			the character allows in.`,
-		ValDesc: map[string]interface{}{
-			"1": "A single small building, such as a single-family home or a social establishment — enough for a basic haven.",
-			"2": `A church, factory, warehouse,
-			mid-rise, or other large structure —
-			a location with ready but easily
-			controllable access to the outside
-			world.`,
-			"3": `A high-rise, city block, or an
-			important intersection — a
-			location or area that offers areas for
-			concealment as well as controlled
-			access.`,
-			"4": `A sewer subsection, a network of
-			service tunnels, the enclave of homes
-			on a hill overlooking the city —
-			a place with inherently protective
-			features, such as an isolated mountain
-			road, bridge-only access, or vigilant
-			private security force.`,
-			"5": `An entire neighborhood, an ethnic
-			subdivision like “Chinatown” or
-			“Little Italy,” or a whole suburb`,
+		"domain": {
+			BaseDesc: `Domain is physical territory (usually within the
+				chronicle’s central city) to which your character con-
+				trols access for the purpose of feeding. Some Kindred
+				refer to their domain as hunting grounds, and most
+				jealously guard their domains, even invoking the Tra-
+				dition of the same name to protect their claims. As
+				part of this Background, the character’s claim to the
+				domain is recognized by the Prince or some other Kin-
+				dred authority in the city where it is located.
+				The Kindred who claims the domain can’t keep the
+				living inhabitants from going about their business,
+				nor does she exercise any direct influence over them,
+				but she can keep watch herself and mind their com-
+				ings and goings. She can also have Allies or Retainers
+				specifically look for unfamiliar vampires and alert her
+				when they find some.Each level of Domain reduces the difficulty of hunt-
+				ing checks by one for your character and those whom
+				the character allows in.`,
+			ValDesc: map[string]interface{}{
+				"1": "A single small building, such as a single-family home or a social establishment — enough for a basic haven.",
+				"2": `A church, factory, warehouse,
+				mid-rise, or other large structure —
+				a location with ready but easily
+				controllable access to the outside
+				world.`,
+				"3": `A high-rise, city block, or an
+				important intersection — a
+				location or area that offers areas for
+				concealment as well as controlled
+				access.`,
+				"4": `A sewer subsection, a network of
+				service tunnels, the enclave of homes
+				on a hill overlooking the city —
+				a place with inherently protective
+				features, such as an isolated mountain
+				road, bridge-only access, or vigilant
+				private security force.`,
+				"5": `An entire neighborhood, an ethnic
+				subdivision like “Chinatown” or
+				“Little Italy,” or a whole suburb`,
+			},
 		},
-	},
-	"fame": {
-		BaseDesc: `You enjoy widespread recognition in mortal society,
-		perhaps as an entertainer, writer, or athlete. People
-		may enjoy just being seen with you. This gives you all
-		manner of privileges when moving in mortal society,
-		but can also attract an unwanted amount of attention
-		now that you’re no longer alive. The greatest weapon
-		fame has to offer is the ability to sway public opin-
-		ion — as modern media constantly proves. Fame isn’t
-		always tied to entertainment: A heinous criminal in
-		a high-profile trial probably has a certain amount of
-		fame, as do a lawmaker and a scientist who has made a
-		popularized discovery.`,
-		ValDesc: map[string]interface{}{
-			"1": `You’re known to a select subculture
-			— local club-goers, industry bloggers,
-			or the Park Avenue set, for instance`,
-			"2": `Random people start to recognize
-			your face; you’re a minor celebrity
-			such as a small-time criminal or a
-			local news anchor.`,
-			"3": `You have greater renown; perhaps
-			you’re a senator or an entertainer who
-			regularly gets hundreds of thousands
-			of YouTube hits.`,
-			"4": `A full-blown celebrity; your name is
-			often recognized by the average
-			person on the street.`,
-			"5": `You’re a household word. People
-			name their children after you.`,
+		"fame": {
+			BaseDesc: `You enjoy widespread recognition in mortal society,
+			perhaps as an entertainer, writer, or athlete. People
+			may enjoy just being seen with you. This gives you all
+			manner of privileges when moving in mortal society,
+			but can also attract an unwanted amount of attention
+			now that you’re no longer alive. The greatest weapon
+			fame has to offer is the ability to sway public opin-
+			ion — as modern media constantly proves. Fame isn’t
+			always tied to entertainment: A heinous criminal in
+			a high-profile trial probably has a certain amount of
+			fame, as do a lawmaker and a scientist who has made a
+			popularized discovery.`,
+			ValDesc: map[string]interface{}{
+				"1": `You’re known to a select subculture
+				— local club-goers, industry bloggers,
+				or the Park Avenue set, for instance`,
+				"2": `Random people start to recognize
+				your face; you’re a minor celebrity
+				such as a small-time criminal or a
+				local news anchor.`,
+				"3": `You have greater renown; perhaps
+				you’re a senator or an entertainer who
+				regularly gets hundreds of thousands
+				of YouTube hits.`,
+				"4": `A full-blown celebrity; your name is
+				often recognized by the average
+				person on the street.`,
+				"5": `You’re a household word. People
+				name their children after you.`,
+			},
 		},
-	},
-	"generation": {
-		BaseDesc: `This Background represents your Generation: the
-		purity of your blood, and your proximity to the First
-		Vampire. A high Generation rating may represent
-		a powerful sire or a decidedly dangerous taste for di-
-		ablerie. If you don’t take any dots in this Trait, you
-		begin play as a Thirteenth Generation vampire.`,
-		ValDesc: map[string]interface{}{
-			"1": `Twelfth Generation: 11 blood pool,
-			can spend 1 blood point per turn`,
-			"2": `Eleventh Generation: 12 blood pool,
-			can spend 1 blood point per turn`,
-			"3": `Tenth Generation: 13 blood pool,
-			can spend 1 blood point per turn`,
-			"4": `Ninth Generation: 14 blood pool,
-			can spend 2 blood points per turn`,
-			"5": `Eighth Generation: 15 blood pool,
-			can spend 3 blood points per turn`,
+		"generation": {
+			BaseDesc: `This Background represents your Generation: the
+			purity of your blood, and your proximity to the First
+			Vampire. A high Generation rating may represent
+			a powerful sire or a decidedly dangerous taste for di-
+			ablerie. If you don’t take any dots in this Trait, you
+			begin play as a Thirteenth Generation vampire.`,
+			ValDesc: map[string]interface{}{
+				"1": `Twelfth Generation: 11 blood pool,
+				can spend 1 blood point per turn`,
+				"2": `Eleventh Generation: 12 blood pool,
+				can spend 1 blood point per turn`,
+				"3": `Tenth Generation: 13 blood pool,
+				can spend 1 blood point per turn`,
+				"4": `Ninth Generation: 14 blood pool,
+				can spend 2 blood points per turn`,
+				"5": `Eighth Generation: 15 blood pool,
+				can spend 3 blood points per turn`,
+			},
 		},
-	},
-	"herd": {
-		BaseDesc: `You have built a group of mortals from whom you can
-		feed without fear. A herd may take many forms, from
-		circles of kinky clubgoers to actual cults built around
-		you as a god-figure. In addition to providing nourishment, your herd might come in handy for minor tasks,
-		though they are typically not very controllable, closely
-		connected to you, or particularly skilled (for more effective pawns, purchase Allies or Retainers). Your
-		Herd rating adds dice to your rolls for hunting`,
-		ValDesc: map[string]interface{}{
-			"1": `Three vessels`,
-			"2": `Seven vessels`,
-			"3": `15 vessels`,
-			"4": `30 vessels`,
-			"5": `60 vessels`,
+		"herd": {
+			BaseDesc: `You have built a group of mortals from whom you can
+			feed without fear. A herd may take many forms, from
+			circles of kinky clubgoers to actual cults built around
+			you as a god-figure. In addition to providing nourishment, your herd might come in handy for minor tasks,
+			though they are typically not very controllable, closely
+			connected to you, or particularly skilled (for more effective pawns, purchase Allies or Retainers). Your
+			Herd rating adds dice to your rolls for hunting`,
+			ValDesc: map[string]interface{}{
+				"1": `Three vessels`,
+				"2": `Seven vessels`,
+				"3": `15 vessels`,
+				"4": `30 vessels`,
+				"5": `60 vessels`,
+			},
 		},
-	},
-	"influence": {
-		BaseDesc: `You have pull in the mortal community, whether
-		through wealth, prestige, political office, blackmail, or
-		supernatural manipulation. Kindred with high Influence can sway, and in rare cases even control, the political and social processes of human society. Influence
-		represents the sum of your opinion- or policy-swaying
-		power in your community, particularly among the police and bureaucracy. In some cases, cultivating Influence is a path to generating Resources (see below).
-		Some rolls may require you to use Influence in place
-		of an Ability, particularly when attempting to sway minor bureaucrats. It’s easier to institute sweeping chang-
-		es on a local level than a worldwide scale (e.g., having
-		an “abandoned” building demolished is relatively easy,
-		while starting a war is a bit more difficult).`,
-		ValDesc: map[string]interface{}{
-			"1": `Moderately influential; a factor in city
-			politics`,
-			"2": `Well-connected; a force in state
-			politics`,
-			"3": `Position of influence; a factor in
-			regional politics`,
-			"4": `Broad personal power; a force in
-			national politics`,
-			"5": `Vastly influential; a factor in global
-			politics`,
+		"influence": {
+			BaseDesc: `You have pull in the mortal community, whether
+			through wealth, prestige, political office, blackmail, or
+			supernatural manipulation. Kindred with high Influence can sway, and in rare cases even control, the political and social processes of human society. Influence
+			represents the sum of your opinion- or policy-swaying
+			power in your community, particularly among the police and bureaucracy. In some cases, cultivating Influence is a path to generating Resources (see below).
+			Some rolls may require you to use Influence in place
+			of an Ability, particularly when attempting to sway minor bureaucrats. It’s easier to institute sweeping chang-
+			es on a local level than a worldwide scale (e.g., having
+			an “abandoned” building demolished is relatively easy,
+			while starting a war is a bit more difficult).`,
+			ValDesc: map[string]interface{}{
+				"1": `Moderately influential; a factor in city
+				politics`,
+				"2": `Well-connected; a force in state
+				politics`,
+				"3": `Position of influence; a factor in
+				regional politics`,
+				"4": `Broad personal power; a force in
+				national politics`,
+				"5": `Vastly influential; a factor in global
+				politics`,
+			},
 		},
-	},
-	"mentor": {
-		BaseDesc: `This Trait represents a Kindred or group of Kindred
-		who looks out for you, offering guidance or aid once in
-		a while. A mentor may be powerful, but his power need
-		not be direct. Depending on the number of dots in this
-		Background, your mentor might be nothing more than
-		a vampire with a remarkable information network, or
-		might be a centuries-old creature with tremendous in-
-		fluence and supernatural power. He may offer advice,
-		speak to the Prince or Archbishop on your behalf,
-		steer other elders clear of you, or warn you when you’re
-		walking into situations you don’t understand.
-		Most often your mentor is your sire, but it could well
-		be any Cainite with an interest in your wellbeing. A
-		high Mentor rating could even represent a group of
-		like-minded vampires, such as the elders of the city’s
-		Tremere chantry or a Black Hand cell.
-		`,
-		ValDesc: map[string]interface{}{
-			"1": `Mentor is an ancilla of little
-			influence, or a Ductus or Pack Priest.
-			•• Mentor is respected: an elder or
-			highly-decorated veteran,
-			for instance.`,
-			"2": `Mentor is heavily influential, such as
-			a member of the Primogen or
-			a Bishop.`,
-			"3": `Mentor is heavily influential, such as
-			a member of the Primogen or
-			a Bishop.`,
-			"4": `Mentor has a great deal of power over
-			the city: a Prince or Archbishop,
-			for example.`,
-			"5": `Mentor is extraordinarily powerful,
-			perhaps even a Justicar or Cardinal.`,
+		"mentor": {
+			BaseDesc: `This Trait represents a Kindred or group of Kindred
+			who looks out for you, offering guidance or aid once in
+			a while. A mentor may be powerful, but his power need
+			not be direct. Depending on the number of dots in this
+			Background, your mentor might be nothing more than
+			a vampire with a remarkable information network, or
+			might be a centuries-old creature with tremendous in-
+			fluence and supernatural power. He may offer advice,
+			speak to the Prince or Archbishop on your behalf,
+			steer other elders clear of you, or warn you when you’re
+			walking into situations you don’t understand.
+			Most often your mentor is your sire, but it could well
+			be any Cainite with an interest in your wellbeing. A
+			high Mentor rating could even represent a group of
+			like-minded vampires, such as the elders of the city’s
+			Tremere chantry or a Black Hand cell.
+			`,
+			ValDesc: map[string]interface{}{
+				"1": `Mentor is an ancilla of little
+				influence, or a Ductus or Pack Priest.
+				•• Mentor is respected: an elder or
+				highly-decorated veteran,
+				for instance.`,
+				"2": `Mentor is heavily influential, such as
+				a member of the Primogen or
+				a Bishop.`,
+				"3": `Mentor is heavily influential, such as
+				a member of the Primogen or
+				a Bishop.`,
+				"4": `Mentor has a great deal of power over
+				the city: a Prince or Archbishop,
+				for example.`,
+				"5": `Mentor is extraordinarily powerful,
+				perhaps even a Justicar or Cardinal.`,
+			},
 		},
-	},
-	"resources": {
-		BaseDesc: `Resources are valuable goods whose disposition your
-		character controls. These assets may be actual cash,
-		but as this Background increases, they’re more likely
-		to be investments, property, or earning capital of some
-		sort — land, industrial assets, stocks and bonds, com-
-		mercial inventories, criminal infrastructure, contra-
-		band, even taxes or tithes. Remember that vampires
-		don’t need to arrange for any food except blood and
-		their actual needs (as opposed to wants) for shelter are
-		very easily accommodated. Resources for vampires go
-		mostly to pay for luxuries and the associated expenses
-		of developing and maintaining Status, Influence, and
-		other Backgrounds. A character with no dots in Re-
-		sources may have enough clothing and supplies to get
-		by, or she may be destitute and squatting in a refrigera-
-		tor box under an overpass.`,
-		ValDesc: map[string]interface{}{
-			"1": `Sufficient. You can maintain a typical
-			residence in the style of the working
-			class with stability, even if spending
-			sprees come seldom.`,
-			"2": `Moderate. You can display yourself
-			as a member in good standing of the
-			middle class, with the occasional gift
-			and indulgence seemly for a person
-			of even higher station. You can
-			maintain a servant or hire specific
-			help as necessary. A fraction of your
-			resources are available in cash,
-			readily portable property (like jewelry
-			or furniture), and other valuables
-			(such as a car or modest home) that
-			let you maintain a standard of living
-			at the one-dot level wherever you
-			happen to be, for up to six months.`,
-			"3": `Comfortable. You are a prominent
-			and established member of your
-			community, with land and an owned
-			dwelling, and you have a reputation
-			that lets you draw on credit at very
-			generous terms. You likely have more
-			tied up in equity and property than
-			you do in ready cash. You can
-			maintain a one-dot quality of
-			existence wherever you are without
-			difficulty, for as long as you choose.`,
-			"4": `Wealthy. You rarely touch cash, as
-			most of your assets exist in tangible
-			forms that are themselves more
-			valuable and stable than paper
-			money. You hold more wealth than
-			many of your local peers (if they can
-			be called such a thing). When
-			earning your Resources doesn’t
-			enjoy your usual degree of attention,
-			you can maintain a three-dot
-			existence for up to a year, and a two-
-			dot existence indefinitely.`,
-			"5": `Extremely Wealthy. You are the
-			model to which others strive to
-			achieve, at least in the popular mind.
-			Television shows, magazine spreads,
-			and gossip websites speculate about
-			your clothing, the appointments of
-			your numerous homes, and the luxury
-			of your modes of transportation. You
-			have vast and widely distributed
-			assets, perhaps tied to the fates of
-			nations, each with huge staffs and
-			connections to every level of
-			society through a region. You
-			travel with a minimum of three-dot
-			comforts, more with a little effort.
-			Corporations and governments
-			sometimes come to you to buy into
-			stocks or bond programs.`,
+		"resources": {
+			BaseDesc: `Resources are valuable goods whose disposition your
+			character controls. These assets may be actual cash,
+			but as this Background increases, they’re more likely
+			to be investments, property, or earning capital of some
+			sort — land, industrial assets, stocks and bonds, com-
+			mercial inventories, criminal infrastructure, contra-
+			band, even taxes or tithes. Remember that vampires
+			don’t need to arrange for any food except blood and
+			their actual needs (as opposed to wants) for shelter are
+			very easily accommodated. Resources for vampires go
+			mostly to pay for luxuries and the associated expenses
+			of developing and maintaining Status, Influence, and
+			other Backgrounds. A character with no dots in Re-
+			sources may have enough clothing and supplies to get
+			by, or she may be destitute and squatting in a refrigera-
+			tor box under an overpass.`,
+			ValDesc: map[string]interface{}{
+				"1": `Sufficient. You can maintain a typical
+				residence in the style of the working
+				class with stability, even if spending
+				sprees come seldom.`,
+				"2": `Moderate. You can display yourself
+				as a member in good standing of the
+				middle class, with the occasional gift
+				and indulgence seemly for a person
+				of even higher station. You can
+				maintain a servant or hire specific
+				help as necessary. A fraction of your
+				resources are available in cash,
+				readily portable property (like jewelry
+				or furniture), and other valuables
+				(such as a car or modest home) that
+				let you maintain a standard of living
+				at the one-dot level wherever you
+				happen to be, for up to six months.`,
+				"3": `Comfortable. You are a prominent
+				and established member of your
+				community, with land and an owned
+				dwelling, and you have a reputation
+				that lets you draw on credit at very
+				generous terms. You likely have more
+				tied up in equity and property than
+				you do in ready cash. You can
+				maintain a one-dot quality of
+				existence wherever you are without
+				difficulty, for as long as you choose.`,
+				"4": `Wealthy. You rarely touch cash, as
+				most of your assets exist in tangible
+				forms that are themselves more
+				valuable and stable than paper
+				money. You hold more wealth than
+				many of your local peers (if they can
+				be called such a thing). When
+				earning your Resources doesn’t
+				enjoy your usual degree of attention,
+				you can maintain a three-dot
+				existence for up to a year, and a two-
+				dot existence indefinitely.`,
+				"5": `Extremely Wealthy. You are the
+				model to which others strive to
+				achieve, at least in the popular mind.
+				Television shows, magazine spreads,
+				and gossip websites speculate about
+				your clothing, the appointments of
+				your numerous homes, and the luxury
+				of your modes of transportation. You
+				have vast and widely distributed
+				assets, perhaps tied to the fates of
+				nations, each with huge staffs and
+				connections to every level of
+				society through a region. You
+				travel with a minimum of three-dot
+				comforts, more with a little effort.
+				Corporations and governments
+				sometimes come to you to buy into
+				stocks or bond programs.`,
+			},
 		},
-	},
-	"retainers": {
-		BaseDesc: `Not precisely Allies or Contacts, your retainers are ser-
-		vants, assistants, or other people who are your loyal and
-		steadfast companions. Many vampires’ servants are ghouls their supernatural powers and blood bond-en-
-		forced loyalty make them the servants of choice. Retainers
-		may also be people whom you’ve repeatedly Dominated
-		until they have no free will left, or followers so enthralled
-		with your Presence that their loyalty borders on blind fa-
-		naticism. Some vampires, particularly those with the Ani-
-		malism Discipline, use animal ghouls as retainers.
-		You must maintain some control over your retainers,
-		whether through a salary, the gift of your vitae, or the
-		use of Disciplines. Retainers are never “blindly loyal no
-		matter what” — if you treat them poorly without exer-
-		cising strict control, they might well turn on you.
-		Retainers may be useful, but they should never be
-		flawless.`,
-		ValDesc: map[string]interface{}{
-			"1": "One retainer",
-			"2": "Two retainers",
-			"3": "Three retainers",
-			"4": "Four retainers",
-			"5": "Five retainers",
+		"retainers": {
+			BaseDesc: `Not precisely Allies or Contacts, your retainers are ser-
+			vants, assistants, or other people who are your loyal and
+			steadfast companions. Many vampires’ servants are ghouls their supernatural powers and blood bond-en-
+			forced loyalty make them the servants of choice. Retainers
+			may also be people whom you’ve repeatedly Dominated
+			until they have no free will left, or followers so enthralled
+			with your Presence that their loyalty borders on blind fa-
+			naticism. Some vampires, particularly those with the Ani-
+			malism Discipline, use animal ghouls as retainers.
+			You must maintain some control over your retainers,
+			whether through a salary, the gift of your vitae, or the
+			use of Disciplines. Retainers are never “blindly loyal no
+			matter what” — if you treat them poorly without exer-
+			cising strict control, they might well turn on you.
+			Retainers may be useful, but they should never be
+			flawless.`,
+			ValDesc: map[string]interface{}{
+				"1": "One retainer",
+				"2": "Two retainers",
+				"3": "Three retainers",
+				"4": "Four retainers",
+				"5": "Five retainers",
+			},
 		},
-	},
-	"rituals": {
-		BaseDesc: `This Background is for Sabbat characters only.
-		You know the ritae and rituals of the Sabbat, and you
-		can enact many of them. This Background is vital to be-
-		ing a Pack Priest — without this Background, ritae will
-		not function. This Background is actually a supernatural
-		investment, drawing on the magic of the eldest Tzimisce
-		sorcerers. Sabbat vampires who are not their pack‘s
-		priests should have an outstanding reason for acquiring
-		this Background, as Pack Priests are loath to share their
-		secrets with more secular members of the Sect.`,
-		ValDesc: map[string]interface{}{
-			"1": `You know a few of the auctoritas ritae
-			(your choice).`,
-			"2": `You know some of the auctoritas ritae
-			(your choice) and a few ignoblis ritae
-			(your choice).`,
-			"3": `You know all of the auctoritas ritae
-			and some ignoblis ritae (your choice).
-			Also, you may create your own
-			ignoblis ritae, given enough time
-			(consult your Storyteller for
-			development time and game effects).`,
-			"4": `You know all the auctoritas ritae
-			and many ignoblis ritae (your
-			choice). You may create your own
-			ignoblis ritae, given enough time
-			(consult your Storyteller for
-			development time and game effects).
-			You are also familiar with the
-			functions of numerous regional and
-			pack-specific ignoblis ritae, even if
-			you cannot perform them.`,
-			"5": `You know all the auctoritas ritae and
-			dozens of ignoblis ritae (your choice).
-			You may create your own ignoblis
-			ritae, given enough time (consult
-			your Storyteller for development time
-			and game effects). You are also
-			familiar with the functions of almost
-			all regional and pack-specific
-			ignoblis ritae, even if you cannot
-			perform them; if it’s been written
-			down or passed around in lore,
-			you’ve heard of it`,
+		"rituals": {
+			BaseDesc: `This Background is for Sabbat characters only.
+			You know the ritae and rituals of the Sabbat, and you
+			can enact many of them. This Background is vital to be-
+			ing a Pack Priest — without this Background, ritae will
+			not function. This Background is actually a supernatural
+			investment, drawing on the magic of the eldest Tzimisce
+			sorcerers. Sabbat vampires who are not their pack‘s
+			priests should have an outstanding reason for acquiring
+			this Background, as Pack Priests are loath to share their
+			secrets with more secular members of the Sect.`,
+			ValDesc: map[string]interface{}{
+				"1": `You know a few of the auctoritas ritae
+				(your choice).`,
+				"2": `You know some of the auctoritas ritae
+				(your choice) and a few ignoblis ritae
+				(your choice).`,
+				"3": `You know all of the auctoritas ritae
+				and some ignoblis ritae (your choice).
+				Also, you may create your own
+				ignoblis ritae, given enough time
+				(consult your Storyteller for
+				development time and game effects).`,
+				"4": `You know all the auctoritas ritae
+				and many ignoblis ritae (your
+				choice). You may create your own
+				ignoblis ritae, given enough time
+				(consult your Storyteller for
+				development time and game effects).
+				You are also familiar with the
+				functions of numerous regional and
+				pack-specific ignoblis ritae, even if
+				you cannot perform them.`,
+				"5": `You know all the auctoritas ritae and
+				dozens of ignoblis ritae (your choice).
+				You may create your own ignoblis
+				ritae, given enough time (consult
+				your Storyteller for development time
+				and game effects). You are also
+				familiar with the functions of almost
+				all regional and pack-specific
+				ignoblis ritae, even if you cannot
+				perform them; if it’s been written
+				down or passed around in lore,
+				you’ve heard of it`,
+			},
 		},
-	},
-	"status": {
-		BaseDesc: `You have something of a reputation and standing
-		(earned or unearned) within the local community of
-		Kindred. Status among Camarilla society is as often
-		derived from your sire’s status and the respect due your
-		particular bloodline as it is by personal achievement.
-		Among the Sabbat, status is more likely to stem from
-		the reputation of your pack or the zeal of your outlook.
-		Elders are known for having little respect for their ju-
-		niors; this Background can mitigate that somewhat`,
-		ValDesc: map[string]interface{}{
-			"1": "Known: a neonate/Pack Priest",
-			"2": "Respected: an ancilla/respected Ductus",
-			"3": "Influential: an elder/Templar",
-			"4": `Powerful: a member of the Primogen/
-			a Bishop`,
-			"5": "Luminary: a Prince/Archbishop",
+		"status": {
+			BaseDesc: `You have something of a reputation and standing
+			(earned or unearned) within the local community of
+			Kindred. Status among Camarilla society is as often
+			derived from your sire’s status and the respect due your
+			particular bloodline as it is by personal achievement.
+			Among the Sabbat, status is more likely to stem from
+			the reputation of your pack or the zeal of your outlook.
+			Elders are known for having little respect for their ju-
+			niors; this Background can mitigate that somewhat`,
+			ValDesc: map[string]interface{}{
+				"1": "Known: a neonate/Pack Priest",
+				"2": "Respected: an ancilla/respected Ductus",
+				"3": "Influential: an elder/Templar",
+				"4": `Powerful: a member of the Primogen/
+				a Bishop`,
+				"5": "Luminary: a Prince/Archbishop",
+			},
 		},
 	},
 }

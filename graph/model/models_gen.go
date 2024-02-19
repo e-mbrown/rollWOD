@@ -20,16 +20,19 @@ type Character interface {
 
 type Entry interface {
 	IsEntry()
+	GetID() *string
 	GetName() string
 	GetDescription() string
 }
 
 type Age struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          *string `json:"id,omitempty"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
 }
 
 func (Age) IsEntry()                    {}
+func (this Age) GetID() *string         { return this.ID }
 func (this Age) GetName() string        { return this.Name }
 func (this Age) GetDescription() string { return this.Description }
 
@@ -41,6 +44,7 @@ type Campaign struct {
 }
 
 type Characteristic struct {
+	ID          *string  `json:"id,omitempty"`
 	Name        string   `json:"name"`
 	Type        CharType `json:"type"`
 	Description string   `json:"description"`
@@ -48,10 +52,12 @@ type Characteristic struct {
 }
 
 func (Characteristic) IsEntry()                    {}
+func (this Characteristic) GetID() *string         { return this.ID }
 func (this Characteristic) GetName() string        { return this.Name }
 func (this Characteristic) GetDescription() string { return this.Description }
 
 type Clan struct {
+	ID             *string           `json:"id,omitempty"`
 	Name           string            `json:"name"`
 	Description    string            `json:"description"`
 	AssociatedSect []*Sect           `json:"associatedSect"`
@@ -68,54 +74,70 @@ type Clan struct {
 }
 
 func (Clan) IsEntry()                    {}
+func (this Clan) GetID() *string         { return this.ID }
 func (this Clan) GetName() string        { return this.Name }
 func (this Clan) GetDescription() string { return this.Description }
 
+type GeneralInfo struct {
+	ID          *string `json:"id,omitempty"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+}
+
+func (GeneralInfo) IsEntry()                    {}
+func (this GeneralInfo) GetID() *string         { return this.ID }
+func (this GeneralInfo) GetName() string        { return this.Name }
+func (this GeneralInfo) GetDescription() string { return this.Description }
+
 type Generation struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          *string `json:"id,omitempty"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
 }
 
 func (Generation) IsEntry()                    {}
+func (this Generation) GetID() *string         { return this.ID }
 func (this Generation) GetName() string        { return this.Name }
 func (this Generation) GetDescription() string { return this.Description }
 
-type NewCharacteristic struct {
-	Name        string   `json:"name"`
-	Type        CharType `json:"type"`
-	Description string   `json:"description"`
-	ValDesc     []string `json:"ValDesc"`
+type Query struct {
 }
 
 type Sect struct {
+	ID          *string  `json:"id,omitempty"`
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
-	Titles      []Entry  `json:"titles,omitempty"`
-	Practices   []string `json:"practices,omitempty"`
-	Rituals     []string `json:"rituals,omitempty"`
+	Titles      []*Title `json:"titles,omitempty"`
+	Practices   string   `json:"practices"`
+	Rituals     string   `json:"rituals"`
 	Strongholds []string `json:"strongholds,omitempty"`
 }
 
 func (Sect) IsEntry()                    {}
+func (this Sect) GetID() *string         { return this.ID }
 func (this Sect) GetName() string        { return this.Name }
 func (this Sect) GetDescription() string { return this.Description }
 
 type Title struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          *string `json:"id,omitempty"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
 }
 
 func (Title) IsEntry()                    {}
+func (this Title) GetID() *string         { return this.ID }
 func (this Title) GetName() string        { return this.Name }
 func (this Title) GetDescription() string { return this.Description }
 
 type Tradition struct {
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Traditions  []Entry `json:"traditions,omitempty"`
+	ID          *string        `json:"id,omitempty"`
+	Name        string         `json:"name"`
+	Description string         `json:"description"`
+	Traditions  []*GeneralInfo `json:"traditions,omitempty"`
 }
 
 func (Tradition) IsEntry()                    {}
+func (this Tradition) GetID() *string         { return this.ID }
 func (this Tradition) GetName() string        { return this.Name }
 func (this Tradition) GetDescription() string { return this.Description }
 

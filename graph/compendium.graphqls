@@ -1,25 +1,36 @@
 # Pk on name, secondary on Entrytype
 interface Entry {
+    id: ID
+    name: String!
+    description: String!
+}
+
+type GeneralInfo implements Entry {
+    id: ID
     name: String!
     description: String!
 }
 
 type Generation implements Entry {
+    id: ID
     name: String!
     description: String!
 }
 
 type Age implements Entry {
+    id: ID
     name: String!
     description: String!
 }
 
 type Title implements Entry {
+    id: ID
     name: String!
     description: String!
 }
 
 type Clan implements Entry {
+    id: ID
     name: String!
     description: String!
     associatedSect: [Sect]!
@@ -36,23 +47,26 @@ type Clan implements Entry {
 }
 
 type Sect implements Entry{
+    id: ID
     name: String!
     description: String!
-    titles: [Entry!]
-    practices: [String!]
-    rituals: [String!]
+    titles: [Title!]
+    practices: String!
+    rituals: String!
     strongholds: [String!]
 }
 
 
 type Tradition implements Entry{
+    id: ID
     name: String!
     description: String!
-    traditions: [Entry!]
+    traditions: [GeneralInfo!]
 }
 
 
 type Characteristic implements Entry{
+    id: ID
     name: String!
     type: charType!
     description: String!
@@ -70,17 +84,9 @@ enum charType {
 
 
 type Query {
-    characteristic: [Characteristic!]!
-}
-
-input NewCharacteristic {
-    name: String!
-    type: charType!
-    description: String!
-    ValDesc: [String!]! 
-}
-
-type Mutation {
-    createCharacteristic (input: NewCharacteristic!): Characteristic!
-    seed(input: String): String!
+    characteristics(name: String): [Characteristic]!
+    titles(name: String): [Title]!
+    sects(id: ID): [Sect]!
+    traditions(id: ID): [Tradition]!
+    genInfo(name: String): [GeneralInfo]!
 }
