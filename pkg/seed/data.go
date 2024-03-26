@@ -1,6 +1,9 @@
 package seed
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Characteristic struct {
 	BaseDesc string
@@ -11826,5 +11829,11 @@ func ValDescString(val map[string]string) []string {
 	}
 
 	return arr
+}
+
+func CleanDesc(val string) string {
+	val = strings.ReplaceAll(val, "\n", " ")
+	val = strings.ReplaceAll(val, "\t", "")
+	return val
 }
 

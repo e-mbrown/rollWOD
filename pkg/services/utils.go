@@ -25,7 +25,7 @@ func EntrytoModelGenInfo(data map[string]seed.Entry) []*model.GeneralInfo {
 			&model.GeneralInfo{
 				ID:          GenUUID(),
 				Name:        v.Name,
-				Description: v.Description,
+				Description: seed.CleanDesc(v.Description),
 			})
 	}
 
@@ -33,7 +33,7 @@ func EntrytoModelGenInfo(data map[string]seed.Entry) []*model.GeneralInfo {
 }
 
 func ChartoModelChar(data map[string]map[string]seed.Characteristic) []*model.Characteristic {
-	entries := make([]*model.Characteristic, len(data))
+	entries := []*model.Characteristic{}
 
 	for k, v := range seed.InfoMap {
 		for ik, iv := range v {
@@ -42,7 +42,7 @@ func ChartoModelChar(data map[string]map[string]seed.Characteristic) []*model.Ch
 					ID:          GenUUID(),
 					Name:        ik,
 					Type:        model.CharType(k),
-					Description: iv.BaseDesc,
+					Description: seed.CleanDesc(iv.BaseDesc),
 					DescbyVal:   seed.ValDescString(iv.ValDesc),
 				})
 		}
@@ -59,12 +59,13 @@ func SecttoModelSect(data map[string]seed.Sect) ([]*model.Sect, []*model.Title) 
 		tempT := []*model.Title{}
 
 		for _, iv := range v.Titles {
+			
 			tempT = append(
-				titles,
+				tempT,
 				&model.Title{
 					ID:          GenUUID(),
 					Name:        iv.Name,
-					Description: iv.Description,
+					Description: seed.CleanDesc(iv.Description),
 				})
 		}
 
@@ -73,7 +74,7 @@ func SecttoModelSect(data map[string]seed.Sect) ([]*model.Sect, []*model.Title) 
 			&model.Sect{
 				ID:          GenUUID(),
 				Name:        v.Name,
-				Description: v.Description,
+				Description:  seed.CleanDesc(v.Description),
 				Practices:   v.Practices,
 				Rituals:     v.Rituals,
 				Titles:      tempT,
@@ -94,7 +95,7 @@ func TradtoModelTrad(data []seed.Traditions) ([]*model.Tradition, []*model.Gener
 			tempT[i] = &model.GeneralInfo{
 					ID:          GenUUID(),
 					Name:        v.Name,
-					Description: v.Description,
+					Description: seed.CleanDesc(v.Description),
 				}
 		}
 
@@ -103,7 +104,7 @@ func TradtoModelTrad(data []seed.Traditions) ([]*model.Tradition, []*model.Gener
 			&model.Tradition{
 				ID:          GenUUID(),
 				Name:        v.Name,
-				Description: v.Description,
+				Description: seed.CleanDesc(v.Description),
 				Traditions:  tempT,
 			},
 		)
@@ -123,7 +124,7 @@ func DisciplinetoModelDiscipline(data map[string]seed.Discipline) ([]*model.Disc
 			tempAb = append(tempAb, &model.DiscAbilities{
 				ID: GenUUID(),
 				Name:        k,
-				Description: v.BaseDesc,
+				Description: seed.CleanDesc(v.BaseDesc),
 				Lvl:         v.Lvl,
 				System:      seed.ValDescString(v.System),
 			})
@@ -132,7 +133,7 @@ func DisciplinetoModelDiscipline(data map[string]seed.Discipline) ([]*model.Disc
 		entries = append(entries, &model.Discipline{
 			ID: GenUUID(),
 			Name:        disc.Name,
-			Description: disc.Description,
+			Description: seed.CleanDesc(disc.Description),
 			Abilities:   tempAb,
 		})
 		discAb = append(discAb, tempAb...)
@@ -174,7 +175,7 @@ func ClantoModelClan(allSects []*model.Sect, allDisc []*model.Discipline, clanMa
 			&model.Clan{
 				ID:             GenUUID(),
 				Name:           v.Name,
-				Description:    v.Description,
+				Description:    seed.CleanDesc(v.Description),
 				Appearance:     v.Appearance,
 				AssociatedSect: sect,
 				Haven:          v.Haven,
@@ -188,12 +189,6 @@ func ClantoModelClan(allSects []*model.Sect, allDisc []*model.Discipline, clanMa
 			},
 		)
 	}
-	return entries
-}
-
-func MakeModelDiscipline(data []seed.Discipline) []*model.Discipline {
-	entries := make([]*model.Discipline, len(data))
-
 	return entries
 }
 
@@ -216,8 +211,3 @@ func RangeDiscipline(allDisc []*model.Discipline, name string) *model.Discipline
 	return nil
 }
 
-/*
- Issue
-	When making clans we have to associate sects with them as well as disciplines.
-	If sects and disciplines are populated first we can use the resolver to get all sects and disciplines and associate them with one another.
-*/
