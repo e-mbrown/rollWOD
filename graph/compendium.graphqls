@@ -33,11 +33,12 @@ type Clan implements Entry {
     id: ID
     name: String!
     description: String!
+    appearance: String!
     associatedSect: [Sect]!
     haven: String!
     background: String!
     character: String!
-    discipline: [Characteristic!]
+    discipline: [Discipline!]
     weakness: String!
     organizations: String
     subClan: [Clan!]
@@ -64,6 +65,20 @@ type Tradition implements Entry{
     traditions: [GeneralInfo!]
 }
 
+type Discipline implements Entry {
+    id: ID
+    name: String!
+    description: String!
+    abilities: [DiscAbilities]
+}
+
+type DiscAbilities implements Entry {
+    id: ID
+    name: String!
+    description: String!
+    lvl: Int!
+    system: [String!]
+}
 
 type Characteristic implements Entry{
     id: ID
@@ -84,9 +99,13 @@ enum charType {
 
 
 type Query {
-    characteristics(name: String): [Characteristic]!
-    titles(name: String): [Title]!
-    sects(id: ID): [Sect]!
-    traditions(id: ID): [Tradition]!
-    genInfo(name: String): [GeneralInfo]!
+    # GetAll Queries
+        characteristics: [Characteristic]!
+        titles: [Title]!
+        sects: [Sect]!
+        traditions: [Tradition]!
+    # GetOne
+        getSect(name: [String!]): [Sect]
+        getTradition(name: String!): Tradition
+        getGenInfo(name: String): GeneralInfo
 }

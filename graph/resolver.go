@@ -15,73 +15,42 @@ import (
 type Resolver struct {
 	characteristics []*model.Characteristic
 	sects           []*model.Sect
+	disciplines     []*model.Discipline
+	discAbilities   []*model.DiscAbilities
 	titles          []*model.Title
 	traditions      []*model.Tradition
 	genInfo         []*model.GeneralInfo
+	clans           []*model.Clan
 }
 
 func NewResolver() Config {
 	r := Resolver{}
 
-	for k, v := range seed.InfoMap {
-		for ik, iv := range v {
-			entry := &model.Characteristic{
-				ID:          services.GenUUID(),
-				Name:        ik,
-				Type:        model.CharType(k),
-				Description: iv.BaseDesc,
-				DescbyVal:   iv.ValDescString(),
-			}
-			r.characteristics = append(r.characteristics, entry)
-		}
-	}
+	r.genInfo = append(
+		r.genInfo,
+		services.EntrytoModelGenInfo(seed.EntryMap)...,
+	)
+	r.characteristics = append(
+		r.characteristics,
+		services.ChartoModelChar(seed.InfoMap)...,
+	)
 
-	for _, v := range seed.SectMap {
-		titles := []*model.Title{}
-		for _, iv := range v.Titles {
-			entry := &model.Title{
-				ID:          services.GenUUID(),
-				Name:        iv.Name,
-				Description: iv.Description,
-			}
-			r.titles = append(r.titles, entry)
-			titles = append(titles, entry)
-		}
+	sects, titles := services.SecttoModelSect(seed.SectMap)
+	r.titles = append(r.titles, titles...)
+	r.sects = append(r.sects, sects...)
 
-		entry := &model.Sect{
-			ID:          services.GenUUID(),
-			Name:        v.Name,
-			Description: v.Description,
-			Practices:   v.Practices,
-			Rituals:     v.Rituals,
-			Titles:      titles,
-		}
+	disc, discab := services.DisciplinetoModelDiscipline(seed.DisciplineMap)
+	r.disciplines = append(r.disciplines, disc...)
+	r.discAbilities = append(r.discAbilities, discab...)
 
-		r.sects = append(r.sects, entry)
-	}
+	traditions, gen := services.TradtoModelTrad(seed.TraditionMap)
+	r.traditions = append(r.traditions, traditions...)
+	r.genInfo = append(r.genInfo, gen...)
 
-	for _, v := range seed.TraditionMap {
-		trads := []*model.GeneralInfo{}
-
-		for _, v := range v.Tradition {
-			info := &model.GeneralInfo{
-				ID:          services.GenUUID(),
-				Name:        v.Name,
-				Description: v.Description,
-			}
-
-			trads = append(trads, info)
-			r.genInfo = append(r.genInfo, info)
-		}
-
-		entry := &model.Tradition{
-			ID:          services.GenUUID(),
-			Name:        v.Name,
-			Description: v.Description,
-			Traditions:  trads,
-		}
-		r.traditions = append(r.traditions, entry)
-	}
+	// Never run clans before Sects and Disciplines are done.
+	r.clans = append(
+		r.clans,
+		services.ClantoModelClan(r.sects, r.disciplines, seed.ClanMap)...)
 
 	return Config{
 		Resolvers: &r,

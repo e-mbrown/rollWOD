@@ -4,18 +4,18 @@ import "fmt"
 
 type Characteristic struct {
 	BaseDesc string
-	ValDesc  map[string]interface{}
+	ValDesc  map[string]string
 }
 
 type Entry struct {
 	Name, Description string
 }
 
-type clan struct {
+type Clan struct {
 	Name           string
 	Description    string
 	Appearance     string
-	AssociatedSect []Sect
+	AssociatedSect []string
 	Haven          string
 	Background     string
 	Character      string
@@ -23,7 +23,7 @@ type clan struct {
 	Weakness       string
 	Organizations  string
 	Strongholds    []string
-	SubClan        []clan
+	SubClan        []Clan
 	IsHighClan     bool
 }
 
@@ -41,7 +41,19 @@ type Traditions struct {
 	Tradition   []Entry
 }
 
-var clanMap = map[string]clan{
+type Discipline struct {
+	Name        string
+	Description string
+	Abilities   map[string]disciplineAbility
+}
+
+type disciplineAbility struct {
+	BaseDesc string
+	Lvl      int
+	System   map[string]string
+}
+
+var ClanMap = map[string]Clan{
 	"Assamite": {
 		Name: "Assamite",
 		Description: `The childer of Haqim, known as Assamites to the
@@ -83,8 +95,8 @@ var clanMap = map[string]clan{
 		unique Path of Enlightenment, and those who don’t
 		often have to spend a great deal of effort maintaining
 		their Virtues and Humanity`,
-		AssociatedSect: []Sect{
-			SectMap["Independent"],
+		AssociatedSect: []string{
+			"Independent",
 		},
 		Haven: `Assamites often share communal havens
 		with others of their local cell, remote structures that
@@ -99,7 +111,7 @@ var clanMap = map[string]clan{
 		Kindred, she suffers one automatic level of unsoakable lethal damage per blood point imbibed. Diablerie attempts result in automatic aggravated damage, one health level per point of permanent Willpower the victim possesses; the would-be diablerist gains no benefits
 		(including Generation reduction) if he survives the process. In addition, Assamites must tithe some of the profits from their contracts to their sires or superiors (generally around 10 percent of all such earnings).`,
 		Discipline: []Discipline{
-			disciplineMap[`celerity`], disciplineMap[`obfuscate`], disciplineMap[`quietus`],
+			DisciplineMap[`celerity`], DisciplineMap[`obfuscate`], DisciplineMap[`quietus`],
 		},
 		Organizations: `An insular, hierarchical organization shapes
 		much of Assamite custom. “The Old Man on the Mountain”
@@ -108,8 +120,8 @@ var clanMap = map[string]clan{
 	},
 	"FollowersofSet": {
 		Name: "Follower of Set",
-		AssociatedSect: []Sect{
-			SectMap["Camarilla"], SectMap["Sabbat"],
+		AssociatedSect: []string{
+			"Camarilla","Sabbat",
 		},
 		Description: `Addiction, debasement, corruption, and desperation strike fear into many Kindred who worry that theirs will become an unlife of ruin, but to the Followers of Set, these and more are the tools of the trade. Pimps, pushers, and
 		priests, the Setites cater to
@@ -165,7 +177,7 @@ var clanMap = map[string]clan{
 		also haven in secret mystical places that have value to
 		the Clan, guarding them from outsiders.`,
 		Discipline: []Discipline{
-			disciplineMap[`presence`], disciplineMap[`obfuscate`], disciplineMap[`serpentis`],
+			DisciplineMap[`presence`], DisciplineMap[`obfuscate`], DisciplineMap[`serpentis`],
 		},
 		Weakness: `Given their origins in darkness, the Ser-
 		pents react negatively to bright light: Add two health
@@ -222,8 +234,8 @@ var clanMap = map[string]clan{
 		Skills and Talents, but most respect the Knowledges
 		that make them more than just thugs. Contacts, Allies,
 		and Herd are common Backgrounds.`,
-		AssociatedSect: []Sect{
-			SectMap["Camarilla"], SectMap["Sabbat"],
+		AssociatedSect: []string{
+			"Camarilla","Sabbat",
 		},
 		Haven: `Brujah may feel kinship to a city, but they rare-
 		ly develop such ties to individual locations. Thus, at any
@@ -241,7 +253,7 @@ var clanMap = map[string]clan{
 		power to avoid frenzy, though he may spend a point of
 		Willpower to end a frenzy that has already begun.`,
 		Discipline: []Discipline{
-			disciplineMap[`celerity`], disciplineMap[`potence`], disciplineMap[`presence`],
+			DisciplineMap[`celerity`], DisciplineMap[`potence`], DisciplineMap[`presence`],
 		},
 		Organizations: `Certain causes rise and fall in Brujah
 		fashion, but some of the more tenured are those who call
@@ -259,8 +271,8 @@ var clanMap = map[string]clan{
 		active decision. The Clan’s weakness can contribute a great deal to
 		their appearance, as does an extended unlife in the places where
 		they make their havens, which are frequently short of modern conveniences`,
-		AssociatedSect: []Sect{
-			SectMap["Independent"], SectMap["Sabbat"], SectMap["Camarilla"], SectMap["Anarch Movement"],
+		AssociatedSect: []string{
+			"Independent", "Sabbat", "Camarilla", "Anarch Movement",
 		},
 		Haven: `Gangrel often lair where they can, taking
 		refuge when the sun threatens to rise. Those who do
@@ -280,7 +292,7 @@ var clanMap = map[string]clan{
 		Character: `Sufficiency is the Gangrel hallmark, and many have outsider or loner personality archetypes. Physical Attributes are far and away most
 		frequent, as are Talents with a smattering of Skills and Knowledges. Many Gangrel focus on Disciplines rather than Backgrounds, preferring to rely on themselves more than others. Gangrel almost never have significant Resources, Influence, or Retainers.`,
 		Discipline: []Discipline{
-			disciplineMap[`animalism`], disciplineMap[`fortitude`], disciplineMap[`protean`],
+			DisciplineMap[`animalism`], DisciplineMap[`fortitude`], DisciplineMap[`protean`],
 		},
 		Weakness: `Every time a Gangrel frenzies, she
 		acquires a temporary animal Characteristic (which
@@ -310,8 +322,8 @@ var clanMap = map[string]clan{
 		of inherited family features. Those outside the immediate
 		family often appear “of a type,” and in the traditional garb of
 		their regional family branch.`,
-		AssociatedSect: []Sect{
-			SectMap["Independent"],
+		AssociatedSect: []string{
+			"Independent",
 		},
 		Haven: `The family wealth of the Giovanni is evident in their havens, which may take the form of villas or lavish estates. The Necromancers often have valuables invested in their havens as well, such as galleries of fine art or displays of jewelry. Many Giovanni also maintain secondary havens, where they may have elaborate necromantic crypts or just flats where they can lie low if necessary.
 		`,
@@ -322,7 +334,7 @@ var clanMap = map[string]clan{
 		those who prefer the forbidden puissance of Disciplines.
 		Few Giovanni could be described as well-rounded.`,
 		Discipline: []Discipline{
-			disciplineMap[`dominate`], disciplineMap[`potence`], disciplineMap[`necromancy`],
+			DisciplineMap[`dominate`], DisciplineMap[`potence`], DisciplineMap[`necromancy`],
 		},
 		Weakness: `The Kiss of a Giovanni vampire causes
 		excruciating pain in mortal vessels who receive it. If
@@ -364,8 +376,8 @@ var clanMap = map[string]clan{
 		stock associated with the Clan, or due to more cosmopolitan modern backgrounds, the Keepers cut a striking figure. Their dress is often conservative or religious,
 		drawing on years of ceremony and faithful ritual. Rare
 		is the Lasombra who cannot at least manipulate shadows to affect a dramatic entrance or enigmatic pose.`,
-		AssociatedSect: []Sect{
-			SectMap["Sabbat"],
+		AssociatedSect: []string{
+			"Sabbat",
 		},
 		Haven: ` The obligation of their leadership leads many
 		young Lasombra to maintain communal havens with other members of their pack. Wealthier Keepers and
@@ -387,7 +399,7 @@ var clanMap = map[string]clan{
 		in (initially) low quantities, to better diversify them-
 		selves`,
 		Discipline: []Discipline{
-			disciplineMap[`dominate`], disciplineMap[`potence`], disciplineMap[`obteneration`],
+			DisciplineMap[`dominate`], DisciplineMap[`potence`], DisciplineMap[`obteneration`],
 		},
 		Weakness: `Lasombra vampires cast no reflections.
 		Whether in a mirror, in a body of water, on a polished
@@ -435,9 +447,8 @@ var clanMap = map[string]clan{
 		schedule. Their precarious stability makes it hard for other
 		Kindred (or, indeed, any vessels with whom they may
 		meet) to interact with Malkavians. `,
-		AssociatedSect: []Sect{
-			SectMap["Camarilla"],
-		},
+		AssociatedSect: []string{
+			"Camarilla",	},
 		Haven: `Consistency is rare among Malkavians.
 		Quite simply, they establish havens where they think
 		to, where they can, and where they can recall. A sig-
@@ -470,7 +481,7 @@ var clanMap = map[string]clan{
 		ly, usually in the wake of Willpower doing the same.
 		`,
 		Discipline: []Discipline{
-			disciplineMap[`auspex`], disciplineMap[`dementation`], disciplineMap[`obsfucate`],
+			DisciplineMap[`auspex`], DisciplineMap[`dementation`], DisciplineMap[`obsfucate`],
 		},
 		Weakness: `All members of Clan Malkavian suffer from
 		a permanent, incurable derangement. They may acquire and
@@ -520,8 +531,8 @@ var clanMap = map[string]clan{
 		alienating. How they react to the Curse of Caine varies with their outlook and mental stamina, but it’s hard
 		to be an object of utter revulsion and not let it shape
 		one’s disposition toward one’s “Kindred” in some way.`,
-		AssociatedSect: []Sect{
-			SectMap["Camarilla"], SectMap["Autarkis"], SectMap["Anarchs"],
+		AssociatedSect: []string{
+			"Camarilla","Autarkis", "Anarchs",
 		},
 		Haven: `Nosferatu Kindred often make their havens
 		far from the scorn and spite of other vampires. Whether they construct warrens in the sewers suggested by their
@@ -541,7 +552,7 @@ var clanMap = map[string]clan{
 		specialize rather than generalize in Backgrounds, favoring those that carry favors and information like Allies,
 		Contacts, Mentor, and even a bit of Influence`,
 		Discipline: []Discipline{
-			disciplineMap[`animalism`], disciplineMap[`obfuscate`], disciplineMap[`potence`],
+			DisciplineMap[`animalism`], DisciplineMap[`obfuscate`], DisciplineMap[`potence`],
 		},
 		Weakness: `All Nosferatu have an Appearance
 		score of zero, and they may never improve it. Cross it
@@ -591,8 +602,8 @@ var clanMap = map[string]clan{
 		vince Kindred that the Ravnos trade in lies and misdi-
 		rection, but it can also prove to be a Deceiver’s salva-
 		tion and ease the vagaries of an outcast unlife`,
-		AssociatedSect: []Sect{
-			SectMap["Independent"],
+		AssociatedSect: []string{
+			"Independent",
 		},
 		Haven: `Many Ravnos take to the
 		road instead of establishing perma-
@@ -624,7 +635,7 @@ var clanMap = map[string]clan{
 		tight spot, such as stashed Resources, defensible Do-
 		main, and a few Allies or Contacts.`,
 		Discipline: []Discipline{
-			disciplineMap[`animalism`], disciplineMap[`chimerstry`], disciplineMap[`fortitude`],
+			DisciplineMap[`animalism`], DisciplineMap[`chimerstry`], DisciplineMap[`fortitude`],
 		},
 		Weakness: `A turbulent history makes the Ravnos
 		slaves to their vices. Each Ravnos has a penchant for
@@ -695,8 +706,8 @@ var clanMap = map[string]clan{
 		Harpies, Princes, and other key figures in vampiric so-
 		ciety.
 		`,
-		AssociatedSect: []Sect{
-			SectMap["Camarilla"],
+		AssociatedSect: []string{
+			"Camarilla",	
 		},
 		Haven: `The Degenerates
 		spare no expense in appoint-
@@ -736,7 +747,7 @@ var clanMap = map[string]clan{
 		must frequently attend to the ugly business of bringing
 		the Beast to heel.`,
 		Discipline: []Discipline{
-			disciplineMap[`celerity`], disciplineMap[`auspex`], disciplineMap[`presence`],
+			DisciplineMap[`celerity`], DisciplineMap[`auspex`], DisciplineMap[`presence`],
 		},
 		Weakness: `When a Toreador experiences some-
 		thing truly remarkable — a person, an objet d’art, a
@@ -804,9 +815,9 @@ var clanMap = map[string]clan{
 		houses to further their understanding of
 		the vitae that is such a focal point of their
 		unlives.`,
-		AssociatedSect: []Sect{
-			SectMap["Camarilla"],
-		},
+		AssociatedSect: []string{
+			"Camarilla",
+			},
 		Haven: `Many Tremere rely on a central chantry the
 		Clan maintains in cities where it has a notable pres-
 		ence. More solitary Warlocks develop private havens,
@@ -833,7 +844,7 @@ var clanMap = map[string]clan{
 		Mentor, Status, and Retainers (whom an accomplished
 		Warlock may craft from otherwise inert components).`,
 		Discipline: []Discipline{
-			disciplineMap[`auspex`], disciplineMap[`dominate`], disciplineMap[`thaumaturgy`],
+			DisciplineMap[`auspex`], DisciplineMap[`dominate`], DisciplineMap[`thaumaturgy`],
 		},
 		Weakness: `Tremere dependency on blood is even
 		more pronounced than that of other Kindred. It takes
@@ -880,8 +891,8 @@ var clanMap = map[string]clan{
 		and things
 		even less
 		recognizable`,
-		AssociatedSect: []Sect{
-			SectMap["Sabbat"],
+		AssociatedSect: []string{
+			"Sabbat",
 		},
 		Haven: `Young
 		Tzimisce
@@ -920,7 +931,7 @@ var clanMap = map[string]clan{
 		posed during their fledgling years sometimes results in
 		complicated derangements.`,
 		Discipline: []Discipline{
-			disciplineMap[`animalism`], disciplineMap[`auspex`], disciplineMap[`vicissitude`],
+			DisciplineMap[`animalism`], DisciplineMap[`auspex`], DisciplineMap[`vicissitude`],
 		},
 		Weakness: `The Tzimisce are inextricably tied to
 		their domains of origin, and must rest in the proximity
@@ -985,9 +996,8 @@ var clanMap = map[string]clan{
 		Damned, each and every Ventrue must still seek that
 		one resource that makes Kindred society egalitarian:
 		precious blood.`,
-		AssociatedSect: []Sect{
-			SectMap["Camarilla"],
-		},
+		AssociatedSect: []string{
+			"Camarilla",	},
 		Haven: `A Ventrue’s haven
 		displays both her great power
 		(read: wealth) and distinguished
@@ -1014,7 +1024,7 @@ var clanMap = map[string]clan{
 		for the Ventrue, with almost every Blue Blood possessing
 		some amount of Resources, Status, and Herd (particularly the latter, given the Clan weakness). Elders in particular cultivate enviable havens and sprawling Domains.`,
 		Discipline: []Discipline{
-			disciplineMap[`dominate`], disciplineMap[`fortitude`], disciplineMap[`presence`],
+			DisciplineMap[`dominate`], DisciplineMap[`fortitude`], DisciplineMap[`presence`],
 		},
 		Weakness: `The Ventrue have rarified tastes, and
 		they find only one specific type of mortal blood palat-
@@ -1375,7 +1385,7 @@ var SectMap = map[string]Sect{
 		},
 	},
 	"Independents": {
-		Name: "",
+		Name: "Independent",
 		Description: `Over the past few centuries, the fatal dance between
 		the Camarilla and the Sabbat has changed vampire so-
 		ciety. Their bloody Jyhad has shaped the secret history
@@ -1601,19 +1611,7 @@ var TraditionMap = []Traditions{
 	},
 }
 
-type Discipline struct {
-	Name        string
-	Description string
-	Abilities   map[string]disciplineAbility
-}
-
-type disciplineAbility struct {
-	BaseDesc string
-	lvl      int
-	System   map[string]string
-}
-
-var disciplineMap = map[string]Discipline{
+var DisciplineMap = map[string]Discipline{
 	"animalism": {
 		Name: `Animalism`,
 		Description: `The Beast resides within all creatures, from scut-
@@ -1626,7 +1624,7 @@ var disciplineMap = map[string]Discipline{
 		power, he can even control the Beast within mortals
 		and other supernaturals.`,
 		Abilities: map[string]disciplineAbility{
-			"Feral Whisper": disciplineAbility{
+			"Feral Whisper": {
 				BaseDesc: `This power is the basis from which all other Animalism abilities grow. The vampire creates an empathic
 				connection with a beast, thereby allowing him to com-
 				municate or issue simple commands. The Kindred locks
@@ -1635,7 +1633,7 @@ var disciplineMap = map[string]Discipline{
 				predatory birds, and larger reptiles are relatively easy
 				to communicate with. Insects, invertebrates, and most
 				fish are just too simple to connect with.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `No roll is necessary to talk with an animal, but the character must establish eye contact first. Issuing commands requires a Manipulation + Animal Ken roll. The difficulty depends on the
 					creature: Predatory mammals (wolves, cats, vampire
@@ -1652,7 +1650,7 @@ var disciplineMap = map[string]Discipline{
 					derness haven for some months`,
 				},
 			},
-			"beckoning": disciplineAbility{
+			"beckoning": {
 				BaseDesc: `The vampire’s connection to the Beast grows strong
 				enough that he may call out in the voice of a specific
 				type of animal — howling like a wolf, shrilling like a
@@ -1667,7 +1665,7 @@ var disciplineMap = map[string]Discipline{
 				favorably disposed toward him and are at least willing
 				to listen to the Kindred’s concerns. (The vampire can
 				then use Feral Whispers on individual animals to command them.)`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The player rolls Charisma + Survival (dif-
 						ficulty 6) to determine the response to the character’s
@@ -1686,7 +1684,7 @@ var disciplineMap = map[string]Discipline{
 					"5": "All of the animals respond.",
 				},
 			},
-			"Quell the Beast": disciplineAbility{
+			"Quell the Beast": {
 				BaseDesc: `As the supreme predators of the natural world, Kindred are highly attuned to the bestial nature that dwells
 				within every mortal heart. A vampire who develops
 				this power may assert his will over a mortal (animal or
@@ -1703,7 +1701,7 @@ var disciplineMap = map[string]Discipline{
 				grel know the power as Quell the Beast, and force the
 				mortal spirit into a state of fear or apathy as befits the
 				individual vampire’s nature.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player rolls Manipulation + Intimidation if forcing down the Beast through fear, or Manipulation + Empathy if soothing it into complacency. The difficulty of the roll is 7 in either case. This is an extended action requiring as many total successes as the
 					target has Willpower. Failure indicates that the player
@@ -1722,7 +1720,7 @@ var disciplineMap = map[string]Discipline{
 					of frenzy.`,
 				},
 			},
-			"Subsume the Spirit": disciplineAbility{
+			"Subsume the Spirit": {
 				BaseDesc: `By locking his gaze with that of an animal, the vampire may mentally possess the creature. Some elders believe that since animals don’t have souls but spirits, the
 				vampire can move his own soul into the animal’s body.
 				Many younger vampires think it a matter of transfer-
@@ -1730,7 +1728,7 @@ var disciplineMap = map[string]Discipline{
 				mind) is pushed aside by the Kindred’s own consciousness. The vampire’s body falls into a motionless state
 				akin to torpor while his mind takes control of the animal’s actions, remaining this way until the Kindred’s
 				consciousness returns.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player rolls Manipulation + Animal
 					Ken (difficulty 8) as the character looks into the ani-
@@ -1742,7 +1740,7 @@ var disciplineMap = map[string]Discipline{
 					"5": "Can also use Chimerstry, Necromancy, Thaumaturgy, and other mystical powers",
 				},
 			},
-			"Drawing Out the Beast": disciplineAbility{
+			"Drawing Out the Beast": {
 				BaseDesc: `At this level of Animalism, the Kindred has a keen
 				understanding of the Beast Within, and is able to release his feral urges upon another mortal or vampire.
 				The recipient of the vampire’s Beast is instantly overcome by frenzy. This is an unnatural frenzy, however,
@@ -1756,7 +1754,7 @@ var disciplineMap = map[string]Discipline{
 				opportunity to dig deeper. In this case, the frenzy lasts
 				twice as long as normal and is twice as difficult to shrug
 				off; its severity also increases exponentially.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The player must announce his preferred tar-
 					get (since it must be someone within sight, Drawing
@@ -1777,7 +1775,7 @@ var disciplineMap = map[string]Discipline{
 					successfully.`,
 				},
 			},
-			"Animal Succulence": disciplineAbility{
+			"Animal Succulence": {
 				BaseDesc: `Most vampires find the blood of animals flat, taste-
 				less, and lacking in nutritional value. Some Gangrel
 				and Nosferatu, however, have refined their under-
@@ -1791,7 +1789,7 @@ var disciplineMap = map[string]Discipline{
 				(Gangrel, werecreatures, and so on) who have taken
 				animal forms, nor does it change the vampire’s feeding
 				preferences (such as the Ventrue have)`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `No roll is needed; once learned, this power
 					is always in effect. Animal Succulence allows a charac-
@@ -1808,7 +1806,7 @@ var disciplineMap = map[string]Discipline{
 					of dining on human or Kindred blood.`,
 				},
 			},
-			"Shared Soul": disciplineAbility{
+			"Shared Soul": {
 				BaseDesc: `This power allows a character to probe the mind of
 				any one animal she touches. Shared Soul can be very
 				disconcerting to both parties involved, as each par-
@@ -1825,7 +1823,7 @@ var disciplineMap = map[string]Discipline{
 				the vampire to adopt mannerisms, behavior patterns,
 				or even ethics (or lack thereof) similar to those of the
 				animal.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The character touches the intended subject
 					creature, and the player rolls Perception + Animal Ken
@@ -1841,7 +1839,7 @@ var disciplineMap = map[string]Discipline{
 					the soul of mouse, bloodlust if the subject was a rabid`,
 				},
 			},
-			"Species Speech": disciplineAbility{
+			"Species Speech": {
 				BaseDesc: `The basic power Feral Whispers (Animalism 1) al-
 				lows character to communicate with only one animal
 				at a time. With Species Speech, a character can enter
@@ -1849,7 +1847,7 @@ var disciplineMap = map[string]Discipline{
 				species that are present. Species Speech is most often
 				used after an application of The Beckoning (Animal-
 				ism 2), which can draw a crowd of likely subjects.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The player rolls Manipulation + Animal
 					Ken (difficulty 7) to establish contact with the tar-
@@ -1867,7 +1865,7 @@ var disciplineMap = map[string]Discipline{
 					or snake present.`,
 				},
 			},
-			"Conquer the Beast": disciplineAbility{
+			"Conquer the Beast": {
 				BaseDesc: `Masters of Animalism have a much greater under-
 				standing of both beasts in general and the Beast in
 				particular. Those who have developed this power can
@@ -1876,7 +1874,7 @@ var disciplineMap = map[string]Discipline{
 				pire both to control her frenzies and to enter them at
 				will. Some elders say that the development of this pow-
 				er is one of the first steps on the road to Golconda`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The character can enter frenzy at will. The
 					player rolls Willpower (difficulty 7). Success sends the
@@ -1895,7 +1893,7 @@ var disciplineMap = map[string]Discipline{
 					frenzy again.`,
 				},
 			},
-			"Taunt the Caged Beast": disciplineAbility{
+			"Taunt the Caged Beast": {
 				BaseDesc: `Some Kindred are so attuned to the Beast that they
 				can unleash it in another individual at will. Vampires
 				who have developed this power are able to send ad-
@@ -1904,7 +1902,7 @@ var disciplineMap = map[string]Discipline{
 				The physical contact allows the vampire’s own Beast
 				to reach out and awaken that of the victim, enraging it
 				by threatening its territory.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The character touches the target. The
 					player spends a Willpower point and rolls Manipulation + Empathy (difficulty 7). The victim makes a
@@ -1922,7 +1920,7 @@ var disciplineMap = map[string]Discipline{
 					"5": "All of the animals respond.",
 				},
 			},
-			"Unchain the Beast": disciplineAbility{
+			"Unchain the Beast": {
 				BaseDesc: `The self-destructive nature of Cainites can be turned
 				against them by an elder who possesses this formidable
 				power. With a glance, the vampire can awaken the
@@ -1932,7 +1930,7 @@ var disciplineMap = map[string]Discipline{
 				A target of this power erupts into a fountain of blood
 				and gore as claw and bite wounds from an invisible
 				source spontaneously tear his flesh asunder.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": `The character makes eye contact with the intended victim. The player spends
 						three blood points and rolls Manipulation + Intimida-
@@ -1963,7 +1961,7 @@ var disciplineMap = map[string]Discipline{
 		at least 4, although the more potent the source of dis-
 		traction, the higher the difficulty). `,
 		Abilities: map[string]disciplineAbility{
-			"Heightened Senses": disciplineAbility{
+			"Heightened Senses": {
 				BaseDesc: `This power increases the acuity of all of the vam-
 				pire’s senses, effectively doubling the clarity and range
 				of sight, hearing, and smell. While her senses of taste
@@ -1978,7 +1976,7 @@ var disciplineMap = map[string]Discipline{
 				or eerie feelings of foreboding. The vampire has no
 				control over these perceptions, but with practice can
 				learn to interpret them with a fair degree of accuracy.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `It takes a reflexive action to activate this
 					ability, but no roll or other cost is required. In certain
@@ -1997,7 +1995,7 @@ var disciplineMap = map[string]Discipline{
 					require a 9.`,
 				},
 			},
-			"Aura Perception": disciplineAbility{
+			"Aura Perception": {
 				BaseDesc: `Using this power, the vampire can perceive the psy-
 				chic “auras” that radiate from mortals and supernatural
 				beings alike. These halos comprise a shifting series of
@@ -2011,7 +2009,7 @@ var disciplineMap = map[string]Discipline{
 				involved, the more intense the hues become. A skilled
 				vampire can learn much from her subject by reading
 				the nuances of color and brilliance in the aura’s flow`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `After the character stares at the subject for
 					at least a few seconds, the player rolls Perception + Em-
@@ -2029,7 +2027,7 @@ var disciplineMap = map[string]Discipline{
 					pattern.`,
 				},
 			},
-			"The Spirit's Touch": disciplineAbility{
+			"The Spirit's Touch": {
 				BaseDesc: `When someone handles an object for any length
 				of time, he leaves a psychic impression on the item.
 				A vampire with this level of Auspex can “read” these
@@ -2041,7 +2039,7 @@ var disciplineMap = map[string]Discipline{
 				the last person to handle the item, a long-time owner
 				leaves a stronger impression than someone who held
 				the object briefly, `,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player rolls Perception + Empathy. The
 					difficulty is determined by the age of the impressions
@@ -2076,7 +2074,7 @@ var disciplineMap = map[string]Discipline{
 					is available`,
 				},
 			},
-			"Telepathy": disciplineAbility{
+			"Telepathy": {
 				BaseDesc: `The vampire projects a portion of her consciousness
 				into a nearby mortal’s mind, creating a mental link
 				through which she can communicate wordlessly or
@@ -2089,7 +2087,7 @@ var disciplineMap = map[string]Discipline{
 				Tremere and Tzimisce in particular find this power es-
 				pecially useful in gleaning secrets from others, or for
 				directing their mortal followers with silent precision.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player rolls Intelligence + Subterfuge
 					(difficulty of the subject’s current Willpower points).
@@ -2111,7 +2109,7 @@ var disciplineMap = map[string]Discipline{
 					creatures`,
 				},
 			},
-			"Psychic Projection": disciplineAbility{
+			"Psychic Projection": {
 				BaseDesc: `The Kindred with this awesome ability projects her
 				senses out of her physical shell, stepping from her body
 				as an entity of pure thought. The vampire’s astral form
@@ -2125,7 +2123,7 @@ var disciplineMap = map[string]Discipline{
 				to it. An ephemeral silver cord connects the Kindred’s
 				psyche to her body. If this cord is severed, her consciousness becomes stranded in the astral plane (the realm of
 				ghosts, spirits, and shades).`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": ` Journeying in astral form requires the player
 					to expend a point of Willpower and make a Perception
@@ -2146,13 +2144,13 @@ var disciplineMap = map[string]Discipline{
 					forcefully that the silver cord snaps.`,
 				},
 			},
-			"Clairvoyance": disciplineAbility{
+			"Clairvoyance": {
 				BaseDesc: `By using Clairvoyance, a vampire can perceive dis-
 				tant events without using Psychic Projection. By con-
 				centrating on a familiar person, place, or object, a
 				character can observe the subject’s immediate vicinity
 				while staying aware of her own surroundings.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": ` The player rolls Perception + Empathy (difficulty 6) and describes the target she’s trying to look
 						in on. If the roll is successful, the character can then
@@ -2166,7 +2164,7 @@ var disciplineMap = map[string]Discipline{
 						relating to actions that affect her physical surroundings.`,
 				},
 			},
-			"Prediction": disciplineAbility{
+			"Prediction": {
 				BaseDesc: `Some people are capable of finishing their friends’
 				sentences. Elder vampires with Prediction sometimes begin their friends’ sentences. Prediction is a constant
 				low-level telepathic scan of the minds of everyone the
@@ -2174,7 +2172,7 @@ var disciplineMap = map[string]Discipline{
 				give the vampire the details of his neighbors’ conscious
 				thoughts, it does provide a wealth of cues as to the subjects’ moods, suppressed reflexes, and attitudes toward
 				the topic of conversation.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `Whenever the character is in conversation
 					and either participant in the discussion makes a Social
@@ -2185,7 +2183,7 @@ var disciplineMap = map[string]Discipline{
 					the Social roll being made against the character.`,
 				},
 			},
-			"Telepathic Communication": disciplineAbility{
+			"Telepathic Communication": {
 				BaseDesc: `Telepathy allows a character to pick up only
 				the surface thoughts of other individuals, and to speak
 				to one at a time. With Telepathic Communication,
@@ -2198,7 +2196,7 @@ var disciplineMap = map[string]Discipline{
 				creating a telepathic web that allows all participants to
 				share thoughts with some or all other members of the
 				network as they choose.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The player rolls Charisma + Empathy (dif-
 						ficulty equals the target’s current Willpower points) to
@@ -2215,14 +2213,14 @@ var disciplineMap = map[string]Discipline{
 					"auspex 9": `2x Perception + Empathy, 1000 miles, 1500 kilometers per point of Intelligence`,
 				},
 			},
-			"Karmic Sight": disciplineAbility{
+			"Karmic Sight": {
 				BaseDesc: `The power of Aura Perception (Auspex 2) allows a
 				vampire to take a brief glimpse at the soul of a sub-
 				ject. This power takes Aura Perception several steps
 				forward, allowing a vampire who has mastered Auspex
 				2 to probe the inner workings of a subject’s mind and
 				soul`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The player rolls Perception + Empathy (dif-
 						ficulty equals the subject’s current Willpower). The de-
@@ -2264,7 +2262,7 @@ var disciplineMap = map[string]Discipline{
 					Dark Fate) can be identified as well.`,
 				},
 			},
-			"Mirror Reflex": disciplineAbility{
+			"Mirror Reflex": {
 				BaseDesc: `This power was developed by a Toreador elder who
 				made a fearsome reputation through her fencing prow-
 				ess, acting as a hired champion in dozens of Ventrue
@@ -2273,7 +2271,7 @@ var disciplineMap = map[string]Discipline{
 				but this power taps into physical (rather than social)
 				reflexes, allowing the character to anticipate an en-
 				emy’s moves in personal combat.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The player spends a blood point and rolls
 					Perception + the combat skill the opponent is using
@@ -2286,7 +2284,7 @@ var disciplineMap = map[string]Discipline{
 					meters equal to the character’s Willpower rating`,
 				},
 			},
-			"Psychic Assault": disciplineAbility{
+			"Psychic Assault": {
 				BaseDesc: `Psychic Assault is nothing less than a direct mind-to-mind attack which uses the sheer force of an elder’s
 				will to overpower his target. Victims of Psychic Assault
 				show little outward sign of the attack, save for nosebleeds and expressions of intense agony; all injuries by
@@ -2295,7 +2293,7 @@ var disciplineMap = map[string]Discipline{
 				Assault invariably shows the cause of death to be a
 				heart attack or aneurysm, while vampires killed with
 				this power decay to dust instantly, regardless of age.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The character must touch or make eye con-
 					tact with his target. The player spends three blood
@@ -2342,13 +2340,13 @@ var disciplineMap = map[string]Discipline{
 					him instantly.`,
 				},
 			},
-			"False Slumber": disciplineAbility{
+			"False Slumber": {
 				BaseDesc: `Possibly the source of many Malkavians’ conviction
 				that their sire is alive and well on the astral plane, this
 				power allows a Methuselah‘s spirit to leave his body while
 				in torpor. While seemingly asleep, the vampire is able to
 				project astrally, think, and perceive events normally`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": `No roll is needed. This power is considered
 					to be active whenever the vampire’s body is in torpor,
@@ -2362,7 +2360,7 @@ var disciplineMap = map[string]Discipline{
 					his permanent Willpower points. `,
 				},
 			},
-			"Seeing the Unseen": disciplineAbility{
+			"Seeing the Unseen": {
 				BaseDesc: `Auspex enables Kindred to perceive many
 				things beyond the limits of lesser senses.
 				Among its many uses, Auspex can detect
@@ -2372,7 +2370,7 @@ var disciplineMap = map[string]Discipline{
 				illusions created by the Discipline of Chim-
 				erstry. Note: “Normal sight” includes regular,
 				non-Auspex use of the Awareness skill.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"Obsfucate": ` When a vampire tries to use her
 					heightened perceptions to notice a Kindred
@@ -2429,7 +2427,7 @@ var disciplineMap = map[string]Discipline{
 		as quick to draw blood as any assassin or punk when
 		angered.`,
 		Abilities: map[string]disciplineAbility{
-			"Celerity 1-5": disciplineAbility{
+			"Celerity 1-5": {
 				BaseDesc: `Normally, a character without Celerity must divide
 				their dice if she wants to take multiple actions in a
 				single turn. A character using Celerity
@@ -2437,7 +2435,7 @@ var disciplineMap = map[string]Discipline{
 				without penalty, gaining a full dice pool for each sepa-
 				rate action. Extra actions gained through Celerity may
 				not in turn be split into multiple actions, however.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `Each point of Celerity adds one die to every
 					Dexterity-related dice roll. In addition, the player can
@@ -2455,7 +2453,7 @@ var disciplineMap = map[string]Discipline{
 					`,
 				},
 			},
-			"Projectile": disciplineAbility{
+			"Projectile": {
 				BaseDesc: `Despite the fact that a vampire with Celerity moves
 				at incredible speeds, any bullets he fires or knives he
 				throws while in this state don’t move any faster than
@@ -2465,7 +2463,7 @@ var disciplineMap = map[string]Discipline{
 				around it. Projectile enables a vampire to take his pre-
 				ternatural speed and transfer it into something he has
 				thrown, fired, or launched.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `Projectile requires the expenditure of a blood
 					point. In addition, the player must decide how many
@@ -2479,14 +2477,14 @@ var disciplineMap = map[string]Discipline{
 					actually hits.`,
 				},
 			},
-			"Flower of Death": disciplineAbility{
+			"Flower of Death": {
 				BaseDesc: `In combat, speed kills. A proper application of Celerity in combat can turn even the meekest Cainite
 				into a walking abattoir. How much more deadly, then,
 				is a vampire with the ability to utilize his preternatural
 				speed to the utmost in combat? Flower of Death allows
 				a vampire to take his Celerity and apply it in full to
 				each hand-to-hand or melee attack he makes.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `Flower of Death costs four blood points, but
 					the spectacular effect is well worth it. Once the power
@@ -2503,7 +2501,7 @@ var disciplineMap = map[string]Discipline{
 					astronomical dice pools`,
 				},
 			},
-			"Zephyr": disciplineAbility{
+			"Zephyr": {
 				BaseDesc: `Zephyr produces an effect vaguely similar to one of
 				the legendary comic book-style uses of enhanced speed,
 				allowing its practitioner to run so fast he can run across
@@ -2513,7 +2511,7 @@ var disciplineMap = map[string]Discipline{
 				blur than anything else. Observers must succeed on a
 				Perception + Alertness roll (difficulty 7) to get a de-
 				cent look at a Kindred zooming past in this fashion`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": ` Zephyr requires the expenditure of one point
 					of blood and one point of Willpower. Unfortunately,
@@ -2546,7 +2544,7 @@ var disciplineMap = map[string]Discipline{
 		tempting to disbelieve everything around them, lead-
 		ing to derangements.`,
 		Abilities: map[string]disciplineAbility{
-			"Ignis Fatuus": disciplineAbility{
+			"Ignis Fatuus": {
 				BaseDesc: `The vampire may conjure a minor, static mirage that
 				confounds one sense. For instance, he may evoke a sul-
 				furous stench, the appearance of stigmata, or the shat-
@@ -2559,7 +2557,7 @@ var disciplineMap = map[string]Discipline{
 				wound might look like, falsifying a person’s voice or a
 				photograph of a childhood home requires knowledge
 				of the details.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player spends a point of Willpower
 					for the vampire to create this illusion. The volume of
@@ -2572,7 +2570,7 @@ var disciplineMap = map[string]Discipline{
 					lusion at any time with no effort.`,
 				},
 			},
-			"Fata Morgana": disciplineAbility{
+			"Fata Morgana": {
 				BaseDesc: `The Cainite can now create illusions that appeal to
 				all the senses, though they remain static. For example,
 				the vampire could make a filthy cellar appear as an opulent ballroom, though she could not create a glittering
@@ -2581,7 +2579,7 @@ var disciplineMap = map[string]Discipline{
 				to fool an enraptured visitor with suggestions of what
 				she might expect. A bucket of brackish water is as cool
 				as chilled champagne, after all.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The player spends a Willpower point and a
 					blood point to create the illusion. These static images
@@ -2589,7 +2587,7 @@ var disciplineMap = map[string]Discipline{
 					Ignis Fatuus illusion does.`,
 				},
 			},
-			"Apparition": disciplineAbility{
+			"Apparition": {
 				BaseDesc: `Not really a power unto itself, Apparition allows a
 				vampire to give motion to an illusion created with Ig-
 				nis Fatuus or Fata Morgana. Thus, the Cainite could
@@ -2602,7 +2600,7 @@ var disciplineMap = map[string]Discipline{
 				regain control over the illusion – she can either allow
 				it to continue moving as ordered, or let it fade as de-
 				scribed under Ignis Fatuus.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The creator spends one blood point to make
 					the illusion move in one significant way, or in any
@@ -2614,13 +2612,13 @@ var disciplineMap = map[string]Discipline{
 					the false construct if the roll fails.`,
 				},
 			},
-			"Permanency": disciplineAbility{
+			"Permanency": {
 				BaseDesc: `This power, also used in conjunction with Ignis
 				Fatuus or Fata Morgana, allows a mirage to persist even
 				when the vampire cannot see it. In this way, Ravnos
 				often cloak their temporary havens in false trappings of
 				luxury, or ward off trespassers with illusory guard dogs.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The vampire need only spend a blood point,
 					and the illusion becomes permanent until dissolved
@@ -2628,7 +2626,7 @@ var disciplineMap = map[string]Discipline{
 					by Apparition).`,
 				},
 			},
-			"Horrid Reality": disciplineAbility{
+			"Horrid Reality": {
 				BaseDesc: `Rather than create simple illusions, the vampire
 				can now project hallucinations directly into a victim’s
 				mind. The target of these illusions believes completely
@@ -2640,7 +2638,7 @@ var disciplineMap = map[string]Discipline{
 				real, but he won’t believe them. Note that targets with
 				enough dots in Auspex can still attempt to roll for See-
 				ing the Unseen`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `A Horrid Realty illusion costs two Willpower points to set in motion and lasts for an entire
 					scene (though its effects may last longer; see below).
@@ -2668,7 +2666,7 @@ var disciplineMap = map[string]Discipline{
 					ness or enters torpor.`,
 				},
 			},
-			"False Resonance": disciplineAbility{
+			"False Resonance": {
 				BaseDesc: `Illusions of living or unliving beings are all well
 				and good until someone decides to read the illusion’s
 				mind or its aura. The automatic failure to perceive any
@@ -2679,7 +2677,7 @@ var disciplineMap = map[string]Discipline{
 				Resonance to overlay auras and thoughts on illusions,
 				as well as leave a trace that other emotionally resonant
 				powers can detect later.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `This power automatically applies to any
 					other use of Chimerstry as the user wishes. In effect,
@@ -2696,14 +2694,14 @@ var disciplineMap = map[string]Discipline{
 					same emotional resonance until the next sunrise.`,
 				},
 			},
-			"Fatuus Mastery": disciplineAbility{
+			"Fatuus Mastery": {
 				BaseDesc: `A Ravnos with Fatuus Mastery has no restriction
 				on how often she may use the first three levels (Ignis
 				Fatuus, Fata Morgana, and Apparition) and can maintain or control illusions with minimal concentration
 				or fatigue. Kindred who rely on the high cost of Chimerstry to limit a vampire’s ability to use illusions are in
 				for a very rude surprise when they encounter a Cainite
 				with this power.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `Fatuus Mastery negates the Willpower and
 					blood cost for using the first three levels of Chimerstry.
@@ -2717,11 +2715,11 @@ var disciplineMap = map[string]Discipline{
 					those events.`,
 				},
 			},
-			"Shared Nightmare": disciplineAbility{
+			"Shared Nightmare": {
 				BaseDesc: `Even though Horrid Reality is visible to all onlookers, it can only inflict “damage” on one victim. With
 				Shared Nightmare, a vampire can inflict her tormented
 				visions on a crowd.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `To use this power, the player must spend
 					two Willpower points, plus one blood point per target.
@@ -2731,12 +2729,12 @@ var disciplineMap = map[string]Discipline{
 					Control/Instinct.`,
 				},
 			},
-			"Far Fatuus": disciplineAbility{
+			"Far Fatuus": {
 				BaseDesc: `This power allows a Kindred to project illusions to
 				any area he can see or visualize. Under most circumstances, accomplishing this requires him to have visited the location in question before he can project illusions there. Although more difficult, a vampire may
 				project illusions on the basis of a description, a photo,
 				or a video clip`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The difficulty for using Far Fatuus depends
 					on the user’s familiarity with the location. The player
@@ -2752,7 +2750,7 @@ var disciplineMap = map[string]Discipline{
 					or have a undoctored photo`,
 				},
 			},
-			"Synesthesia": disciplineAbility{
+			"Synesthesia": {
 				BaseDesc: `A Cainite who masters this power can shuffle oth-
 				ers’ senses around to suit his preferences. He can select one target and inflict a serious, disorienting, and
 				all-encompassing case of synesthesia upon her, making it impossible for her to interact meaningfully with
@@ -2763,7 +2761,7 @@ var disciplineMap = map[string]Discipline{
 				pleasure. Used against a crowd, sensations are randomly shuffled, so one man will see what the woman next to him sees, but hears what the man 15 feet behind him
 				hears and feels what the child a block away feels. The
 				end result is extremely disorienting for all victims.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": ` When used against a single victim, the play-
 					er must spend one Willpower point and roll Manipula-
@@ -2781,14 +2779,14 @@ var disciplineMap = map[string]Discipline{
 					"5": `Permanent`,
 				},
 			},
-			"Mayaparisatya": disciplineAbility{
+			"Mayaparisatya": {
 				BaseDesc: `This expression of Chimerstry allows the Cainite
 				to directly alter or create real objects or creatures, although such changes are of finite duration. A vampire
 				with this power can transform the air around a rival
 				Kindred into fire or render a locked door insubstantial.
 				A more harrowing use of this power enables the vampire to force an object out of existence by transforming
 				it into nothing more than a wisp of its former reality.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": `To use this power, the player must spend 10
 					blood points and one permanent Willpower point and
@@ -2850,13 +2848,13 @@ var disciplineMap = map[string]Discipline{
 		ist advancement of what modern people consider con-
 		sciousness`,
 		Abilities: map[string]disciplineAbility{
-			"Passion": disciplineAbility{
+			"Passion": {
 				BaseDesc: `The vampire stirs his victim’s emotions, either
 				heightening them to a fevered pitch or blunting them
 				until the target is completely desensitized. The Cainite may not choose which emotion is affected; she may
 				only amplify or dull emotions already present in the
 				target. In this way, a vampire can inflame mild irritation into quivering rage or atrophy true love into casual interest.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The character talks to her victim, and
 					the vampire’s player rolls Charisma + Empathy (dif-
@@ -2874,7 +2872,7 @@ var disciplineMap = map[string]Discipline{
 					"6+": `Three months`,
 				},
 			},
-			"The Haunting": disciplineAbility{
+			"The Haunting": {
 				BaseDesc: `The vampire manipulates the sensory centers of his
 				victim’s brain, flooding the victim’s senses with visions,
 				sounds, scents, or feelings that aren’t really there. The
@@ -2885,7 +2883,7 @@ var disciplineMap = map[string]Discipline{
 				form of the subject’s repressed fears, guilty memories,
 				or anything else that the Storyteller finds dramatically
 				appropriate.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `After the vampire speaks to the victim, the
 					player spends a blood point and rolls Manipulation +
@@ -2900,7 +2898,7 @@ var disciplineMap = map[string]Discipline{
 					"6+": `One year`,
 				},
 			},
-			"Eyes of Chaos": disciplineAbility{
+			"Eyes of Chaos": {
 				BaseDesc: `This peculiar power allows the vampire to take advantage of the fleeting clarity hidden in insanity. She
 				may scrutinize the “patterns” of a person’s soul, the
 				convolutions of a vampire’s inner nature, or even random events in nature itself. The Kindred with this
@@ -2911,7 +2909,7 @@ var disciplineMap = map[string]Discipline{
 				patterns of fate. Secrets revealed
 				via Eyes of Chaos are never simple facts; they’re tanta-
 				lizing symbols adrift in a sea of madness`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `This power allows a vampire to determine a
 					person’s true Nature, among other things. The vampire
@@ -2930,7 +2928,7 @@ var disciplineMap = map[string]Discipline{
 					understand their message.`,
 				},
 			},
-			"Voice of Madness": disciplineAbility{
+			"Voice of Madness": {
 				BaseDesc: `By merely addressing his victims aloud, the Kindred
 				can drive targets into fits of blind rage or fear, forcing
 				them to abandon reason and higher thought. Victims
@@ -2940,7 +2938,7 @@ var disciplineMap = map[string]Discipline{
 				they were merely encouraging people to act “according
 				to their natures.” Unfortunately for the vampire concerned, he runs a very real risk of falling prey to his
 				own voice’s power.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player spends a blood point and makes
 					a Manipulation + Empathy roll (difficulty 7). One tar-
@@ -2963,11 +2961,11 @@ var disciplineMap = map[string]Discipline{
 					frenzy or Rötschreck response is automatic.`,
 				},
 			},
-			"Total Insanity": disciplineAbility{
+			"Total Insanity": {
 				BaseDesc: `The vampire coaxes the madness from the deepest
 				recesses of her target’s mind, focusing it into an overwhelming wave of insanity. This power has driven
 				countless victims, vampire and mortal alike, to unfortunate ends.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The Kindred must gain her target’s undi-
 					vided attention for at least one full turn to enact this
@@ -2983,7 +2981,7 @@ var disciplineMap = map[string]Discipline{
 					"5+": `One year`,
 				},
 			},
-			"Lingering Malaise": disciplineAbility{
+			"Lingering Malaise": {
 				BaseDesc: `While lesser Dementation powers allow a vampire to
 				inflict temporary (though often long-lasting) madness
 				upon a victim, elders of the Clan have developed the
@@ -2991,7 +2989,7 @@ var disciplineMap = map[string]Discipline{
 				manent maladies. Lingering Malaise causes permanent
 				psychological shifts within the victim, making him, as
 				one Gangrel elder remarked, “an honorary Lunatic.”`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The character speaks to his victim for at
 					least a minute, describing the derangement that Lin-
@@ -3007,7 +3005,7 @@ var disciplineMap = map[string]Discipline{
 					until the derangement takes hold.`,
 				},
 			},
-			"Shattered Mirror": disciplineAbility{
+			"Shattered Mirror": {
 				BaseDesc: `Although Dementation’s low-level effects are pri-
 				marily to initiate or promote insanity rather than to
 				create it spontaneously, some of its more potent mani-
@@ -3015,7 +3013,7 @@ var disciplineMap = map[string]Discipline{
 				some power can transfer her own deranged mindset
 				into the psyche of a hapless victim, spreading her own
 				brand of insanity like a virus.”`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The vampire must establish eye contact
 					with her intended victim to apply this power.
@@ -3034,7 +3032,7 @@ var disciplineMap = map[string]Discipline{
 					"6+": `one year per success over 5`,
 				},
 			},
-			"Restructure": disciplineAbility{
+			"Restructure": {
 				BaseDesc: `The elder with this fearsome power has the ability
 				to twist his victims’ psyches at their most basic levels,
 				warping their very beings. The subject of Restructure
@@ -3043,7 +3041,7 @@ var disciplineMap = map[string]Discipline{
 				or religious conversion. This effect goes much deeper
 				than the implantation of a derangement; it actually
 				performs a complete rewrite of the victim’s personality.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `As the description says, this power allows
 					the vampire to change his target’s Nature to one more
@@ -3060,7 +3058,7 @@ var disciplineMap = map[string]Discipline{
 					as it is impossible for such a fundamental change to occur flawlessly). A botch on this roll changes the character’s own Nature to that of his intended victim.`,
 				},
 			},
-			"Personal Scourge": disciplineAbility{
+			"Personal Scourge": {
 				BaseDesc: `Similar to the Auspex power of Psychic Assault, this fearsome ability allows the elder to turn
 				the very strength of her victim’s mind against him,
 				inflicting physical harm with the power of his own
@@ -3070,7 +3068,7 @@ var disciplineMap = map[string]Discipline{
 				victim’s aura swirls with violent psychosis and erupts
 				outward in writhing appendages — a sight that can
 				make even the most jaded Tzimisce quail`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The vampire must touch or establish eye
 					contact with her target. The player rolls Manipulation + Empathy (difficulty equal to the target’s
@@ -3082,7 +3080,7 @@ var disciplineMap = map[string]Discipline{
 					and gibbering; this includes spending blood to heal.`,
 				},
 			},
-			"Lunatic Eruption": disciplineAbility{
+			"Lunatic Eruption": {
 				BaseDesc: `This fearsome ability is only known to have been
 				applied a few times in recorded Kindred history, most
 				spectacularly during the final nights of the last battle of
@@ -3091,7 +3089,7 @@ var disciplineMap = map[string]Discipline{
 				(kilometers) into an orgy of bloodlust and rage. It is
 				suspected that the Malkavians have used the threat of
 				this power as a bargaining chip in several key negotiations`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": `The player spends four Willpower points
 					and rolls Stamina + Intimidation (difficulty 8). The
@@ -3125,7 +3123,7 @@ var disciplineMap = map[string]Discipline{
 		Clans. The Giovanni, Lasombra, Tremere, and Ventrue all consider an iron will to be a boon, and are eager to impose that iron will on any who would move
 		against them.`,
 		Abilities: map[string]disciplineAbility{
-			"Command": disciplineAbility{
+			"Command": {
 				BaseDesc: `The vampire locks eyes with the subject and speaks
 				a one-word command, which the subject must be obey
 				instantly. The order must be clear and straightforward:
@@ -3138,7 +3136,7 @@ var disciplineMap = map[string]Discipline{
 				The command may be included in a sentence, thereby concealing the power’s use from others. This effort at subtlety still requires the Kindred to make eye
 				contact at the proper moment and stress the key word
 				slightly.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": ` The player rolls Manipulation + Intimida-
 					tion (difficulty equals the target’s current Willpower
@@ -3153,7 +3151,7 @@ var disciplineMap = map[string]Discipline{
 					indeed, any effect at all.`,
 				},
 			},
-			"Mesmerize": disciplineAbility{
+			"Mesmerize": {
 				BaseDesc: `With this power, a vampire can verbally implant a
 				false thought or hypnotic suggestion in the subject’s
 				subconscious mind. Both Kindred and target must be
@@ -3166,7 +3164,7 @@ var disciplineMap = map[string]Discipline{
 				as seeing a rabbit or believing yourself to be on fire). A
 				subject can have only one suggestion implanted at any
 				time.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The player rolls Manipulation + Leader-
 					ship (difficulty equal to the target’s current Willpower
@@ -3186,7 +3184,7 @@ var disciplineMap = map[string]Discipline{
 					mortal shoot herself in the head.`,
 				},
 			},
-			"The Forgetful Mind": disciplineAbility{
+			"The Forgetful Mind": {
 				BaseDesc: `After capturing the subject’s gaze, the vampire delves
 				into the subject’s memories, stealing or re-creating
 				them at his whim. The Forgetful Mind does not allow
@@ -3206,7 +3204,7 @@ var disciplineMap = map[string]Discipline{
 				more successes than his predecessor did. However, the
 				Kindred cannot use The Forgetful Mind to restore his
 				own memories if they were stolen in such a way.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player states what sorts of alteration he
 					wants to perform, then rolls Wits + Subterfuge (dif-
@@ -3230,7 +3228,7 @@ var disciplineMap = map[string]Discipline{
 					subject’s life.`,
 				},
 			},
-			"Conditioning": disciplineAbility{
+			"Conditioning": {
 				BaseDesc: `Through sustained manipulation, the vampire can
 				make a subject more pliant to the Kindred’s will. Over
 				time, the victim becomes increasingly susceptible to
@@ -3248,7 +3246,7 @@ var disciplineMap = map[string]Discipline{
 				ing initiative or showing any imagination. In the end,
 				such retainers become like automatons or the walking
 				dead.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player rolls Charisma + Leadership (dif-
 						ficulty equal to the target’s current Willpower points)
@@ -3265,7 +3263,7 @@ var disciplineMap = map[string]Discipline{
 						present to retain absolute control. `,
 				},
 			},
-			"Possession": disciplineAbility{
+			"Possession": {
 				BaseDesc: `At this level of Dominate, the force of the Kindred’s
 				psyche is such that it can utterly supplant the mind of
 				a mortal subject. Speaking isn’t required, but the vam-
@@ -3286,7 +3284,7 @@ var disciplineMap = map[string]Discipline{
 				form. However, the vampire’s own body must be awake
 				to do so, requiring a successful roll to remain awake
 				`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": ` The vampire must completely strip away the
 					target’s Willpower prior to possessing her. The player
@@ -3309,12 +3307,12 @@ var disciplineMap = map[string]Discipline{
 					and other mystical powers`,
 				},
 			},
-			"Chain the Psyche": disciplineAbility{
+			"Chain the Psyche": {
 				BaseDesc: `Not content with merely commanding their subjects,some elders apply this power to ensure obedience from
 				recalcitrant victims. Chain the Psyche is a Dominate
 				technique that inflicts incapacitating pain on a target
 				who attempts to break the vampire’s commands.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The player spends a blood point when her
 					character applies Dominate to a subject. Any attempt
@@ -3329,14 +3327,14 @@ var disciplineMap = map[string]Discipline{
 					tion rating, after which the effect fades.`,
 				},
 			},
-			"Loyalty": disciplineAbility{
+			"Loyalty": {
 				BaseDesc: `With this power in effect, the elder’s Dominate is so
 				strong that other vampires find it almost impossible to
 				break with their own commands. Despite the name,
 				Loyalty instills no special feelings in the victim — the
 				vampire’s commands are simply implanted far more
 				deeply than normal.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `Any other vampire attempting to employ
 					Dominate on a subject who has been Dominated by a
@@ -3344,11 +3342,11 @@ var disciplineMap = map[string]Discipline{
 					rolls and must spend an additional Willpower point.`,
 				},
 			},
-			"Obedience": disciplineAbility{
+			"Obedience": {
 				BaseDesc: `While most Kindred must employ Dominate through
 				eye contact, some powerful elders may command loy-
 				alty with the lightest brush of a hand`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The character can employ all Dominate
 					powers through touch instead of eye contact (although
@@ -3359,13 +3357,13 @@ var disciplineMap = map[string]Discipline{
 					a single target require the character to touch the subject again.`,
 				},
 			},
-			"Mass Manipulation": disciplineAbility{
+			"Mass Manipulation": {
 				BaseDesc: `A truly skilled elder may command small crowds
 				through the use of this power. By manipulating the
 				strongest minds within a given group, a gathering may
 				be directed to the vampire’s will.
 				`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The player declares that he is using this
 					power before rolling for the use of another Dominate
@@ -3379,7 +3377,7 @@ var disciplineMap = map[string]Discipline{
 					make eye contact only with the initial target.`,
 				},
 			},
-			"Still the Mortal Flesh": disciplineAbility{
+			"Still the Mortal Flesh": {
 				BaseDesc: `Despite its name, this power may be employed on
 				vampires as well as mortals, and it has left more than
 				one unfortunate victim writhing in agony — or unable
@@ -3390,7 +3388,7 @@ var disciplineMap = map[string]Discipline{
 				easily to the Kindred, but modern medicine has made
 				the bodies and spirits of mortals more resistant to such
 				manipulations`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The player rolls Manipulation + Medicine
 					(difficulty equal to the target’s current Willpower
@@ -3403,14 +3401,14 @@ var disciplineMap = map[string]Discipline{
 					are all viable targets. While Still the Mortal Flesh is in effect, a vampire can either stop any one of those functions entirely or cause them to fluctuate erratically.`,
 				},
 			},
-			"Far Mastery": disciplineAbility{
+			"Far Mastery": {
 				BaseDesc: `This refinement of Obedience (though the character
 					need not have learned Obedience first) allows the use
 					of Dominate on any subject that the vampire is familiar
 					with, at any time, over any distance. If the elder knows
 					where his target is, he may issue commands as if he
 					were standing face- to-face with his intended victim.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The player spends a Willpower point and
 					rolls Perception + Empathy (difficulty equal to the sub-
@@ -3422,7 +3420,7 @@ var disciplineMap = map[string]Discipline{
 					being.`,
 				},
 			},
-			"Speak Through the Blood": disciplineAbility{
+			"Speak Through the Blood": {
 				BaseDesc: `The power structures of Methuselahs extend across
 				continents and centuries. This power allows such an-
 				cients to wield control over their descendants, even
@@ -3443,7 +3441,7 @@ var disciplineMap = map[string]Discipline{
 				been used. Her childer, however, are affected normally
 				unless they are also enlightened. Ghouls of the victims
 				of this power are also affected, but to a lesser extent.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": `The player spends a permanent Willpower
 					point and rolls Manipulation + Leadership. The dif-
@@ -3463,14 +3461,14 @@ var disciplineMap = map[string]Discipline{
 					ends of one’s lineage.`,
 				},
 			},
-			"Resist Dominate": disciplineAbility{
+			"Resist Dominate": {
 				BaseDesc: `This refinement of Obedience (though the character
 					need not have learned Obedience first) allows the use
 					of Dominate on any subject that the vampire is familiar
 					with, at any time, over any distance. If the elder knows
 					where his target is, he may issue commands as if he
 					were standing face- to-face with his intended victim.`,
-				lvl: 0,
+				Lvl: 0,
 				System: map[string]string{
 					"Mortals": `Few mortals can hope to resist
 					Dominate, as their strength of will nothing
@@ -3515,9 +3513,9 @@ var disciplineMap = map[string]Discipline{
 		such as sunlight and fire, and the Gangrel, Ravnos, and
 		Ventrue all find that edge incredibly useful.`,
 		Abilities: map[string]disciplineAbility{
-			"Fortitude 1-5": disciplineAbility{
+			"Fortitude 1-5": {
 				BaseDesc: ``,
-				lvl:      5,
+				Lvl:      5,
 				System: map[string]string{
 					"sys": `A character’s rating in Fortitude adds to his
 					Stamina for the purposes of soaking normal damage
@@ -3528,16 +3526,16 @@ var disciplineMap = map[string]Discipline{
 					sunlight, or massive physical trauma.`,
 				},
 			},
-			"Fortitude 6+": disciplineAbility{
+			"Fortitude 6+": {
 				BaseDesc: `Elder vampires progress in Fortitude in the same way
 				as Celerity. They can increase their basic
 				mastery of the Discipline or to take an alternate power`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": ``,
 				},
 			},
-			"Personal Armor": disciplineAbility{
+			"Personal Armor": {
 				BaseDesc: `Nobody likes to get hit, not even Cainites. The
 				easiest way to ensure that one is not hit (or shot, or
 				stabbed) repeatedly is to take the weapon with which
@@ -3546,7 +3544,7 @@ var disciplineMap = map[string]Discipline{
 				century, causes anything that strikes a Kindred who
 				employs Personal Armor to shatter on impact.
 				`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `With the expenditure of two blood points,
 					a vampire can add preternatural hardness to his flesh.
@@ -3568,14 +3566,14 @@ var disciplineMap = map[string]Discipline{
 					scene.`,
 				},
 			},
-			"Shared Strength": disciplineAbility{
+			"Shared Strength": {
 				BaseDesc: `It’s one thing to laugh off bullets, rather another to
 				watch the ricochets mow down everyone around you.
 				Many Kindred have wished, at one time or another,
 				that they could lend their monstrous vitality to those
 				around them. Those few vampires who have mastered
 				Shared Strength can — if only for a little while.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `Shared Strength duplicates a portion of a
 					vampire’s Fortitude (one dot for every point of blood
@@ -3600,10 +3598,10 @@ var disciplineMap = map[string]Discipline{
 					"7": `One year`,
 				},
 			},
-			"Adamantine": disciplineAbility{
+			"Adamantine": {
 				BaseDesc: `Adamantine functions as a more potent version of
 				Personal Armor.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `This power mimics the effects of Personal
 					Armor, save that the vampire who uses it takes no
@@ -3623,7 +3621,7 @@ var disciplineMap = map[string]Discipline{
 		despised for their foul practices (until those practices
 		become useful, of course).`,
 		Abilities: map[string]disciplineAbility{
-			"Necromancy Base": disciplineAbility{
+			"Necromancy Base": {
 				BaseDesc: `Over the centuries, the various schools of vampiric
 				Necromancy have evolved and diversified from an earlier form of death magic, leaving several distinct paths
 				of necromantic magic available to Cainites. Nearly all
@@ -3631,7 +3629,7 @@ var disciplineMap = map[string]Discipline{
 				before extending their studies to other paths. The primary Necromancy path increases automatically as the
 				character increases her overall Necromancy rating.
 				Other paths must be bought separately, using the experience costs for secondary paths`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `A Cainite necromancer must learn at least
 					three levels in his primary path before learning his first
@@ -3639,45 +3637,45 @@ var disciplineMap = map[string]Discipline{
 					master the primary path (all five levels) before acquiring any knowledge of a third path.`,
 				},
 			},
-			"The Sepulchre Path": disciplineAbility{
+			"The Sepulchre Path": {
 				BaseDesc: `Path in which the vampire can witness, summon, and command the spirits of the dead.`,
-				lvl:      0,
+				Lvl:      0,
 			},
-			"The Ash Path": disciplineAbility{
+			"The Ash Path": {
 				BaseDesc: `Path allows necromancers to peer into the
 				lands of the dead, and even affect things there.`,
-				lvl: 0,
+				Lvl: 0,
 			},
-			"The Bone Path": disciplineAbility{
+			"The Bone Path": {
 				BaseDesc: `Path of corpses and ressurection`,
-				lvl:      0,
+				Lvl:      0,
 			},
-			"The Cenopath": disciplineAbility{
+			"The Cenopath": {
 				BaseDesc: `Path for discovering or forging links between
 				the living world and the Shadowland`,
-				lvl: 0,
+				Lvl: 0,
 			},
-			"The Corpse in the Monster": disciplineAbility{
+			"The Corpse in the Monster": {
 				BaseDesc: `Path that allows the user to fully experience the corpse as a gateway between life and death`,
-				lvl:      0,
+				Lvl:      0,
 			},
-			"The Grave's Decay": disciplineAbility{
+			"The Grave's Decay": {
 				BaseDesc: `Under this path, a practitioner of
 				Necromancy channels the force of decay`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Path of the Four Humors": disciplineAbility{
+			"Path of the Four Humors": {
 				BaseDesc: `This antiquated path tapps into the four humors, qualities split along two axes`,
-				lvl:      0,
+				Lvl:      0,
 			},
-			"Vitreous Path": disciplineAbility{
+			"Vitreous Path": {
 				BaseDesc: `Path allows a necromancer to control
 				and influence the energies pertaining to death.`,
-				lvl: 0,
+				Lvl: 0,
 			},
-			"Necromantic Rituals": disciplineAbility{
+			"Necromantic Rituals": {
 				BaseDesc: `Rituals connected with Necromancy`,
-				lvl:      0,
+				Lvl:      0,
 			},
 		},
 	},
@@ -3694,7 +3692,7 @@ var disciplineMap = map[string]Discipline{
 		summoning increase dramatically (reduce the difficulty
 		by 2).`,
 		Abilities: map[string]disciplineAbility{
-			"Witness of Death": disciplineAbility{
+			"Witness of Death": {
 				BaseDesc: `Before it is possible to control the dead, one must
 				perceive them. This power allows just that, attuning
 				a vampire’s unliving senses to the presence of the incorporeal Under its effects, a necromancer sees ghosts as translucent phantoms gliding among the living and hears
@@ -3707,7 +3705,7 @@ var disciplineMap = map[string]Discipline{
 				dead can see.
 				Ghosts resent being spied upon, and more powerful
 				shades may use their own powers to inflict their displeasure on the incautious.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player rolls Perception + Awareness
 					(difficulty 5). Success allows the vampire to perceive
@@ -3721,7 +3719,7 @@ var disciplineMap = map[string]Discipline{
 					Perception + Alertness roll (difficulty 7).`,
 				},
 			},
-			"Summon Soul": disciplineAbility{
+			"Summon Soul": {
 				BaseDesc: `The power of Summon Soul allows a necromancer to
 				call a ghost back from the Underworld, for conversational purposes only. In order to perform this feat (and
 				indeed, most of the feats in this path), the vampire
@@ -3742,7 +3740,7 @@ var disciplineMap = map[string]Discipline{
 				the dead cannot be called — they are destroyed, un-
 				able to return to the mortal plane, or lost in the eternal
 				storm of the Underworld.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": ` The player spends one blood point and rolls
 					Manipulation + Occult (difficulty equal to 7 or the
@@ -3770,12 +3768,12 @@ var disciplineMap = map[string]Discipline{
 					once more and return it to its original location.`,
 				},
 			},
-			"Compel Soul": disciplineAbility{
+			"Compel Soul": {
 				BaseDesc: `With this power, a vampire can command a ghost to
 				do his bidding for a while. Compulsion of the soul is a
 				perilous undertaking and, when used improperly, can
 				endanger vampire and wraith alike.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The vampire locates and approaches the intended ghost or calls it to his presence with Summon
 					Soul. As with the previous power, he must have the
@@ -3853,12 +3851,12 @@ var disciplineMap = map[string]Discipline{
 					they must obey.`,
 				},
 			},
-			"Haunting": disciplineAbility{
+			"Haunting": {
 				BaseDesc: `Haunting binds a summoned ghost to a particular
 				location or, in extreme cases, an object. The wraith
 				cannot leave the area to which the necromancer binds
 				it without risking destruction.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player spends one blood point while
 					standing at the location for the haunting or touching
@@ -3880,13 +3878,13 @@ var disciplineMap = map[string]Discipline{
 					to face destruction.`,
 				},
 			},
-			"Torment": disciplineAbility{
+			"Torment": {
 				BaseDesc: `It is through the use of this power that powerful necromancers convince bound ghosts to behave — or else. Torment allows the vampire to strike a wraith as if he
 				himself were in the lands of the dead, inflicting dam-
 				age on the wraith’s ectoplasmic form. The vampire
 				remains in the real world, however, so he cannot be
 				struck in return.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The player rolls Stamina + Empathy (dif-
 						ficulty equal to the wraith’s current Willpower points),
@@ -3907,7 +3905,7 @@ var disciplineMap = map[string]Discipline{
 		ous to learn, because many of the path’s uses increase a
 		necromancer’s vulnerability to wraiths`,
 		Abilities: map[string]disciplineAbility{
-			"Shroudsight": disciplineAbility{
+			"Shroudsight": {
 				BaseDesc: `Shroudsight allows a necromancer to see through the
 				Shroud, the mystical barrier that separates the living
 				world from the Underworld. By using this power, the
@@ -3915,27 +3913,27 @@ var disciplineMap = map[string]Discipline{
 				themselves. However, an observant wraith may notice
 				when a vampire suddenly starts staring at him, which
 				can lead to unpleasant consequences.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `A simple roll of Perception + Awareness
 					(difficulty 7) allows a necromancer to utilize Shroudsight. The effects last for a scene.`,
 				},
 			},
-			"Lifeless Tongues": disciplineAbility{
+			"Lifeless Tongues": {
 				BaseDesc: `Where Shroudsight allows a necromancer to see
 				ghosts, Lifeless Tongues allows her to converse with
 				them effortlessly. Once Lifeless Tongues is employed,
 				the vampire can carry on a conversation with the deni-
 				zens of the ghostly Underworld without spending blood
 				or causing the wraiths to expend any effort.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `To use Lifeless Tongues requires a roll of
 					Perception + Occult (difficulty 6) and the expenditure
 					of a Willpower point.`,
 				},
 			},
-			"Dead Hand": disciplineAbility{
+			"Dead Hand": {
 				BaseDesc: `Similar to the Sepulchre Path power Torment, Dead
 				Hand allows a necromancer to reach across the Shroud
 				and affect a ghostly object as if it were in the real world.
@@ -3946,7 +3944,7 @@ var disciplineMap = map[string]Discipline{
 				On the other hand, a necromancer using Dead Hand is
 				quite solid to the residents of the Underworld — and
 				to whatever hostilities they might have.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player spends a point of Willpower and
 					makes a successful Wits + Occult roll (difficulty 7) to
@@ -3955,7 +3953,7 @@ var disciplineMap = map[string]Discipline{
 					the Underworld, he must spend a point of blood.`,
 				},
 			},
-			"Ex Nihilo": disciplineAbility{
+			"Ex Nihilo": {
 				BaseDesc: `Ex Nihilo allows a necromancer to enter the Underworld physically. While in the lands of the dead,
 				the vampire is essentially a particularly solid ghost. He
 				maintains his normal number of health levels, but can
@@ -3969,7 +3967,7 @@ var disciplineMap = map[string]Discipline{
 				subject to all of the Underworld’s perils, including ultimate destruction. A vampire killed in the realm of the
 				dead is gone forever, beyond even the reach of other
 				necromancers.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": ` Using Ex Nihilo takes a tremendous toll on
 					the necromancer. To activate this power, the vampire
@@ -3986,14 +3984,14 @@ var disciplineMap = map[string]Discipline{
 					difficulty 6). `,
 				},
 			},
-			"Shroud Mastery": disciplineAbility{
+			"Shroud Mastery": {
 				BaseDesc: `Shroud Mastery offers the Kindred the ability to
 				manipulate the veil between the worlds of the living
 				and the dead. By doing so, a necromancer can make
 				it easier for bound wraiths in his service to function,
 				or make it nearly impossible for ghosts to contact the
 				material world.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `To exercise Shroud Mastery, the necromancer expends two points of Willpower, then states
 					whether he is attempting to raise or lower the Shroud.
@@ -4013,13 +4011,13 @@ var disciplineMap = map[string]Discipline{
 		and the methods by which dead souls can be restored
 		to the living world — temporarily or otherwise.`,
 		Abilities: map[string]disciplineAbility{
-			"Tremens": disciplineAbility{
+			"Tremens": {
 				BaseDesc: `Tremens allows a necromancer to make the flesh of a
 				corpse shift once. An arm might suddenly flop forward,
 				a cadaver might sit up, or dead eyes might abruptly
 				open. This sort of thing tends to have an impressive
 				impact on people who aren’t expecting a departed relative to roll over in his coffin.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `To use Tremens, the necromancer spends
 					a single blood point, and the player must succeed on
@@ -4031,7 +4029,7 @@ var disciplineMap = map[string]Discipline{
 					a dead body to attack or cause damage.`,
 				},
 			},
-			"Apprentice's Brooms": disciplineAbility{
+			"Apprentice's Brooms": {
 				BaseDesc: `With Apprentice’s Brooms, the necromancer can
 				make a dead body rise and perform a simple function.
 				For example, the corpse could be set to carrying heavy
@@ -4041,7 +4039,7 @@ var disciplineMap = map[string]Discipline{
 				carry out their given instructions until such time as
 				they’ve been rendered inanimate. Generally it takes dismemberment, flame, or something similar to destroy
 				a corpse animated in this way.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `A roll of Wits + Occult (difficulty 7) and
 					the expenditure of a point of both blood and Will-
@@ -4051,7 +4049,7 @@ var disciplineMap = map[string]Discipline{
 					work until they finish the job (at which point they collapse) or something (including time) destroys them.`,
 				},
 			},
-			"Shambling Hordes": disciplineAbility{
+			"Shambling Hordes": {
 				BaseDesc: `Shambling Hordes creates obvious results: reanimated corpses with the ability to attack, albeit neither very
 				well nor very quickly. Once primed by this power, the
 				corpses wait — for years, if necessary — to fulfill the
@@ -4059,7 +4057,7 @@ var disciplineMap = map[string]Discipline{
 				a certain site or simply to attack immediately, but they
 				will be carried out until every last one of the decom-
 				posing monsters is destroyed.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player spends a point of Willpower.
 					The player then must succeed on a Wits + Occult roll
@@ -4072,14 +4070,14 @@ var disciplineMap = map[string]Discipline{
 					or “Kill them!”`,
 				},
 			},
-			"Soul Stealing": disciplineAbility{
+			"Soul Stealing": {
 				BaseDesc: `This power affects the living, not the dead. It does,
 				however, temporarily turn a living soul into a sort of
 				wraith, as it allows a necromancer to strip a soul from
 				a living body. A mortal exiled from his body by this
 				power becomes a wraith with a single tie to the real
 				world: his now-empty body.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player spends a point of Willpower
 					and then makes a contested Willpower roll against
@@ -4093,14 +4091,14 @@ var disciplineMap = map[string]Discipline{
 					Final Death.”`,
 				},
 			},
-			"Daemonic Possession": disciplineAbility{
+			"Daemonic Possession": {
 				BaseDesc: `Daemonic Possession lets a vampire insert a soul into
 				a freshly dead body. This does not turn the reanimated
 				corpse into anything other than a reanimated corpse,
 				one that will irrevocably decay after a week, but it does give either a wraith or a free-floating soul (say, that of
 				a vampire using Psychic Projection) a temporary home
 				in the physical world.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The body in question must be no more than
 					30 minutes dead, and the new tenant must agree to inhabit it — a ghost or astral form cannot be forced into a
@@ -4135,7 +4133,7 @@ var disciplineMap = map[string]Discipline{
 		passions or commanding this world and the Shadow-
 		lands together.`,
 		Abilities: map[string]disciplineAbility{
-			"A Touch of Death": disciplineAbility{
+			"A Touch of Death": {
 				BaseDesc: `Just as a necromancer may exert mastery over the
 				Shadowlands, so too can some ghosts exert themselves in the mortal world. Whereas obvious displays
 				of ghostly power such as bleeding walls or disembodied
@@ -4143,7 +4141,7 @@ var disciplineMap = map[string]Discipline{
 				A necromancer sensitized to the residue of the dead,
 				though, can feel whether an object has been touched
 				by a ghost or sense the recent passage of a wraith.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The necromancer simply touches a person or
 					object that he suspects is a victim of ghostly influence.
@@ -4171,7 +4169,7 @@ var disciplineMap = map[string]Discipline{
 					ghostly powers`,
 				},
 			},
-			"Reveal the Catene": disciplineAbility{
+			"Reveal the Catene": {
 				BaseDesc: `Necromantic compulsions function much more effectively when the caster uses an object of significance
 				to the ghost in question. Such fetters tie the dead to
 				the living lands through their remembered importance
@@ -4187,7 +4185,7 @@ var disciplineMap = map[string]Discipline{
 				is important to a given wraith, he can also determine if
 				there are other ghosts tied to the item, though he must
 				use the power again to gain their identities.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The necromancer holds and examines the
 					object for at least three turns — if it’s an item, this
@@ -4208,7 +4206,7 @@ var disciplineMap = map[string]Discipline{
 					any other impressions gained. If a botch is scored, the necromancer can never successfully use this power on the item being examined.`,
 				},
 			},
-			"Tread Upon the Grave": disciplineAbility{
+			"Tread Upon the Grave": {
 				BaseDesc: `The extended awareness granted with the Cenotaph
 				Path allows the necromancer to find locations where
 				the Shadowlands and the living world come close.
@@ -4220,7 +4218,7 @@ var disciplineMap = map[string]Discipline{
 				knowledgeable vampire can thus discover places where
 				the dead are likely to congregate, the better to snare
 				them with other Necromancy powers.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player simply declares intent to sense
 					the Shroud in an area and makes a Willpower roll
@@ -4239,7 +4237,7 @@ var disciplineMap = map[string]Discipline{
 					tificially altered in the area.`,
 				},
 			},
-			"Death Knell": disciplineAbility{
+			"Death Knell": {
 				BaseDesc: `Not all who die go on to become ghosts — many
 				lack the drive to hang on after death or simply have no
 				overwhelming needs that compel them to stick around.
@@ -4258,7 +4256,7 @@ var disciplineMap = map[string]Discipline{
 				to look for the new unfortunate, especially if a large
 				accident or massacre leaves too many corpses for the
 				necromancer to easily discern and test names.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `Whenever someone dies and becomes a
 					ghost within a half-mile or kilometer of the necromancer, she automatically senses the demise (though many
@@ -4277,7 +4275,7 @@ var disciplineMap = map[string]Discipline{
 					in the wrong direction.`,
 				},
 			},
-			"Ephemeral Binding": disciplineAbility{
+			"Ephemeral Binding": {
 				BaseDesc: `The most puissant necromancers learn not only to
 				sense the ties between living and dead, but to forge
 				such ties themselves. The master of Ephemeral Bind-
@@ -4291,7 +4289,7 @@ var disciplineMap = map[string]Discipline{
 				ditional point of Willpower increases this duration to
 				a week per success, whereas spending a permanent dot
 				of Willpower extends the duration to a year and a day.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The necromancer must coat an object with
 					his blood (a full blood point’s worth); if the subject is
@@ -4320,7 +4318,7 @@ var disciplineMap = map[string]Discipline{
 		traits to a vampire, and she can enhance or reduce
 		these traits at various levels of the power`,
 		Abilities: map[string]disciplineAbility{
-			"Masque of Death": disciplineAbility{
+			"Masque of Death": {
 				BaseDesc: `The character with this ability can assume a visage
 				of death or inflict that shape on another vampire. The
 				victim’s flesh becomes pallid and thin (if it is not already), and skin pulls tight against bone. This ability
@@ -4334,7 +4332,7 @@ var disciplineMap = map[string]Discipline{
 				to the target’s Stamina + 3). The Masque of Death lasts
 				until the next sunset, unless the character who created
 				the masque wishes to extinguish its effects earlier.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player spends one blood point for the
 					character to gain the form described. Those afflicted with the Masque of Death lose two points of Dexterity and Appearance (minimum of 1 in Dexterity and
@@ -4359,7 +4357,7 @@ var disciplineMap = map[string]Discipline{
 					ghostly powers`,
 				},
 			},
-			"Cold of the Grave": disciplineAbility{
+			"Cold of the Grave": {
 				BaseDesc: `The dead feel no pain, though most undead do. With
 				this ability, the character can temporarily take on the
 				unfeeling semblance of the dead, in order to protect
@@ -4374,7 +4372,7 @@ var disciplineMap = map[string]Discipline{
 				oneself to action, and very little seems important
 				enough to really worry about. A corpse has no worries,
 				after all.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The player spends one Willpower point.
 					For the remainder of the scene, the character takes no
@@ -4388,7 +4386,7 @@ var disciplineMap = map[string]Discipline{
 					frenzy as normal.`,
 				},
 			},
-			"Curse of Life": disciplineAbility{
+			"Curse of Life": {
 				BaseDesc: `The Curse of Life inflicts some of the undesirable
 				traits of the living upon the undead, removing their corpselike nature and creating a false life to remind
 				them of the worst things about being alive. Targets of
@@ -4413,7 +4411,7 @@ var disciplineMap = map[string]Discipline{
 					effect until the next sunset.`,
 				},
 			},
-			"Gift of Corpse": disciplineAbility{
+			"Gift of Corpse": {
 				BaseDesc: `This power, one of the most potent on the Corpse
 				in the Monster path, enables a necromancer to ignore
 				most of her race’s inherent weaknesses for a short time.
@@ -4426,7 +4424,7 @@ var disciplineMap = map[string]Discipline{
 				ly, but that time may be enough to enable a character
 				to charge through a burning building without fearing
 				frenzy or instant death.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player spends one Willpower and rolls
 					Stamina + Occult (difficulty 8). For every success, the
@@ -4447,7 +4445,7 @@ var disciplineMap = map[string]Discipline{
 					immediately roll against Rötschreck.`,
 				},
 			},
-			"Gift of Life": disciplineAbility{
+			"Gift of Life": {
 				BaseDesc: `With the Gift of Life, the character can experience
 				the best and most positive things about being alive. The
 				overwhelming hunger for blood temporarily abates, al-
@@ -4475,7 +4473,7 @@ var disciplineMap = map[string]Discipline{
 				to holy artifacts, human faith, and being staked. Her
 				blood remains vitae, not human blood. Use of this ability — which creates a mockery of human life — may
 				interfere with a character’s Path advancement.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The player spends 12 blood points, burning
 					as much blood as possible each turn until she meets
@@ -4522,7 +4520,7 @@ var disciplineMap = map[string]Discipline{
 		erything save them. Under this path, a practitioner of
 		Necromancy channels that force.`,
 		Abilities: map[string]disciplineAbility{
-			"Destroy the Husk": disciplineAbility{
+			"Destroy the Husk": {
 				BaseDesc: `Cainites who kill their victims, rather than just feed-
 				ing upon them, frequently find themselves in need of a
 				quick way to dispose of a corpse. While there are many
@@ -4534,7 +4532,7 @@ var disciplineMap = map[string]Discipline{
 				simply turns one human corpse to a pile of about 30
 				pounds (13 kilograms) of unremarkable dust, roughly
 				the size and shape of that body.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player spends one blood point as the
 					vampire drips her vitae onto the corpse. The player
@@ -4544,7 +4542,7 @@ var disciplineMap = map[string]Discipline{
 					equal to five minus the successes.`,
 				},
 			},
-			"Rigor Mortis": disciplineAbility{
+			"Rigor Mortis": {
 				BaseDesc: `One of the first changes that comes over a dead body
 				is rigidity; the corpse becomes stiff as a board, frozen
 				in a single pose. The Cainite who wields Rigor Mortis
@@ -4553,7 +4551,7 @@ var disciplineMap = map[string]Discipline{
 				es of decay. She forces her target to become rigid and
 				unable to move without enormous effort of will, as his
 				very muscles betray him.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The player spends a point of Willpower and
 					rolls Intelligence + Medicine (difficulty 7). Each success freezes the target in place for one turn. A failure
@@ -4568,7 +4566,7 @@ var disciplineMap = map[string]Discipline{
 					wasted and frozen.`,
 				},
 			},
-			"Wither": disciplineAbility{
+			"Wither": {
 				BaseDesc: `Reminiscent of some of the powers of Vicissitude,
 				Wither allows a vampire to cripple an opponent’s limb.
 				Whether the foe is living or undead, muscle shrivels
@@ -4583,7 +4581,7 @@ var disciplineMap = map[string]Discipline{
 				thus requiring two uses to permanently blind or deafen). Wither cannot be used as an “instant-kill” power
 				— necromancers cannot wither internal organs — but
 				it can inflict a wide variety of injuries on a foe.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player spends a Willpower point. The
 					character chooses a limb on the target and then touch-
@@ -4613,7 +4611,7 @@ var disciplineMap = map[string]Discipline{
 					pearance by one for each aggravated wound suffered.`,
 				},
 			},
-			"Corrupt the Undead Flesh": disciplineAbility{
+			"Corrupt the Undead Flesh": {
 				BaseDesc: `Corrupt the Undead Flesh blurs the line between life
 				and undeath, turning an undead creature into some-
 				thing just living enough to carry and suffer from dis-
@@ -4635,7 +4633,7 @@ var disciplineMap = map[string]Discipline{
 				blood, and he heals back one lost Attribute point per
 				hour until all have returned
 				`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player chooses a target within her
 					character’s line of sight and no more than 20 yards or
@@ -4656,7 +4654,7 @@ var disciplineMap = map[string]Discipline{
 						might have provided. Humans vomit up food.`,
 				},
 			},
-			"Dissolve the Flesh": disciplineAbility{
+			"Dissolve the Flesh": {
 				BaseDesc: `This ability brings the Grave’s Decay path full circle,
 				as it causes Destroy the Husk to apply to vampires. Dis-
 				solve the Flesh allows a necromancer to attempt to
@@ -4668,7 +4666,7 @@ var disciplineMap = map[string]Discipline{
 				about one-eighth of the target’s weight(It might also be
 				shed from all over, leaving the victim a bit gaunter or
 				missing chunks of flesh.)`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The player spends two blood points and a
 					Willpower point as the vampire extracts a quantity of
@@ -4705,13 +4703,13 @@ var disciplineMap = map[string]Discipline{
 		necromancers have searched everywhere (both in this
 		world and the next) for clues to its existence.`,
 		Abilities: map[string]disciplineAbility{
-			"Whispers to the Soul": disciplineAbility{
+			"Whispers to the Soul": {
 				BaseDesc: `The necromancer with this ability can let slip a little
 				of her own undead bilious humor as she speaks to another being (whether mortal or Kindred). The wicked
 				vapor slips into the target’s ear and whispers nightmares to the target throughout the day and night. The
 				target has a harder time sleeping, and becomes irritable
 				and distracted during his waking hours.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The character must whisper the target’s
 					name (as she knows it) into his ear. The victim rolls
@@ -4724,7 +4722,7 @@ var disciplineMap = map[string]Discipline{
 					may be increased by one at the same time.`,
 				},
 			},
-			"Kiss of the Dark Mother": disciplineAbility{
+			"Kiss of the Dark Mother": {
 				BaseDesc: `Kiss of the Dark Mother allows the necromancer
 				who uses it to mix her vitae with black bile, turning it
 				into a noxious poison. The necromancer forces it into
@@ -4732,7 +4730,7 @@ var disciplineMap = map[string]Discipline{
 				tastes acrid and bitter, as though it had been scorched.
 				Once the necromancer coats her teeth and lips with it,
 				she can inflict terrible damage with her bite`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player spends one blood point; activat-
 					ing this power is a reflexive action, but it must be done
@@ -4744,7 +4742,7 @@ var disciplineMap = map[string]Discipline{
 					one turn cleansing the dark blood from her mouth.`,
 				},
 			},
-			"Dark Humors": disciplineAbility{
+			"Dark Humors": {
 				BaseDesc: `The vampire can exude a coat of a particular humor
 				onto her skin, causing all that touch it to experience
 				the most intense form of that humor. After a necro-
@@ -4754,7 +4752,7 @@ var disciplineMap = map[string]Discipline{
 				yellow bile renders her calm and placid; using black
 				bile leaves her optimistic; and using phlegm makes her
 				aroused and angry.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player spends two blood points. The
 					necromancer chooses which humor she wishes to ex-
@@ -4781,7 +4779,7 @@ var disciplineMap = map[string]Discipline{
 					er rolls receive a +2 difficulty.`,
 				},
 			},
-			"Clutching the Shroud": disciplineAbility{
+			"Clutching the Shroud": {
 				BaseDesc: `Blood, the sanguine humor, was regarded by philosophers as being both hot and wet. Blood from a cold
 				corpse has been transubstantiated into a dead form —
 				a cold incarnation of a hot, wet element. This transformation of the living into death holds great power;
@@ -4791,7 +4789,7 @@ var disciplineMap = map[string]Discipline{
 				fact as well as name. She grows distant and chill, as
 				though possessed by the spirit of Death itself; she has to
 				work to push her attention into the physical world.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The character must drink, and then spend,
 					five blood points from a cold corpse (one dead for 24
@@ -4817,7 +4815,7 @@ var disciplineMap = map[string]Discipline{
 					must act carefully.`,
 				},
 			},
-			"Black Breath": disciplineAbility{
+			"Black Breath": {
 				BaseDesc: `A necromancer who has mastered this path can harness the undead black bile that festers at the core of her
 				being; she pulls that melancholy to her lungs and lets it
 				mingle with her outgoing breath. She then exhales the
@@ -4826,7 +4824,7 @@ var disciplineMap = map[string]Discipline{
 				using this power, as she has forced some of her most
 				depressed nature out into the world; those caught in
 				the black vapors grow despairing and hopeless.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The player spends one Willpower and one
 					blood point, and rolls Stamina + Athletics (difficulty
@@ -4873,7 +4871,7 @@ var disciplineMap = map[string]Discipline{
 		the Sepulchre Path before any others. The Vitreous
 		Path is usually their second focus of study.`,
 		Abilities: map[string]disciplineAbility{
-			"Eyes of the Dead": disciplineAbility{
+			"Eyes of the Dead": {
 				BaseDesc: `The necromancer employing the Eyes of the Dead
 				can see with the perceptions of the Restless Dead
 				(called Deathsight). To such a manipulator of ghostly
@@ -4885,7 +4883,7 @@ var disciplineMap = map[string]Discipline{
 				die, and even what the cause of her death is likely to be. The information thus gained is not exact by any
 				means, but it gives the necromancer an edge over those
 				she scrutinizes.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player rolls Perception + Occult, dif-
 					ficulty 6. One success lets a necromancer determine
@@ -4912,7 +4910,7 @@ var disciplineMap = map[string]Discipline{
 					has no way of knowing whether her insight is correct.`,
 				},
 			},
-			"Aura of Decay": disciplineAbility{
+			"Aura of Decay": {
 				BaseDesc: `The necromancer can strengthen the feeling of en-
 				tropy around her to the point where it breaks down
 				nonliving objects and machines. It can gnarl wood,
@@ -4921,7 +4919,7 @@ var disciplineMap = map[string]Discipline{
 				one yard or meter from the necromancer’s body, but all
 				those in the presence of the vampire can feel her cor-
 				ruption as an icy wind.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": ` No roll is required, but this power does cost
 					at least one blood point. Objects subjected to this Aura
@@ -4942,7 +4940,7 @@ var disciplineMap = map[string]Discipline{
 					`Five BP`:  `One turn`,
 				},
 			},
-			"Soul Feast": disciplineAbility{
+			"Soul Feast": {
 				BaseDesc: `Just as the necromancer can release entropic ener-
 				gies from within, she may also pull them into herself
 				as a source of power. Soul Feasting allows the caster
@@ -4950,7 +4948,7 @@ var disciplineMap = map[string]Discipline{
 				her or to actively feed on a ghost, stealing the wraith’s
 				substance and mystically transforming that energy into
 				sustenance.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player spends one Willpower point to
 					allow the vampire to feed on the negative energies of
@@ -4970,7 +4968,7 @@ var disciplineMap = map[string]Discipline{
 					less substantial as their spirit essence drains away`,
 				},
 			},
-			"Breath of Thanatos": disciplineAbility{
+			"Breath of Thanatos": {
 				BaseDesc: `The Breath of Thanatos allows the necromancer to
 				draw out entropic energy and focus it upon an area
 				or person by taking a deep breath and then forcefully
@@ -5005,19 +5003,19 @@ var disciplineMap = map[string]Discipline{
 				interact with the necromancer as normal, although the
 				other Spectres in the area will continue to ignore both
 				the vampire and the targeted ghost.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": ``,
 				},
 			},
-			"Night Cry": disciplineAbility{
+			"Night Cry": {
 				BaseDesc: `The breath of entropic energy becomes a scream of
 				pure chaos. The necromancer can issue an unearthly cry
 				(heard both in the living world and in the Shadowlands).
 				The howl pours icy oblivion into a target or group of
 				targets — either sweeping away the inherent entropy or
 				collecting that destruction and unleashing it.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The vampire chooses a number of targets
 					within one yard or meter per dot of Necromancy and
@@ -5055,7 +5053,7 @@ var disciplineMap = map[string]Discipline{
 		proceeds smoothly, failure produces no effect, and a
 		botch indicates something has gone horribly wrong.`,
 		Abilities: map[string]disciplineAbility{
-			"Call of the Hungry Dead": disciplineAbility{
+			"Call of the Hungry Dead": {
 				BaseDesc: `Call of the Hungry Dead takes only 10 minutes to
 				cast and requires a hair from the target’s head. The rit-
 				ual climaxes with the burning of that hair in the flame
@@ -5065,9 +5063,9 @@ var disciplineMap = map[string]Discipline{
 				as a confusing welter of howls and unearthly demands;
 				he is unable to make out anything intelligible, and may
 				go briefly mad.`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Eldritch Beacon": disciplineAbility{
+			"Eldritch Beacon": {
 				BaseDesc: `Eldritch Beacon takes 15 minutes to cast. The mate-
 				rial component is a green candle, the melted wax from
 				which must be collected and molded into a half-inch
@@ -5077,15 +5075,15 @@ var disciplineMap = map[string]Discipline{
 				ghostly powers affect this individual with greater ease
 				and severity. The sphere retains its power for one hour
 				per success on the casting roll.`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Insight": disciplineAbility{
+			"Insight": {
 				BaseDesc: `This ritual allows a necromancer to stare into the
 				eyes of a corpse and see reflected there the last thing
 				the dead man witnessed. The vision appears only in
 				the eyes of the cadaver and is visible to no one ex-
 				cept the necromancer using Insight.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player rolls
 					as normal as the vampire stares into the target’s eyes
@@ -5108,7 +5106,7 @@ var disciplineMap = map[string]Discipline{
 					leading up to the target’s death`,
 				},
 			},
-			"Knowing Stone": disciplineAbility{
+			"Knowing Stone": {
 				BaseDesc: `By use of her own blood and the proper rituals, a
 				necromancer can mark a person’s spirit, allowing the
 				vampire to see where her subject is at any time, even
@@ -5124,9 +5122,9 @@ var disciplineMap = map[string]Discipline{
 				mation into her ear. The stone loses its powers on the
 				night of All Saints Day unless the vampire spends a
 				blood point`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Minestra di Morte": disciplineAbility{
+			"Minestra di Morte": {
 				BaseDesc: `The necromancer obtains a piece of a dead body and
 				simmers it in a pot with half a quart (or half a liter)
 				of vampiric vitae. To this stew, the necromancer adds
@@ -5145,12 +5143,12 @@ var disciplineMap = map[string]Discipline{
 				from drinking it, nor does she add a point to her blood
 				pool. Similarly, if she uses her own blood, her pool decreases by a point but does not increase when she consumes the soup.
 				`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": ``,
 				},
 			},
-			"Ritual of the Smoking Mirror": disciplineAbility{
+			"Ritual of the Smoking Mirror": {
 				BaseDesc: `This ritual allows the necromancer to use an obsidian
 				mirror to see as ghosts do. By gazing into the mirror’s
 				ebony depths, the vampire may discover an object’s
@@ -5164,9 +5162,9 @@ var disciplineMap = map[string]Discipline{
 				other hand, grants the necromancer the ability to see
 				ghosts and the Shadowlands. It also shows the stain of
 				oblivion on the living, as per Eyes of the Dead.`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Eyes of Graves": disciplineAbility{
+			"Eyes of Graves": {
 				BaseDesc: `This ritual, which takes two hours to cast, causes the
 				target to experience intermittent visions of her death
 				over the period of a week. The visions come without
@@ -5179,9 +5177,9 @@ var disciplineMap = map[string]Discipline{
 				ing, shooting, and so on.
 				Eyes of the Grave requires a pinch of soil from a fresh
 				grave.`,
-				lvl: 2,
+				Lvl: 2,
 			},
-			"The Hand of Glory": disciplineAbility{
+			"The Hand of Glory": {
 				BaseDesc: `The Hand of Glory is a mummified hand used by the
 				necromancer to anesthetize a home’s residents and,
 				thereby, allow him free rein to do what he will in the
@@ -5195,7 +5193,7 @@ var disciplineMap = map[string]Discipline{
 				tivate the ritual garners any successes, the creation is
 				viable.
 				`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `To use the Hand of Glory, the vampire first coats
 					the fingertips of the mummified hand with a flammable
@@ -5215,7 +5213,7 @@ var disciplineMap = map[string]Discipline{
 					may be reused indefinitely. Effects last for one scene.`,
 				},
 			},
-			"Occhio d’Uomo Morto": disciplineAbility{
+			"Occhio d’Uomo Morto": {
 				BaseDesc: `To cast this ritual, the necromancer needs an eye
 				from a corpse whose absent soul became a ghost or
 				Spectre. The eye is ritually prepared in a process in-
@@ -5225,7 +5223,7 @@ var disciplineMap = map[string]Discipline{
 				with the one from the corpse (fresher is better). Kin-
 				dred healing takes over at that point, sealing the eye
 				within the socket.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `If the ritual succeeds, the Necromancer permanently
 					gains the Shroudsight ability. This ability
@@ -5259,7 +5257,7 @@ var disciplineMap = map[string]Discipline{
 					mancer by that particular ghost are at –1 difficulty`,
 				},
 			},
-			"Puppet": disciplineAbility{
+			"Puppet": {
 				BaseDesc: `Used primarily to facilitate conversations with the
 				recently departed, though also applied as a method of
 				psychological torture, Puppet prepares a subject (will-
@@ -5270,9 +5268,9 @@ var disciplineMap = map[string]Discipline{
 				attempting to take control of the subject gains two au-
 				tomatic successes. The ritual’s effects remain even if
 				the soil is washed off.`,
-				lvl: 2,
+				Lvl: 2,
 			},
-			"The Ritual of Pochtli": disciplineAbility{
+			"The Ritual of Pochtli": {
 				BaseDesc: `This ritual cannot be cast by itself, but only in con-
 				junction with another Necromantic ritual, or with the
 				heavily ritualized use of a Necromantic path. The ac-
@@ -5286,7 +5284,7 @@ var disciplineMap = map[string]Discipline{
 				seek to employ gains the benefit of all the participants’
 				knowledge. This ritual makes it possible for Necroman-
 				cers to create truly fearsome feats of death magic.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The player rolls to activate this ritual as normal. If
 					the roll succeeds, the Kindred who have participated
@@ -5303,7 +5301,7 @@ var disciplineMap = map[string]Discipline{
 					ing in a horrific failure for all the ritual workers.`,
 				},
 			},
-			"Two Cetimes": disciplineAbility{
+			"Two Cetimes": {
 				BaseDesc: `The necromancer ceremonially “kills” a mortal, lay-
 				ing him out on a pallet and putting pennies on his eyes.
 				The mortal’s soul journeys to the Underworld, which
@@ -5319,9 +5317,9 @@ var disciplineMap = map[string]Discipline{
 				untarily undergo the ritual to assist necromancers, or
 				the vampire may use Two Centimes to terrify unwill-
 				ing victims.`,
-				lvl: 2,
+				Lvl: 2,
 			},
-			"Blood Dance": disciplineAbility{
+			"Blood Dance": {
 				BaseDesc: `The Blood Dance allows a ghost to communicate
 				with a living relative. Necromancers sometimes perform this ritual for people in exchange for money or
 				favors.
@@ -5334,11 +5332,11 @@ var disciplineMap = map[string]Discipline{
 				“appears” within the necromancer’s sand-sigil and the
 				living person can communicate with her for one hour.
 				Failure means the spirit could not be contacted.`,
-				lvl: 3,
+				Lvl: 3,
 			},
-			"Divine Sign": disciplineAbility{
+			"Divine Sign": {
 				BaseDesc: ``,
-				lvl:      3,
+				Lvl:      3,
 				System: map[string]string{
 					"sys": `Upon learning a person’s birth date, the necroman-
 					cer’s player may roll to activate this ritual. If successful,
@@ -5353,7 +5351,7 @@ var disciplineMap = map[string]Discipline{
 					fetters.`,
 				},
 			},
-			"Din of the Damned": disciplineAbility{
+			"Din of the Damned": {
 				BaseDesc: `This ritual is similar to the Level One Ritual Call
 				of the Hungry Dead in that it makes the
 				sounds of the Underworld audible in the physical realm.
@@ -5372,9 +5370,9 @@ var disciplineMap = map[string]Discipline{
 				this mark gives the listener an earful of ghostly wailing
 				and moaning and the sound of howling winds; a botch
 				deafens him for the rest of the night.`,
-				lvl: 3,
+				Lvl: 3,
 			},
-			"Nightmare Drums": disciplineAbility{
+			"Nightmare Drums": {
 				BaseDesc: `The necromancer using this ritual sends the dead to
 				haunt the dreams of an enemy, using the ghosts to drive
 				an opponent slowly insane. Once the ritual is cast, the
@@ -5400,9 +5398,9 @@ var disciplineMap = map[string]Discipline{
 				in return for a favor. Their request normally runs along
 				the lines of passing a message to a living relative or ex-
 				acting revenge against someone who slighted them.`,
-				lvl: 3,
+				Lvl: 3,
 			},
-			"Ritual of The Unearthed Fetter": disciplineAbility{
+			"Ritual of The Unearthed Fetter": {
 				BaseDesc: `This ritual requires that a necromancer have a fin-
 				ger bone from the skeleton of the particular ghost he’s
 				interested in. When the ritual is cast, the finger bone
@@ -5421,9 +5419,9 @@ var disciplineMap = map[string]Discipline{
 				(not necessarily the marker of the bone’s former own-
 				er). During the course of the ritual the stone crumbles
 				to dust, which is then sprinkled over the finger bone.`,
-				lvl: 3,
+				Lvl: 3,
 			},
-			"Tempesta Scudo": disciplineAbility{
+			"Tempesta Scudo": {
 				BaseDesc: `Unlike most rituals, Tempesta Scudo can be cast
 				speedily. The necromancer performs a short and awk-
 				ward dance that ends with her biting through her own
@@ -5439,9 +5437,9 @@ var disciplineMap = map[string]Discipline{
 				damage) and spits (spending one blood point). Then
 				the normal ritual roll is made to see whether the power
 				takes effect.`,
-				lvl: 3,
+				Lvl: 3,
 			},
-			"Baleful Doll": disciplineAbility{
+			"Baleful Doll": {
 				BaseDesc: `A baleful doll is a powerful figure that is linked di-
 				rectly to the spirit of the target. This doll must be hand-
 				crafted, and is only finished when it has been painted
@@ -5460,9 +5458,9 @@ var disciplineMap = map[string]Discipline{
 				doll that does not resemble its victim is useless for the
 				purposes of this ritual, though some necromancers sell
 				failures as “authentic voodoo dolls” to tourists.`,
-				lvl: 4,
+				Lvl: 4,
 			},
-			"Bastone Diabolico": disciplineAbility{
+			"Bastone Diabolico": {
 				BaseDesc: `Casting this ritual is tricky because it requires the
 				removal of a leg bone from a living person. The donor
 				must survive the removal, at least for a little while. The
@@ -5471,7 +5469,7 @@ var disciplineMap = map[string]Discipline{
 				The necromancer then uses this metal-shod bone
 				to beat its donor to death while repeating a droning
 				Greek chant.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `With a successful roll, this ritual produces a bastone
 					diabolico or “devil stick.” The stick can be activated by
@@ -5490,7 +5488,7 @@ var disciplineMap = map[string]Discipline{
 					attract ghosts occur at +1 difficulty.`,
 				},
 			},
-			"Cadaver's Touch": disciplineAbility{
+			"Cadaver's Touch": {
 				BaseDesc: `By chanting for three hours and melting a wax doll in
 				the shape of the target, the necromancer turns a mortal
 				target into a corpselike ruin. As the doll loses the last
@@ -5502,9 +5500,9 @@ var disciplineMap = map[string]Discipline{
 				on all Social rolls). The effects of the ritual wear off
 				only when the wax of the doll is permitted to solidify.
 				If the wax is allowed to boil off, the spell is broken.`,
-				lvl: 4,
+				Lvl: 4,
 			},
-			"Peek Past the Shroud": disciplineAbility{
+			"Peek Past the Shroud": {
 				BaseDesc: `This hour-long ritual enchants a handful of ergot
 				fungi mold to act as a catalyst for second sight. By eating a pinch of the mold, a subject gains the benefits of
 				Shroudsight for a number of hours equal to the
@@ -5514,9 +5512,9 @@ var disciplineMap = map[string]Discipline{
 				the ergot highly and instantaneously toxic, inflicting
 				eight dice of lethal damage on any subject who ingests
 				it — including vampires`,
-				lvl: 4,
+				Lvl: 4,
 			},
-			"Ritual of Xipe Totec": disciplineAbility{
+			"Ritual of Xipe Totec": {
 				BaseDesc: `To perform the ritual, the Kindred removes his vic-
 				tim’s top layer of skin with an obsidian dagger, tak-
 				ing care to damage the skin as little as possible in the
@@ -5528,7 +5526,7 @@ var disciplineMap = map[string]Discipline{
 				ingredients. When imbibed by the necromancer, this
 				mixture causes him to sweat a glistening sheen of blood
 				(equal to one blood point). `,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The Kindred then dons the
 					skin of his victim, which on a successful roll absorbs
@@ -5551,14 +5549,14 @@ var disciplineMap = map[string]Discipline{
 					process.`,
 				},
 			},
-			"Chill of Oblivion": disciplineAbility{
+			"Chill of Oblivion": {
 				BaseDesc: ``,
-				lvl:      5,
+				Lvl:      5,
 				System: map[string]string{
 					"sys": ``,
 				},
 			},
-			"Dead Man’s Hand": disciplineAbility{
+			"Dead Man’s Hand": {
 				BaseDesc: `The necromancer takes a rag stained in the blood,
 				sweat, or tears of the intended victim. She takes a
 				freshly severed human hand (which can come either
@@ -5567,7 +5565,7 @@ var disciplineMap = map[string]Discipline{
 				His flesh bloats, turns gray and then green, then starts
 				to slough off. The victim’s brain remains fresh until the
 				very end, so he can see the maggots writhe in the putrescent rack of meat that once was his healthy body.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The necromancer makes the standard roll and spends
 					two blood points for each point of Stamina (and Forti-
@@ -5585,7 +5583,7 @@ var disciplineMap = map[string]Discipline{
 					`Incapacitated`: `12 minutes`,
 				},
 			},
-			"Esilio": disciplineAbility{
+			"Esilio": {
 				BaseDesc: `Like Tempesta Scudo, Esilio is a quick and dirty ritual.
 				The necromancer simply speaks five syllables. No one
 				can identify the casting language, but according to the
@@ -5610,7 +5608,7 @@ var disciplineMap = map[string]Discipline{
 				184 CHAPTER FOUR: DISCIPLINES
 				a month, if ever. A wraith destroyed in this fashion
 				tends to return as a Spectre, if it returns at all`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The necromancer may clutch and destroy a number
 					of spirits equal to the number of successes she rolled.
@@ -5628,7 +5626,7 @@ var disciplineMap = map[string]Discipline{
 					may impact other Paths at the Storyteller’s discretion.`,
 				},
 			},
-			"Grasp the Ghostly": disciplineAbility{
+			"Grasp the Ghostly": {
 				BaseDesc: `Requiring a full six hours of chanting, this ritual al-
 				lows a necromancer to bring an object from the Un-
 				derworld into the real world. It’s not simple, however
@@ -5643,7 +5641,7 @@ var disciplineMap = map[string]Discipline{
 				in this manner. Artifacts created by wraiths themselves
 				were never meant to exist outside the Underworld, and
 				vanish on contact with the living world`,
-				lvl: 5,
+				Lvl: 5,
 			},
 		},
 	},
@@ -5673,7 +5671,7 @@ var disciplineMap = map[string]Discipline{
 		age until she views the video at a later date (if even
 		then)`,
 		Abilities: map[string]disciplineAbility{
-			"Cloak of Shadows": disciplineAbility{
+			"Cloak of Shadows": {
 				BaseDesc: `At this level, the vampire must rely on nearby shad-
 				ows and cover to assist in hiding his presence. He steps
 				into an out-of-the-way, shadowed place and eases him-
@@ -5685,7 +5683,7 @@ var disciplineMap = map[string]Discipline{
 				der direct light. Furthermore, the vampire’s deception
 				cannot stand up to concentrated observation without
 				fading.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `No roll is required as long as the character
 					fulfills the criteria described above. So long as he re-
@@ -5694,7 +5692,7 @@ var disciplineMap = map[string]Discipline{
 					see him.`,
 				},
 			},
-			"Unseen Presence": disciplineAbility{
+			"Unseen Presence": {
 				BaseDesc: `With experience, the vampire can move around
 				without being seen. Shadows seem to shift to cover
 				him, and people automatically avert their gazes as he
@@ -5710,7 +5708,7 @@ var disciplineMap = map[string]Discipline{
 				vase, bumping into someone). Even a whispered word
 				or the scuffing of a shoe against the floor can be enough
 				to disrupt the power.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": ` No roll is necessary to use this power unless
 					the character speaks, attacks, or otherwise draws atten-
@@ -5736,7 +5734,7 @@ var disciplineMap = map[string]Discipline{
 					the entire time.`,
 				},
 			},
-			"Mask of a Thousand Faces": disciplineAbility{
+			"Mask of a Thousand Faces": {
 				BaseDesc: `The vampire can influence the perception of others,
 				causing them to see a face different from his. Although
 				the Kindred’s physical form does not change, any observer who cannot sense the truth sees whomever the
@@ -5749,7 +5747,7 @@ var disciplineMap = map[string]Discipline{
 				but such a disguise is easier to maintain than having to
 				impersonate someone else. Of course, things get simpler if the Kindred borrows the face but doesn’t bother
 				with the personality.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player rolls Manipulation + Perfor-
 					mance (difficulty 7) to determine how well the disguise
@@ -5786,7 +5784,7 @@ var disciplineMap = map[string]Discipline{
 						or an extreme change of size.`,
 				},
 			},
-			"Vanish from the Mind's Eye": disciplineAbility{
+			"Vanish from the Mind's Eye": {
 				BaseDesc: `This potent expression of Obfuscate enables the
 				vampire to disappear from plain view. So profound is
 				this vanishing that the immortal can fade away even if
@@ -5798,7 +5796,7 @@ var disciplineMap = map[string]Discipline{
 				minds. Although vampires are not shaken so easily,
 				even Kindred may be momentarily surprised by a sud-
 				den vanishing.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player rolls Charisma + Stealth; the
 					difficulty equals the target’s Wits + Alertness (use the
@@ -5831,7 +5829,7 @@ var disciplineMap = map[string]Discipline{
 					make sense of what she just experienced.`,
 				},
 			},
-			"Cloak the Gathering": disciplineAbility{
+			"Cloak the Gathering": {
 				BaseDesc: `At this degree of power, the vampire may extend
 				his concealing abilities to cover an area. The immor-
 				tal may use any Obfuscate power upon those nearby as
@@ -5840,7 +5838,7 @@ var disciplineMap = map[string]Discipline{
 				exposes himself to view. Further, if the one who invokes the power gives himself away, the cloak falls
 				from everyone. This power is particularly useful if the
 				vampire needs to bring his retinue through a secure location without drawing the notice of others.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The character may conceal one extra indi-
 					vidual for each dot of Stealth he possesses. He may be-
@@ -5855,7 +5853,7 @@ var disciplineMap = map[string]Discipline{
 					eryone.`,
 				},
 			},
-			"Conceal": disciplineAbility{
+			"Conceal": {
 				BaseDesc: `The vampire may mask an inanimate object up to
 				the size of a house (Obfuscate cannot be used to dis-
 				guise inanimate objects without the use of this power).
@@ -5863,7 +5861,7 @@ var disciplineMap = map[string]Discipline{
 				Conceal is in effect, passersby walk around the con-
 				cealed object as if it were still visible, but refuse to ac-
 				knowledge that they are making any kind of detour.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": ` In order to activate this power, a character
 					must be within about 30 feet (approximately 10 me-
@@ -5885,11 +5883,11 @@ var disciplineMap = map[string]Discipline{
 					the like.`,
 				},
 			},
-			"Mind Blank": disciplineAbility{
+			"Mind Blank": {
 				BaseDesc: `A vampire with this power is able to shrug off tele-
 				pathic contact, easily withstanding invasive probes of
 				her mind.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `Any attempt to read or probe the character’s
 					mind first requires a successful Perception + Empathy
@@ -5898,7 +5896,7 @@ var disciplineMap = map[string]Discipline{
 					for the attempt is then limited to the number of successes he scored on the initial roll.`,
 				},
 			},
-			"Soul Mask": disciplineAbility{
+			"Soul Mask": {
 				BaseDesc: `In addition to concealing her form, a vampire who
 				has developed Soul Mask is able to conceal her aura.
 				She may display whatever combination of colors and
@@ -5906,7 +5904,7 @@ var disciplineMap = map[string]Discipline{
 				soever. This power is of particular use to those of elder
 				Generation who have reached such heights of power
 				through diablerie.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The use of this power allows the projection of only one aura (or lack thereof) — the vampire
 					chooses the precise colors to be displayed when she first
@@ -5923,14 +5921,14 @@ var disciplineMap = map[string]Discipline{
 					first one she learned.`,
 				},
 			},
-			"Cache": disciplineAbility{
+			"Cache": {
 				BaseDesc: `Most Obfuscate powers require the individual using
 				them to be within a short distance of the subjects of
 				the concealment. Cache extends this range consider-
 				ably, allowing an elder with this power to leave people
 				or objects safely hidden while he goes about his busi-
 				ness elsewhere.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `A character must be within the normal re-
 					quired distance to initiate an Obfuscate power. Once
@@ -5945,7 +5943,7 @@ var disciplineMap = map[string]Discipline{
 					subject reveals himself.`,
 				},
 			},
-			"Veil of Blissful Ignorance": disciplineAbility{
+			"Veil of Blissful Ignorance": {
 				BaseDesc: `This power’s development is attributed to the Mal-
 				kavians, but many Nosferatu have also found it to be
 				highly useful. The Veil of Blissful Ignorance allows a
@@ -5965,7 +5963,7 @@ var disciplineMap = map[string]Discipline{
 				Curiously enough, Veil of Blissful Ignorance can
 				never be used on anyone who is ready and willing to
 				accept its effects.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The character must touch the victim to ac-
 					tivate this power. The player spends a blood point and
@@ -5981,7 +5979,7 @@ var disciplineMap = map[string]Discipline{
 					`5 sucesses`: `One night`,
 				},
 			},
-			"Old Friend": disciplineAbility{
+			"Old Friend": {
 				BaseDesc: `Many elder Nosferatu have made reputations for om-
 				niscience with the secrets they learn through creative
 				uses of this power. A variation of Mask of a Thousand
@@ -5996,7 +5994,7 @@ var disciplineMap = map[string]Discipline{
 				long- dead friend or relative is just as likely, and in such
 				cases the subject remembers the encounter as a dream
 				or a ghostly visitation.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The player rolls Manipulation + Subterfuge
 					(difficulty equal to the victim’s Perception + Alert-
@@ -6008,7 +6006,7 @@ var disciplineMap = map[string]Discipline{
 					Friend.`,
 				},
 			},
-			"Create Name": disciplineAbility{
+			"Create Name": {
 				BaseDesc: `Some Toreador call this power the ultimate develop-
 				ment of method acting. Create Name allows a charac-
 				ter to create a completely new identity; face, speech
@@ -6017,7 +6015,7 @@ var disciplineMap = map[string]Discipline{
 				can be used to impersonate an existing individual, or
 				it can project the semblance of a completely fictional
 				identity with perfect accuracy.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": `A vampire working with Create Name must
 					spend three hours a night in relatively uninterrupted
@@ -6060,7 +6058,7 @@ var disciplineMap = map[string]Discipline{
 		the darkness they control, though other vampires (even
 		those that also have Obtenebration) cannot. `,
 		Abilities: map[string]disciplineAbility{
-			"Shadow Play": disciplineAbility{
+			"Shadow Play": {
 				BaseDesc: `This power grants the vampire limited control over
 				shadows and other ambient darkness. Though the vam-
 				pire cannot truly “create” darkness, she can overlap and
@@ -6074,7 +6072,7 @@ var disciplineMap = map[string]Discipline{
 				to aggravate or even smother victims. Certain callous
 				Lasombra claim to have choked mortals to death with
 				their own shadows.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `This power requires no roll, but a blood
 					point must be spent to activate it. Shadow Play lasts for
@@ -6096,7 +6094,7 @@ var disciplineMap = map[string]Discipline{
 					the monstrous shadows.`,
 				},
 			},
-			"Shroud of Night": disciplineAbility{
+			"Shroud of Night": {
 				BaseDesc: `The vampire can create a cloud of inky blackness.
 				The cloud completely obscures light and even sound
 				to some extent. Those who have been trapped within
@@ -6107,7 +6105,7 @@ var disciplineMap = map[string]Discipline{
 				The tenebrous cloud may even move, if the creating
 				Kindred wishes, though this requires complete concen-
 				tration.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": ` The player rolls Manipulation + Occult
 					(difficulty 7). Success on the roll generates darkness
@@ -6139,12 +6137,12 @@ var disciplineMap = map[string]Discipline{
 					above, or panic and flee.`,
 				},
 			},
-			"Arms of the Abyss": disciplineAbility{
+			"Arms of the Abyss": {
 				BaseDesc: `Refining his control over darkness, the Kindred can
 				create prehensile tentacles that emerge from patches of
 				dim lighting. These tentacles may grasp, restrain, and
 				constrict foes.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player spends a blood point and makes
 					a simple (never extended) Manipulation + Occult roll
@@ -6169,7 +6167,7 @@ var disciplineMap = map[string]Discipline{
 					such as typing or driving.`,
 				},
 			},
-			"Black Metamorphosis": disciplineAbility{
+			"Black Metamorphosis": {
 				BaseDesc: `The Cainite calls upon his inner darkness and in-
 				fuses himself with it, becoming a monstrous hybrid of
 				matter and shadow. His body becomes mottled with
@@ -6177,7 +6175,7 @@ var disciplineMap = map[string]Discipline{
 				from his torso and abdomen. Though still humanoid,
 				the vampire takes on an almost demonic appearance,
 				as the darkness within him bubbles to the surface.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The player spends two blood points and
 					makes a Manipulation + Courage roll (difficulty 7) —
@@ -6217,7 +6215,7 @@ var disciplineMap = map[string]Discipline{
 					dred’s Intimidation dice pools.`,
 				},
 			},
-			"Tenebrous Form": disciplineAbility{
+			"Tenebrous Form": {
 				BaseDesc: `At this level, the Kindred’s mastery of darkness is so
 				extensive that she may physically become it. Upon ac-
 				tivation of this power, the vampire becomes an inky,
@@ -6225,7 +6223,7 @@ var disciplineMap = map[string]Discipline{
 				practically invulnerable and may slither through cracks
 				and crevices. In addition, the shadow-vampire gains
 				the ability to see in natural darkness.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The transformation costs three blood points
 					(which may need to occur over three turns, depending on the vampire’s Generation). The vampire is immune to physical attacks while in the tenebrous form
@@ -6245,7 +6243,7 @@ var disciplineMap = map[string]Discipline{
 					bilitating terror described under Black Metamorphosis.`,
 				},
 			},
-			"The Darkness Within": disciplineAbility{
+			"The Darkness Within": {
 				BaseDesc: `This power allows the Cainite to call forth the dark-
 				ness contained in her black soul. This enormous, turbu-
 				lent shadow vomits from the vampire’s mouth, though
@@ -6253,7 +6251,7 @@ var disciplineMap = map[string]Discipline{
 				blackness seep from their veins. The shadow-cloud en-
 				gulfs a chosen target, burning it with a soul-scarring
 				chill and siphoning its blood away in torrents.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": ` The player makes a Willpower roll (difficulty 6) and spends a blood point. The resulting shadow
 						envelops the target and, though it does not physically
@@ -6275,7 +6273,7 @@ var disciplineMap = map[string]Discipline{
 						may be in contact with many.`,
 				},
 			},
-			"Shadowstep": disciplineAbility{
+			"Shadowstep": {
 				BaseDesc: `The vampire has such fine control over the darkness
 				that he may become it briefly and reform himself from
 				other darkness close by. The vampire may Shadowstep
@@ -6283,7 +6281,7 @@ var disciplineMap = map[string]Discipline{
 				Cainite simply steps “into” a shadow and re-emerges
 				from another shadow a short distance away (or next to
 				the barrier, if there is no shadow on the other side).`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The player rolls Dexterity + Occult, and on
 					a successful roll, the character may emerge from anoth-
@@ -6295,7 +6293,7 @@ var disciplineMap = map[string]Discipline{
 					for failure similar to failing by oneself.`,
 				},
 			},
-			"Shadow Twin": disciplineAbility{
+			"Shadow Twin": {
 				BaseDesc: `The vampire’s control over darkness has progressed
 				to such a degree that he may bestow upon it a lim-
 				ited degree of sentience. By animating his own shadow
@@ -6308,7 +6306,7 @@ var disciplineMap = map[string]Discipline{
 				tion commands the individual’s shadow; some vampires
 				report having seen mortals literally scared to death, as
 				their shadows leapt away to taunt or menace them.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The player spends a blood point and makes
 					a Willpower roll (difficulty 8). If the roll succeeds, the
@@ -6335,7 +6333,7 @@ var disciplineMap = map[string]Discipline{
 					Rötschreck (difficulty 9).`,
 				},
 			},
-			"Oubliette": disciplineAbility{
+			"Oubliette": {
 				BaseDesc: `By creating a “chamber” of pure darkness, the Cain-
 				ite may entrap or smother her enemies. No air exists
 				in this shadow-trap, and mortals suffocate within its
@@ -6343,7 +6341,7 @@ var disciplineMap = map[string]Discipline{
 				trapped — they may leave only at their captor’s whim.
 				The Oubliette appears as a dense patch of shadow, un-
 				affected by ambient light around it.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The vampire spends a blood point, but no
 					roll is necessary to create the Oubliette. To actually
@@ -6363,7 +6361,7 @@ var disciplineMap = map[string]Discipline{
 					is a prison created from the vampire’s very soul.`,
 				},
 			},
-			"Ahriman's Demense": disciplineAbility{
+			"Ahriman's Demense": {
 				BaseDesc: `This power allows the vampire to summon a dark-
 				ness so oppressive that it extinguishes the light of life
 				— or unlife — of any victim trapped within it. Ahri-
@@ -6373,7 +6371,7 @@ var disciplineMap = map[string]Discipline{
 				The overwhelming darkness destroys friend and foe
 				alike, claiming anyone unfortunate enough to be with-
 				in its circumference.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": ` The player spends two points of Willpower
 					and concentrates for three turns. During this time, the
@@ -6404,9 +6402,9 @@ var disciplineMap = map[string]Discipline{
 		brutal effectiveness of Potence is formidable in its own
 		right.`,
 		Abilities: map[string]disciplineAbility{
-			"Potence 1-5": disciplineAbility{
+			"Potence 1-5": {
 				BaseDesc: `Kindred endowed with Potence possess unnatural strength.`,
-				lvl:      1,
+				Lvl:      1,
 				System: map[string]string{
 					"sys": `: Each dot that the vampire has in Potence
 					adds one die to all Strength-related dice rolls. Further,
@@ -6415,7 +6413,7 @@ var disciplineMap = map[string]Discipline{
 					results.`,
 				},
 			},
-			"Imprint": disciplineAbility{
+			"Imprint": {
 				BaseDesc: `A vampire with extensive knowledge of Potence can
 				squeeze very, very hard. As a matter of fact, she can
 				squeeze (or press, or push) so hard that she can leave
@@ -6424,7 +6422,7 @@ var disciplineMap = map[string]Discipline{
 				simply serve as a threat, or it can be used, for example,
 				to dig handholds into sheer surfaces for purposes of
 				climbing.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `Imprint requires a point of blood to activate.
 					The power remains active for the duration of a scene.
@@ -6437,7 +6435,7 @@ var disciplineMap = map[string]Discipline{
 					off (in the case of a spear or pipe).`,
 				},
 			},
-			"Earthshock": disciplineAbility{
+			"Earthshock": {
 				BaseDesc: `According to some pundits, Potence is merely the
 				art of hitting something very hard. But what do you
 				do when your target is too far away to hit directly? The
@@ -6446,7 +6444,7 @@ var disciplineMap = map[string]Discipline{
 				Earthshock is the ability to hit the ground at point A,
 				and subsequently have the force of the blow emerge
 				from the ground at point B.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The use of Earthshock requires the expenditure of two blood points, as well as a normal Dexterity
 					+ Brawl roll. The vampire punches or stamps on the
@@ -6461,7 +6459,7 @@ var disciplineMap = map[string]Discipline{
 					in the process.`,
 				},
 			},
-			"Flick": disciplineAbility{
+			"Flick": {
 				BaseDesc: `It is a truism that “the great ones always make it look
 				easy.” In the case of Flick, that saying stops being a
 				truism and becomes literal truth. With this power, a
@@ -6470,7 +6468,7 @@ var disciplineMap = map[string]Discipline{
 				have it unleash the full, devastating impact of a dead-
 				on strike. The attack can come without warning, limiting the target’s ability to dodge or anticipate; this makes
 				Flick one of the most feared applications of Potence.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": ` Flick costs a point of blood, and requires
 					a Dexterity + Brawl roll (difficulty 6). The vampire
@@ -6505,7 +6503,7 @@ var disciplineMap = map[string]Discipline{
 		power to ignore the Presence for an entire night and
 		need not roll Willpower to do so.`,
 		Abilities: map[string]disciplineAbility{
-			"Awe": disciplineAbility{
+			"Awe": {
 				BaseDesc: `Those near the vampire suddenly desire to be closer
 				to her and become receptive to her point of view. Awe
 				is extremely useful for mass communication. It matters
@@ -6521,7 +6519,7 @@ var disciplineMap = map[string]Discipline{
 				Those subject to Awe will remember how they felt in
 				the vampire’s presence, however. This will influence
 				their reactions should they ever encounter her again.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player spends a blood point and rolls
 					Charisma + Performance (difficulty 7). The number of
@@ -6537,7 +6535,7 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `Everyone in the vampire's immediate vicinity (an entire auditorium, a mob)`,
 				},
 			},
-			"Dread Gaze": disciplineAbility{
+			"Dread Gaze": {
 				BaseDesc: `While all Kindred can frighten others by physically
 				revealing their true vampiric natures — baring claws
 				and fangs, glaring with malevolence, hissing loudly with
@@ -6546,7 +6544,7 @@ var disciplineMap = map[string]Discipline{
 				ror in its victim, stupefying him into madness, immobil-
 				ity, or reckless flight. Even the most stalwart individual
 				will fall back from the vampire’s horrific visage`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": ` The player rolls Charisma + Intimidation
 					(difficulty equal to the victim’s Wits + Courage). Success indicates the victim is cowed, while failure means
@@ -6572,7 +6570,7 @@ var disciplineMap = map[string]Discipline{
 					Presence by the character for the rest of the story.`,
 				},
 			},
-			" Entrancement": disciplineAbility{
+			" Entrancement": {
 				BaseDesc: `This power bends others’ emotions, making them
 				the vampire’s willing servants. Due to what these in-
 				dividuals see as true and enduring devotion, they heed
@@ -6588,7 +6586,7 @@ var disciplineMap = map[string]Discipline{
 				serve their usefulness, or binds them more securely by a
 				blood bond (made much easier by the minion’s willing-
 				ness to serve).`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player spends a blood point and rolls
 					Appearance + Empathy (difficulty equal to the target’s
@@ -6613,7 +6611,7 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `1 year`,
 				},
 			},
-			"Summon": disciplineAbility{
+			"Summon": {
 				BaseDesc: `This impressive power enables the vampire to call to
 				herself any person whom she has ever met. This call
 				can go to anyone, mortal or supernatural, across any
@@ -6632,7 +6630,7 @@ var disciplineMap = map[string]Discipline{
 				the individual’s financial resources are a factor; if he
 				doesn’t have the money to travel quickly, it will take
 				him a far greater time to get there.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": ` The player spends a blood point and rolls
 					Charisma + Subterfuge. The base difficulty is 5; this in-
@@ -6659,7 +6657,7 @@ var disciplineMap = map[string]Discipline{
 					anything to get to her.`,
 				},
 			},
-			"Majesty": disciplineAbility{
+			"Majesty": {
 				BaseDesc: `At this stage, the vampire can augment her super-
 				natural mien a thousandfold. The attractive become
 				paralyzingly beautiful; the homely become hideously
@@ -6675,7 +6673,7 @@ var disciplineMap = map[string]Discipline{
 				mystique enough to oppose her are shouted down by
 				the many under her thrall, before the immortal need
 				even respond.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `No roll is required on the part of the vam-
 					pire, but she must spend a Willpower point. A subject
@@ -6691,7 +6689,7 @@ var disciplineMap = map[string]Discipline{
 					last for one scene.`,
 				},
 			},
-			"Love": disciplineAbility{
+			"Love": {
 				BaseDesc: `The blood bond is one of the most powerful tools in
 				an elder’s inventory. However, more and more childer
 				are aware of how to avoid being bound, so alterna-
@@ -6701,7 +6699,7 @@ var disciplineMap = map[string]Discipline{
 				as sure a method of control as a true blood bond, nor
 				as long-lasting, Love is still an extremely potent means
 				of command.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The player spends a blood point and rolls
 					Charisma + Subterfuge (difficulty equal to the target’s
@@ -6716,14 +6714,14 @@ var disciplineMap = map[string]Discipline{
 					multiple scenes in the same night.`,
 				},
 			},
-			"Paralyzing Glance": disciplineAbility{
+			"Paralyzing Glance": {
 				BaseDesc: `Some elders have honed their mastery of Dread Gaze
 				to such a degree that they are said to be able to para-
 				lyze with a look. The power‘s name is something of a
 				misnomer, as victims of this power are not precisely
 				paralyzed in a physical sense, but rather frozen with
 				sheer terror.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The character must make eye contact
 					with her intended victim. The player then
@@ -6746,13 +6744,13 @@ var disciplineMap = map[string]Discipline{
 					`6+ successes`: `A week(or more)`,
 				},
 			},
-			"Spark of Rage": disciplineAbility{
+			"Spark of Rage": {
 				BaseDesc: `A vampire possessing this power can shorten tem-
 				pers and bring old grudges and irritations to the boiling
 				point with a minimum of effort. Spark of Rage causes
 				disagreements and fights, and can even send other
 				vampires into frenzy.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The player spends a blood point and rolls
 					Manipulation + Subterfuge (difficulty 8). The number of individuals affected is determined by how many
@@ -6773,7 +6771,7 @@ var disciplineMap = map[string]Discipline{
 					immediate vicinity`,
 				},
 			},
-			"Cooperation": disciplineAbility{
+			"Cooperation": {
 				BaseDesc: `Any elder knows that Kindred are the most difficult
 				beings in existence to force to work together. Peaceful
 				coexistence is not a common tenet of vampiric society.
@@ -6783,7 +6781,7 @@ var disciplineMap = map[string]Discipline{
 				Clan’s mastery of this Presence effect is the sole reason
 				that anything is ever accomplished in Camarilla conclaves. Ventrue who voice this opinion too loudly also
 				tend to have numerous chances to test just how effective Cooperation is.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": ` To invoke Cooperation, the player spends a
 					blood point and rolls Charisma + Leadership (difficulty
@@ -6803,13 +6801,13 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `Everyone in the character’s immediate vicinity`,
 				},
 			},
-			"Ironclad Command": disciplineAbility{
+			"Ironclad Command": {
 				BaseDesc: `Any individual can normally resist the powers of
 				Presence for a brief time through an effort of will. Some
 				elder Toreador and Ventrue have developed such force
 				of personality that their powers of Presence cannot be
 				resisted without truly heroic efforts.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": ` This power is always in effect once it has
 					been learned. A mortal may not spend Willpower to resist the character’s Presence (for purposes of this power,
@@ -6826,7 +6824,7 @@ var disciplineMap = map[string]Discipline{
 					hapless victim for the remainder of the night.`,
 				},
 			},
-			"Pulse of the City": disciplineAbility{
+			"Pulse of the City": {
 				BaseDesc: `A vampire who has developed her Presence to this
 				terrifying degree can control the emotional climate of
 				the entire region around her, up to the size of a large
@@ -6838,7 +6836,7 @@ var disciplineMap = map[string]Discipline{
 				tourists, and also has a significant impact on those in-
 				dividuals who might be elsewhere at the time but who
 				still have strong ties to the affected city.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": ` The character must be present in the city in
 					question, and have at least a casual, personal knowledge of its streets and makeup (maps won’t help). The
@@ -6873,13 +6871,13 @@ var disciplineMap = map[string]Discipline{
 		transforms (presumably absorbed within his very substance), although armor and the like do not provide
 		any benefit while transformed.`,
 		Abilities: map[string]disciplineAbility{
-			"Eye of the Beast": disciplineAbility{
+			"Eye of the Beast": {
 				BaseDesc: `The vampire sees perfectly well in pitch darkness,
 				not requiring a light source to notice details in even
 				the darkest basement or cave. The vampire’s Beast is
 				evident in his red glowing eyes, a sight sure to disturb
 				most mortals.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The character must declare his desire to call
 					forth the Eyes. No roll is necessary, but the change re-
@@ -6891,7 +6889,7 @@ var disciplineMap = map[string]Discipline{
 					suffers blind-fighting penalties)`,
 				},
 			},
-			"Feral Claws": disciplineAbility{
+			"Feral Claws": {
 				BaseDesc: `The vampire’s nails transform into long, bestial claws.
 				These talons are wickedly sharp, able to rend flesh with
 				ease and even carve stone and metal with little trouble.
@@ -6899,7 +6897,7 @@ var disciplineMap = map[string]Discipline{
 				them fearsome weapons against other immortals. It’s
 				rumored that some Gangrel have modified this power
 				to change their vampiric fangs into vicious tusks.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The claws grow automatically in response to
 					the character’s desire, and can grow from both hands
@@ -6912,7 +6910,7 @@ var disciplineMap = map[string]Discipline{
 					by two.`,
 				},
 			},
-			"Earth Meld": disciplineAbility{
+			"Earth Meld": {
 				BaseDesc: `One of the most prized powers within Protean,
 				Earth Meld enables the vampire to become one with
 				the earth. The immortal literally sinks into the bare
@@ -6926,7 +6924,7 @@ var disciplineMap = map[string]Discipline{
 				tively simple matter for a vampire at this level of power
 				to grow claws and rip apart enough of the flooring to
 				expose the raw soil beneath.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `No roll is necessary, although the charater must spend a blood point. Sinking into the earth is
 					automatic and takes a turn to complete. The character
@@ -6947,7 +6945,7 @@ var disciplineMap = map[string]Discipline{
 					earth, the vampire may act normally.`,
 				},
 			},
-			"Shape of the Beast": disciplineAbility{
+			"Shape of the Beast": {
 				BaseDesc: `This endows the vampire with the legendary ability
 				to transform into a wolf or bat. A Kindred changed
 				in this way is a particularly imposing representative
@@ -6961,7 +6959,7 @@ var disciplineMap = map[string]Discipline{
 				dholes in Asia, and even enormous rats in urban envi-
 				ronments — a feat that other Clans learning Protean
 				cannot seem to duplicate.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The character spends one blood point to assume the desired shape. The transformation requires
 					three turns to complete (spending additional blood
@@ -6983,7 +6981,7 @@ var disciplineMap = map[string]Discipline{
 					abilities it grants the character.`,
 				},
 			},
-			"Mist Form": disciplineAbility{
+			"Mist Form": {
 				BaseDesc: `This truly unsettling power enables the vampire to
 				turn into mist. His physical shape disperses into a hazy
 				cloud, but one still subject entirely to the immortal’s
@@ -6995,7 +6993,7 @@ var disciplineMap = map[string]Discipline{
 				the vampire’s ultimate control over the material world,
 				while others believe that it is the immortal’s soul made
 				manifest (damned though it may be)`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": ` No roll is required, although a blood point
 					must be spent. The transformation takes three turns to
@@ -7013,7 +7011,7 @@ var disciplineMap = map[string]Discipline{
 					substance, however.`,
 				},
 			},
-			"Earth Control": disciplineAbility{
+			"Earth Control": {
 				BaseDesc: `An Earth Melded character with this power is no
 				longer confined to the resting place she selected the
 				night before. She can pass through the ground as if it
@@ -7021,7 +7019,7 @@ var disciplineMap = map[string]Discipline{
 				elders use this as a means of unobstructed and unobtru-
 				sive travel, while others find it a highly effective means
 				of maneuvering in combat.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": ` This power is in effect whenever a character
 					is Earth Melded, with no additional roll or expenditure
@@ -7036,7 +7034,7 @@ var disciplineMap = map[string]Discipline{
 					an extended, contested Strength + Athletics roll`,
 				},
 			},
-			"Flesh of Marble": disciplineAbility{
+			"Flesh of Marble": {
 				BaseDesc: `Tales have long spoken of the combat prowess of
 				Gangrel elders and of their inhuman resilience. Poorly
 				informed individuals believe the stories of swords shat-
@@ -7048,7 +7046,7 @@ var disciplineMap = map[string]Discipline{
 				Flesh of Marble becomes in essence a sort of flexible
 				stone, although it appears (and feels) no different than
 				normal skin and muscle.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The player spends three blood points to activate Flesh of Marble, which goes into effect instantly.
 					The effects of the power last for the remainder of the
@@ -7063,7 +7061,7 @@ var disciplineMap = map[string]Discipline{
 					he were holding some form of weapon.`,
 				},
 			},
-			"Restore the Mortal Visage": disciplineAbility{
+			"Restore the Mortal Visage": {
 				BaseDesc: `Cainites are of two opinions regarding this power.
 				Those who are politically active, or who associate extensively with mortals, view it as both necessary and
 				acceptable. Those Kindred who embrace their more feral sides, however, see it as a disgusting defiance of the
@@ -7074,7 +7072,7 @@ var disciplineMap = map[string]Discipline{
 				elders have attempted to develop it, and it is whispered
 				that they met spontaneous, grotesque Final Deaths
 				when they attempted to take their mortal forms.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The player spends three blood points and
 					a Willpower point and rolls Willpower (difficulty 8).
@@ -7087,7 +7085,7 @@ var disciplineMap = map[string]Discipline{
 					lasts for the remainder of the scene.`,
 				},
 			},
-			"Shape of the Beast’s Wrath": disciplineAbility{
+			"Shape of the Beast’s Wrath": {
 				BaseDesc: `Users of this power are often mistaken for Tzimisce
 				employing the Vicissitude power Horrid Form. A vam-
 				pire employing this power shifts into a huge, monstrous
@@ -7100,7 +7098,7 @@ var disciplineMap = map[string]Discipline{
 				The vampire’s new shape does bear some vague resem-
 				blance to the war-forms of the werecreatures, but the
 				difference quickly becomes apparent.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The player spends three blood points, the
 					expenditure of which triggers the change. The character’s transformation takes three turns (the player may
@@ -7135,7 +7133,7 @@ var disciplineMap = map[string]Discipline{
 					the power’s effect, and the player may not spend Willpower points on such rolls.`,
 				},
 			},
-			" Spectral Body": disciplineAbility{
+			" Spectral Body": {
 				BaseDesc: `This powerful variation on Mist Form allows a vam-
 				pire to take a shape with most of the advantages of the
 				lesser power but fewer of the disadvantages. A vampire
@@ -7146,7 +7144,7 @@ var disciplineMap = map[string]Discipline{
 				Although his lungs are no longer solid, the vampire can
 				still speak, a fact in which some elders of the Daughters
 				of Cacophony bloodline have expressed great interest.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The player spends three blood points. The
 					transformation takes one turn to complete, and lasts
@@ -7165,7 +7163,7 @@ var disciplineMap = map[string]Discipline{
 					the use of powers such as Movement of the Mind.`,
 				},
 			},
-			" Purify the Impaled Beast": disciplineAbility{
+			" Purify the Impaled Beast": {
 				BaseDesc: `Camarilla records indicate that a disproportionately
 				small number of Gangrel elders were killed by mortals
 				and Anarchs during the Inquisition and the Anarch
@@ -7174,7 +7172,7 @@ var disciplineMap = map[string]Discipline{
 				tean power can expel foreign objects from her body
 				with great force, even excising stakes that transfix her
 				heart.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The player spends three blood points and
 					rolls Willpower (difficulty 6, or 8 if the vampire is paralyzed by an object impaling her heart). One success is
@@ -7190,7 +7188,7 @@ var disciplineMap = map[string]Discipline{
 					spend a Willpower point when activating this power.`,
 				},
 			},
-			"Inward Focus": disciplineAbility{
+			"Inward Focus": {
 				BaseDesc: `This power has no outwardly visible effects what-
 				soever. Indeed, its very existence is unknown outside
 				those Gangrel Methuselahs who have developed it.
@@ -7201,7 +7199,7 @@ var disciplineMap = map[string]Discipline{
 				nal workings to levels undreamed of by lesser Kindred,
 				withstanding inconceivable amounts of injury and
 				moving with blinding speed and shattering strength.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": ` The player spends four blood points to ac-
 					tivate this power and an additional two blood points
@@ -7234,7 +7232,7 @@ var disciplineMap = map[string]Discipline{
 		death, but the Assamites rely on its lethality to hide
 		their involvement with their victims.`,
 		Abilities: map[string]disciplineAbility{
-			"Silence of Death": disciplineAbility{
+			"Silence of Death": {
 				BaseDesc: `Many Assamites claim never to have heard their
 				targets’ death screams. Silence of Death imbues the
 				vampire with a mystical silence that radiates from her
@@ -7244,14 +7242,14 @@ var disciplineMap = map[string]Discipline{
 				who have the ability to silence a location rather than a
 				circumference that follows them, but no proof of this
 				has been forthcoming.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `This power (which costs one blood point to
 						activate) maintains a 20-foot (6-meter) radius of utter
 						stillness around the Kindred for one hour.`,
 				},
 			},
-			"Scorpion’s Touch": disciplineAbility{
+			"Scorpion’s Touch": {
 				BaseDesc: `By changing the properties of her blood, a vampire
 				may create powerful venom that strips her prey of his resilience. This power is greatly feared by other Kindred,
 				and all manner of hideous tales concerning methods of
@@ -7263,7 +7261,7 @@ var disciplineMap = map[string]Discipline{
 				diablerize her would-be assassin. Halfway through the
 				act, she learned that she had ingested a dire quantity of
 				tainted blood and was then unable to resist the weakened hashashiyyin’s renewed attack.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `To convert a bit of her blood to poison, the
 					Kindred’s player spends at least one blood point and
@@ -7288,7 +7286,7 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `Permanently (though Stamina may be bought back up with experience`,
 				},
 			},
-			"Dagon’s Call": disciplineAbility{
+			"Dagon’s Call": {
 				BaseDesc: `This terrible power allows a vampire to drown her
 				target in his own blood. By concentrating, the Kindred
 				bursts her target’s blood vessels and fills his lungs with
@@ -7297,7 +7295,7 @@ var disciplineMap = map[string]Discipline{
 				or death throes, this power has no visible effect, and
 				many Kindred like it because it leaves no trace of their
 				presence.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The vampire must touch her target prior
 					to using Dagon’s Call. Within an hour thereafter, the
@@ -7314,7 +7312,7 @@ var disciplineMap = map[string]Discipline{
 					continues to spend Willpower, the character may continue rending her opponent from within.`,
 				},
 			},
-			"Baal’s Caress": disciplineAbility{
+			"Baal’s Caress": {
 				BaseDesc: `The penultimate use of blood as a weapon (short of
 					diablerie itself), Baal’s Caress allows the Kindred to
 					transmute her blood into a virulent ichor that destroys
@@ -7326,7 +7324,7 @@ var disciplineMap = map[string]Discipline{
 					Baal’s Caress may be used to augment any bladed
 					weapon; everything from poisoned knives and swords
 					to tainted fingernails and claws has been reported.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `Baal’s Caress does not increase the damage
 					done by a given weapon, but that weapon inflicts aggravated damage rather than normal. No roll is necessary to activate this power, but one blood point is
@@ -7337,14 +7335,14 @@ var disciplineMap = map[string]Discipline{
 					the vampire misses, no tainted blood is consumed`,
 				},
 			},
-			"Taste of Death": disciplineAbility{
+			"Taste of Death": {
 				BaseDesc: `A refinement of Baal’s Caress, Taste of Death allows
 				the Cainite to spit caustic blood at her target. The
 				blood coughed forth with this power burns flesh and
 				corrodes bone; some vampires have been reported to
 				vomit voluminous streams of vitae that reduce their
 				targets to heaps of sludge.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The vampire may spit up to 10 feet (3 meters) for each dot of Strength and Potence he possesses.
 						Hitting the target requires a Stamina + Athletics roll
@@ -7355,7 +7353,7 @@ var disciplineMap = map[string]Discipline{
 						which a target may be deluged.`,
 				},
 			},
-			"Blood Sweat": disciplineAbility{
+			"Blood Sweat": {
 				BaseDesc: `Although vampires do not have functioning sebaceous glands, they are still capable of sweating at
 				times of extreme stress. This “sweat” is actually a thin
 				sheen of blood on the Cainite’s forehead and palms.
@@ -7364,7 +7362,7 @@ var disciplineMap = map[string]Discipline{
 				capable of inducing these feelings in a subject to a preternatural degree. The victim experiences a torrential
 				outpouring of vitae if he harbors the tiniest shred of
 				remorse for any action he has ever undertaken.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The character must be within line of sight
 					of the subject and spend three turns concentrating.
@@ -7391,7 +7389,7 @@ var disciplineMap = map[string]Discipline{
 					to confess or boast.`,
 				},
 			},
-			"Selective Silence": disciplineAbility{
+			"Selective Silence": {
 				BaseDesc: `Although Silence of Death is an effective tool for
 				the battlefield and the court alike, it is indiscriminate
 				in its effects. The assassin who uses it in preparation
@@ -7406,7 +7404,7 @@ var disciplineMap = map[string]Discipline{
 				gradually evaporating as Selective Silence’s effects
 				fade. Some vampires also use a similar technique when
 				invoking Silence of Death, in which case the mist surrounds them and moves with them.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The player spends two blood points and
 					rolls Stamina + Stealth (difficulty 7). Each success allows for one individual or object that the character can
@@ -7427,7 +7425,7 @@ var disciplineMap = map[string]Discipline{
 					able to summon help by smashing a window.`,
 				},
 			},
-			"Ripples of the Heart": disciplineAbility{
+			"Ripples of the Heart": {
 				BaseDesc: `According to Assamite lore, this technique origi-
 				nated with a Byzantine scholar who wanted to protect
 				his herd from the thirst of other Cainites. Ripples of
@@ -7436,7 +7434,7 @@ var disciplineMap = map[string]Discipline{
 				Any other vampire who subsequently drinks from that
 				mortal experiences those emotions as if they were his
 				own.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The character drinks at least one blood
 					point from the subject mortal then spends a minute in
@@ -7473,7 +7471,7 @@ var disciplineMap = map[string]Discipline{
 					subject to other feelings after the initial rush of sensation.`,
 				},
 			},
-			"Purification": disciplineAbility{
+			"Purification": {
 				BaseDesc: `Although most mortal cultures affix negative connotations to the spilling of blood, most Assamites
 				— indeed, most vampires — have quite the opposite
 				reaction to it. For them, blood is an unlife-affirming
@@ -7486,7 +7484,7 @@ var disciplineMap = map[string]Discipline{
 				using this power expels his own blood through his skin
 				and allows it to soak through his subject, slowly dissipating. As it does so, it carries away spiritual impurities
 				and outside influences.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": ` The character touches the forehead of her
 					intended subject, and both parties spend a minimum of
@@ -7509,7 +7507,7 @@ var disciplineMap = map[string]Discipline{
 					use Purification on herself.`,
 				},
 			},
-			"Baal’s Bloody Talons": disciplineAbility{
+			"Baal’s Bloody Talons": {
 				BaseDesc: `The toxin generated by Baal’s Caress is not enough to
 				significantly harm some truly fearsome foes. This progressive development of that lesser technique allows its
 				user to envenom his weapon with a blood-based poison
@@ -7519,7 +7517,7 @@ var disciplineMap = map[string]Discipline{
 				enough to make the loss of even the most treasured
 				blades worthwhile. This power’s effects are of very limited duration, as the substance it creates will quickly
 				evaporate away.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The character coats an edged weapon with
 					her own blood, as per Baal’s Caress. The player spends
@@ -7547,7 +7545,7 @@ var disciplineMap = map[string]Discipline{
 					leaving its creator’s body.`,
 				},
 			},
-			"Poison the Well of Life": disciplineAbility{
+			"Poison the Well of Life": {
 				BaseDesc: `Beyond leaving emotional traces in a subject’s blood,
 				the master of this Quietus power can now taint that
 				same vitae, making it into a deadly poison for any other
@@ -7557,7 +7555,7 @@ var disciplineMap = map[string]Discipline{
 				indiscriminate feeding. Others have been known to
 				employ it as a subtle trap for other vampires, turning
 				herds against their owners.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `Beyond leaving emotional traces in a subject’s blood,
 					the master of this Quietus power can now taint that
@@ -7570,7 +7568,7 @@ var disciplineMap = map[string]Discipline{
 					herds against their owners.`,
 				},
 			},
-			"Songs of Distant Vitae": disciplineAbility{
+			"Songs of Distant Vitae": {
 				BaseDesc: `Blood magic practitioners and individuals skilled at
 				Auspex have long known that vitae can carry residual
 				impressions of emotion and personality. This power
@@ -7585,7 +7583,7 @@ var disciplineMap = map[string]Discipline{
 				which the images are drawn. Some viziers theorize that
 				this is the result of motes of the vessels’ consciousness
 				making an effort to escape their usurper.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The character touches his target and spends
 					a turn in concentration. The player spends four blood
@@ -7612,7 +7610,7 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `The target is thrown into a nightmarish reenactment of the greatest fears of every individual upon whom he has ever fed. He must make a successful Self-Control/ Instinct roll (difficulty 9) or fall into torpor for (10 - the target’s Stamina) nights, at the end of which he loses half his permanent Willpower and gains the derangement Sanguinary Animism. If he succeeds on the Self-Control/Instinct roll, he enters Rötschreck for the rest of the night, during which time his greatest fear is of his own image. At the end of the night, he must succeed at a Willpower roll (difficulty 9) or lose a permanent Willpower point and gain the derangement Sanguinary Animism.`,
 				},
 			},
-			"Condemn the Sins of the Father": disciplineAbility{
+			"Condemn the Sins of the Father": {
 				BaseDesc: `Although the Second City’s judges recognized that
 				heritage does not equal guilt, they also encountered
 				many situations in which a vampire’s entire brood had
@@ -7620,7 +7618,7 @@ var disciplineMap = map[string]Discipline{
 				often decreed the same punishment for all transgressors. This technique, which modern viziers believe to
 				have originated at that time, allows its wielder to administer such judgments. Through Condemn the Sins
 				of the Father, a Cainite can apply lesser Quietus powers to an entire lineage.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `After successfully using any lesser Quietus
 					power on another vampire, the player spends a permanent Willpower point and 10 blood points and rolls
@@ -7647,7 +7645,7 @@ var disciplineMap = map[string]Discipline{
 		evoke a primordial fear in others, particularly those
 		who recall the tale of Eden.`,
 		Abilities: map[string]disciplineAbility{
-			"The Eyes of the Serpent": disciplineAbility{
+			"The Eyes of the Serpent": {
 				BaseDesc: `This power grants the vampire the legendary hyp-
 				notic gaze of the serpent. The Kindred’s eyes become
 				gold with large black irises, and mortals in the char-
@@ -7655,7 +7653,7 @@ var disciplineMap = map[string]Discipline{
 				him. A mortal who meets the vampire’s beguiling gaze
 				is immobilized. Until the character takes his eyes off
 				his victim, the person is frozen in place.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `No roll is required, but this power can be
 					avoided if the mortal takes care not to look into the
@@ -7667,10 +7665,10 @@ var disciplineMap = map[string]Discipline{
 					vampire’s eyes for Eyes of the Serpent to work.`,
 				},
 			},
-			"The Tongue of the Asp": disciplineAbility{
+			"The Tongue of the Asp": {
 				BaseDesc: `The vampire may lengthen her tongue at will, splitting it into a fork like that of a serpent. The tongue
 				may reach 18 inches or half a meter, and makes a terrifyingly effective weapon in close combat.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The lash of the tongue’s razor fork causes aggravated wounds (difficulty 6, Strength damage). If the
 					Kindred wounds her enemy, she may drink blood from
@@ -7685,11 +7683,11 @@ var disciplineMap = map[string]Discipline{
 					darkness.`,
 				},
 			},
-			"The Skin of the Adder": disciplineAbility{
+			"The Skin of the Adder": {
 				BaseDesc: `By calling upon her Blood, the vampire may trans-
 				form her skin into a mottled, scaly hide. A vampire in
 				this form becomes more supple and flexible.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The vampire spends one blood point and
 					one Willpower point. Her skin becomes scaly and
@@ -7704,7 +7702,7 @@ var disciplineMap = map[string]Discipline{
 					though casual passersby might not notice, if the vampire is in darkness or wearing heavy clothing.`,
 				},
 			},
-			"The Form of the Cobra": disciplineAbility{
+			"The Form of the Cobra": {
 				BaseDesc: `The Cainite may change his form into that of a huge
 				black cobra. The serpent weighs as much as the vampire’s human form, stretches over 10 feet or three meters long, and is about 20 inches (50 cm) around. The
 				Form of the Cobra grants several advantages, including
@@ -7712,7 +7710,7 @@ var disciplineMap = map[string]Discipline{
 				spaces, and a greatly enhanced sense of smell. The
 				character may use any Disciplines while in this form
 				save those that require hands (such as Feral Claws).`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The vampire spends one blood point; the
 					change is automatic, but takes three turns. Clothing
@@ -7726,7 +7724,7 @@ var disciplineMap = map[string]Discipline{
 					poison delivered is fatal to mortals.`,
 				},
 			},
-			"The Heart of Darkness": disciplineAbility{
+			"The Heart of Darkness": {
 				BaseDesc: `A Kindred with mastery of Serpentis may pull her
 				heart from her body. She can even use this ability on
 				other Cainites, although this requires several hours of
@@ -7742,7 +7740,7 @@ var disciplineMap = map[string]Discipline{
 				sunlight. If this happens, the Kindred dies where she
 				stands, boiling away into a blistering heap of ash and
 				blackened bone. Plunging a wooden stake into an exposed heart drives the vampire into instant torpor.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `This power requires no roll. Those who witness a vampire pull his heart from his breast (or cut
 					the heart from another vampire) must make Courage
@@ -7750,7 +7748,7 @@ var disciplineMap = map[string]Discipline{
 					to complete revulsion, possibly even Rötschreck.`,
 				},
 			},
-			" Cobra Fangs": disciplineAbility{
+			" Cobra Fangs": {
 				BaseDesc: `A character using Form of the Cobra gains a venomous bite along with his serpentine form. Unfortunately,
 				huge black cobras tend to make people run away as fast
 				as they can. This Serpentis power enables a vampire
@@ -7758,7 +7756,7 @@ var disciplineMap = map[string]Discipline{
 				surprise. The police do ask questions when someone
 				dies from a cobra bite under unlikely circumstances, so
 				Cobra Fangs still requires some discretion in its use.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `The Kindred expends one blood point, and
 					in one turn his fangs become hollow, more slender and
@@ -7770,7 +7768,7 @@ var disciplineMap = map[string]Discipline{
 					of aggravated damage over the course of five minutes.`,
 				},
 			},
-			"Divine Image": disciplineAbility{
+			"Divine Image": {
 				BaseDesc: `Many of the low-Generation Setite elders no longer need the illusions of Obfuscate to appear as a god.
 				Through this Serpentis power, a vampire can physically metamorphose into the form of a god. Male Kindred
 				generally take the form of Set himself: a muscular man
@@ -7787,7 +7785,7 @@ var disciplineMap = map[string]Discipline{
 				While assuming the Divine Image, the vampire becomes stronger, tougher, and more impressive. More
 				importantly, perhaps, the vampire’s will becomes more
 				powerful as he identifies with a divine forebear.`,
-				lvl: 7,
+				Lvl: 7,
 				System: map[string]string{
 					"sys": `The character expends three blood points
 					and transforms into the Divine Image in one turn. In
@@ -7804,7 +7802,7 @@ var disciplineMap = map[string]Discipline{
 					can freely choose the preferred form.`,
 				},
 			},
-			"Heart Thief": disciplineAbility{
+			"Heart Thief": {
 				BaseDesc: `The Serpentis power Heart of Darkness normally
 				takes hours to perform upon other vampires, and only
 				works at the dark of the moon. Some elders, however,
@@ -7812,7 +7810,7 @@ var disciplineMap = map[string]Discipline{
 				a quick snatch. This does not destroy the victim, unless the attacker then destroys the stolen heart. Heart
 				Thief is not an easy power to use despite its speed, but
 				few Discipline effects can place one vampire in another’s power so suddenly and completely`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The character must expend one Willpower
 					point. Removing the heart of a reluctant vampire is a
@@ -7833,7 +7831,7 @@ var disciplineMap = map[string]Discipline{
 					cause aggravated wounds to the vampire in question.`,
 				},
 			},
-			"Shadow of Apep": disciplineAbility{
+			"Shadow of Apep": {
 				BaseDesc: `Only Set and Set’s own childer can perform this terrifying power. These ancient monsters can take the form
 				of Set’s defeated enemy, Apep. The vampire becomes
 				a giant serpent of fluid, glittering Darkness — not mere
@@ -7844,7 +7842,7 @@ var disciplineMap = map[string]Discipline{
 				whose shadowy form can seep through even the tiniest
 				crack. The vampire, however, can still exert physical
 				and supernatural force quite freely.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": `Taking the form of Apep costs a Willpower
 					point. The transformation takes three turns to complete; once the vampire has transformed, her body remains changed for one scene. In this form, the vampire
@@ -7883,7 +7881,7 @@ var disciplineMap = map[string]Discipline{
 		knows what to expect when confronted with a practi-
 		tioner of this Discipline.`,
 		Abilities: map[string]disciplineAbility{
-			"Thaumaturgy Base": disciplineAbility{
+			"Thaumaturgy Base": {
 				BaseDesc: `Thaumaturgy encompasses blood magic and other
 				sorcerous arts available to Kindred. The Tremere Clan
 				is best known for their possession (and jealous hoarding) of this Discipline. The Tremere created Thauma-
@@ -7902,7 +7900,7 @@ var disciplineMap = map[string]Discipline{
 				magical “spells.” Because so many different paths and
 				rituals are available to the arcane Tremere, one never
 				knows what to expect when confronted with a practitioner of this Discipline`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `Paths define the types of magic a vampire can perform. A vampire typically learns his primary path from
 					his sire, though it is not unknown for some vampires to
@@ -7920,30 +7918,30 @@ var disciplineMap = map[string]Discipline{
 					to that level.`,
 				},
 			},
-			"The Path of Blood": disciplineAbility{
+			"The Path of Blood": {
 				BaseDesc: `The Path of Blood encompasses some of the most fun-
 				damental principles of Thaumaturgy,based as it is on
 				the manipulation of Kindred vitae`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Elemental Mastery": disciplineAbility{
+			"Elemental Mastery": {
 				BaseDesc: `This path allows a vampire limited control over and
 				communion with inanimate objects.`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"The Green Path": disciplineAbility{
+			"The Green Path": {
 				BaseDesc: `The Green Path deals with the manipulation of
 				plant matter of all sorts`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Hands of Destruction": disciplineAbility{
+			"Hands of Destruction": {
 				BaseDesc: `The Hands of Destruction has an infamous history, and some Tremere refuse to practice it due to rumors that it is demonic in origin.`,
-				lvl:      1,
+				Lvl:      1,
 				System: map[string]string{
 					"sys": ``,
 				},
 			},
-			"The Lure of Flames": disciplineAbility{
+			"The Lure of Flames": {
 				BaseDesc: `This path grants the thaumaturge the ability to conjure forth mystical flames — small fires at first, but
 				skilled magicians may create great conflagrations. Fire
 				created by this path is not “natural.” In fact, many vampires believe the flames to be conjured from Hell itself.
@@ -7956,7 +7954,7 @@ var disciplineMap = map[string]Discipline{
 				merely produces light. Once the flame has been re-
 				leased, however, it burns normally and the character
 				has no control over it.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The number of successes determines how
 					accurately the vampire places the flame in his desired
@@ -7976,13 +7974,13 @@ var disciplineMap = map[string]Discipline{
 					normally.`,
 				},
 			},
-			"Neptune’s Might": disciplineAbility{
+			"Neptune’s Might": {
 				BaseDesc: ` This path is
 				based primarily around the manipulation of standing
 				water.`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Movement of the Mind": disciplineAbility{
+			"Movement of the Mind": {
 				BaseDesc: `This path gives the thaumaturge the ability to move
 				objects telekinetically through the mystic power of
 				blood. At higher levels, even flight is possible (but be
@@ -7995,7 +7993,7 @@ var disciplineMap = map[string]Discipline{
 				havens, animating swords, axes, and firearms to ward
 				off intruders. This path may frighten and disconcert
 				onlookers.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The number of successes indicates the duration of the caster’s control over the object (or subject).
 					Each success allows one turn of manipulation, though
@@ -8027,44 +8025,44 @@ var disciplineMap = map[string]Discipline{
 					`5`: `1000 pounds/500 kilograms`,
 				},
 			},
-			"The Path of Conjuring": disciplineAbility{
+			"The Path of Conjuring": {
 				BaseDesc: `This Thaumaturgical path enables
 				powerful conjurations limited only by the mind of the
 				practitioner.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": ``,
 				},
 			},
-			"The Path of Corruption": disciplineAbility{
+			"The Path of Corruption": {
 				BaseDesc: `The Path of Corruption is primarily a mentally and
 				spiritually oriented path centered on influencing the
 				psyches of other individuals`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"The Path of Mars": disciplineAbility{
+			"The Path of Mars": {
 				BaseDesc: `This path has proven useful, turn-
 				ing the tides of several confrontations with elder vam-
 				pires`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"The Path of Technomancy": disciplineAbility{
+			"The Path of Technomancy": {
 				BaseDesc: `The path focuses on the control of electronic
 				devices, from cellphones to laptops, and its proponents
 				maintain that it is a prime example of the versatility of
 				Thaumaturgy with regards to a changing world.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": ``,
 				},
 			},
-			"The Path of the Father’s Vengeance": disciplineAbility{
+			"The Path of the Father’s Vengeance": {
 				BaseDesc: `The power of this path comes not only from the
 				magic of blood, but also incantation of verses from the
 				Book of Nod.`,
-				lvl: 1,
+				Lvl: 1,
 			},
-			"Thaumaturgical Countermagic": disciplineAbility{
+			"Thaumaturgical Countermagic": {
 				BaseDesc: `This is less of a path than it is a separate Discipline,
 				as the power to resist Thaumaturgy can be taught independently of Thaumaturgy, even to those Kindred who
 				are incapable of mastering the simplest ritual. Though
@@ -8073,7 +8071,7 @@ var disciplineMap = map[string]Discipline{
 				methods are likely to exist. Any non-Tremere who
 				displays the ability to resist Thaumaturgy quickly becomes the subject of potentially fatal scrutiny from the
 				entirety of Clan Tremere.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `Thaumaturgical Countermagic is treated as
 					a separate Discipline, although it uses the usual rules
@@ -8109,7 +8107,7 @@ var disciplineMap = map[string]Discipline{
 					`5`: `Ten dice of countermagic. The character can now attempt to cancel a power or ritual that targets anything within a radius equal to his Willpower in yards or meters, or one that is being used or performed within that same radius.`,
 				},
 			},
-			"Weather Control": disciplineAbility{
+			"Weather Control": {
 				BaseDesc: `Command over the weather has long been a staple
 				power of wizards both mortal and immortal, and this
 				path is said to predate the Tremere by millennia. The
@@ -8119,7 +8117,7 @@ var disciplineMap = map[string]Discipline{
 				usually rather small, no more than three or four miles
 				(five to six kilometers) in diameter, and the changes
 				the power wreaks are not always immediate.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The number of successes rolled indicates
 					how long it takes the weather magic to take effect.
@@ -8154,9 +8152,9 @@ var disciplineMap = map[string]Discipline{
 					`5`: `Lightning Strike: This attack inflicts 10 dice of lethal damage. Body armor does not add to the target’s dice pool to soak this attack.`,
 				},
 			},
-			"Thaumaturgical Rituals": disciplineAbility{
+			"Thaumaturgical Rituals": {
 				BaseDesc: `Rituals are Thaumaturgical formulas, meticulously researched and prepared, that create powerful magical effects.`,
-				lvl:      1,
+				Lvl:      1,
 			},
 		},
 	},
@@ -8170,21 +8168,21 @@ var disciplineMap = map[string]Discipline{
 		Storyteller may require additional reasoning (though
 		choosing a different path is by no means unheard of)`,
 		Abilities: map[string]disciplineAbility{
-			"A Taste of Blood": disciplineAbility{
+			"A Taste of Blood": {
 				BaseDesc: `This power was developed as a means of testing a
 				foe’s might — an extremely important ability in the
 				tumultuous early nights of Clan Tremere. By merely
 				touching the blood of his subject, the caster may determine how much vitae remains in the subject and, if
 				the subject is a vampire, how recently he has fed, his
 				approximate Generation and, with three or more successes, whether he has ever committed diablerie`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The number of successes achieved on the
 					roll determines how much information the thauma-
 					turge gleans and how accurate it is.`,
 				},
 			},
-			"Blood Rage": disciplineAbility{
+			"Blood Rage": {
 				BaseDesc: `This power allows a vampire to force another Kin-
 				dred to expend blood against his will. The caster must
 				touch her subject for this power to work, though only
@@ -8194,7 +8192,7 @@ var disciplineMap = map[string]Discipline{
 				himself suddenly looking more human, or may even
 				find himself on the brink of frenzy as his stores of vitae
 				are mystically depleted.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `  Each success forces the subject to spend one
 					blood point immediately in the way the caster desires
@@ -8209,13 +8207,13 @@ var disciplineMap = map[string]Discipline{
 					generational limits.`,
 				},
 			},
-			"Blood of Potency": disciplineAbility{
+			"Blood of Potency": {
 				BaseDesc: `The thaumaturge gains such control over his own
 				blood that he may effectively “concentrate” it, mak-
 				ing it more powerful for a short time. In effect, he may
 				temporarily lower his own Generation with this power.
 				This power may be used only once per night.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `One success on the Willpower roll allows
 					the character to lower his Generation by one step for
@@ -8243,13 +8241,13 @@ var disciplineMap = map[string]Discipline{
 					blood pool would immediately drop to 11.`,
 				},
 			},
-			"Theft of Vitae": disciplineAbility{
+			"Theft of Vitae": {
 				BaseDesc: `A thaumaturge using this power siphons vitae from
 				her subject. She need never come in contact with the
 				subject — blood literally streams out in a physical torrent from the subject to the Kindred (though it is often
 				mystically absorbed and need not enter through the
 				mouth).`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The number of successes determines how
 					many blood points the caster transfers from the suject. The subject must be visible to the thaumaturge
@@ -8258,14 +8256,14 @@ var disciplineMap = map[string]Discipline{
 					the Masquerade.`,
 				},
 			},
-			"Cauldron of Blood": disciplineAbility{
+			"Cauldron of Blood": {
 				BaseDesc: `A thaumaturge using this power boils her subject’s
 				blood in his veins like water on a stove. The Kindred
 				must touch her subject, and it is this contact that sim-
 				mers the subject’s blood. This power is always fatal to
 				mortals, and causes great damage to even the mightiest
 				vampires.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The number of successes gained determines
 					how many blood points are brought to boil. The sub-
@@ -8289,12 +8287,12 @@ var disciplineMap = map[string]Discipline{
 		mastery over living things generally study paths such
 		as The Green Path.`,
 		Abilities: map[string]disciplineAbility{
-			"Elemental Strength": disciplineAbility{
+			"Elemental Strength": {
 				BaseDesc: `The vampire can draw upon the strength and resil-
 				ience of the earth, or of the objects around him, to in-
 				crease his physical prowess without the need for large
 				amounts of blood.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player allocates a total of three tem-
 					porary bonus dots between the character’s Strength
@@ -8306,7 +8304,7 @@ var disciplineMap = map[string]Discipline{
 					next can be made.`,
 				},
 			},
-			"Wooden Tongues": disciplineAbility{
+			"Wooden Tongues": {
 				BaseDesc: `A vampire may speak, albeit in limited fashion, with
 				the spirit of any inanimate object. The conversation
 				may not be incredibly interesting, as most rocks and
@@ -8314,7 +8312,7 @@ var disciplineMap = map[string]Discipline{
 				them, but the vampire can get at least a general impression of what the subject has “experienced.” Note
 				that events which are significant to a vampire may not
 				be the same events that interest a lawn gnome.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The number of successes dictates the amount
 					and relevance of the information that the character receives. One success may yield a boulder’s memory of a
@@ -8323,7 +8321,7 @@ var disciplineMap = map[string]Discipline{
 					rock to relate a precise description of a local Gangrel`,
 				},
 			},
-			"Animate the Unmoving": disciplineAbility{
+			"Animate the Unmoving": {
 				BaseDesc: `Objects affected by this power move as the vampire
 				using it dictates. An object cannot take an action that
 				would be completely inconceivable for something with
@@ -8333,7 +8331,7 @@ var disciplineMap = map[string]Discipline{
 				son: Barstools can run with their legs, guns can twist
 				out of their owners’ hands or fire while holstered, and
 				humanoid statues can move like normal humans.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `This power requires the expenditure of a
 					Willpower point with less than four successes on the
@@ -8344,12 +8342,12 @@ var disciplineMap = map[string]Discipline{
 					take other actions during that time.`,
 				},
 			},
-			"Elemental Form": disciplineAbility{
+			"Elemental Form": {
 				BaseDesc: `The vampire can take the shape of any inanimate
 				object of a mass roughly equal to her own. A desk, a
 				statue, or a bicycle would be feasible, but a house or a
 				pen would be beyond this power’s capacity.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The number of successes determines how
 					completely the character takes the shape she wishes
@@ -8360,14 +8358,14 @@ var disciplineMap = map[string]Discipline{
 					normal form at will.`,
 				},
 			},
-			"Summon Elemental": disciplineAbility{
+			"Summon Elemental": {
 				BaseDesc: `A vampire may summon one of the traditional spirits of the elements: a salamander (fire), a sylph (air),
 				a gnome (earth), or an undine (water). Some thaumaturges claim to have contacted elemental spirits of
 				glass, electricity, blood, and even atomic energy, but
 				such reports remain unconfirmed (even as their authors are summoned to Vienna for questioning). The
 				caster may choose what type of elemental he wishes to
 				summon and command.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The character must be near some quantity
 					of the classical element corresponding to the spirit
@@ -8413,7 +8411,7 @@ var disciplineMap = map[string]Discipline{
 		“Botanical Mastery”) is as subtle and powerful as the
 		natural world which it affects.`,
 		Abilities: map[string]disciplineAbility{
-			"Herbal Wisdom": disciplineAbility{
+			"Herbal Wisdom": {
 				BaseDesc: `With a touch, a vampire can commune with the
 				spirit of a plant. Conversations held in this manner are
 				often cryptic but rewarding — the wisdom and experi-
@@ -8421,7 +8419,7 @@ var disciplineMap = map[string]Discipline{
 				oracles of legend. Crabgrass, on the other hand, rarely
 				has much insight to offer, but might reveal the appear-
 				ance of the last person who trod upon it.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The number of successes rolled determines
 					the amount of information that can be gained from the
@@ -8436,13 +8434,13 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `The sum total of the plant-spirit’s knowledge on a given subject`,
 				},
 			},
-			"Speed the Season’s Passing": disciplineAbility{
+			"Speed the Season’s Passing": {
 				BaseDesc: `This power allows a thaumaturge to accelerate a plant’s
 				growth, causing roses to bloom in a matter of minutes or
 				trees to shoot up from saplings overnight. Alternately,
 				she can speed a plant’s death and decay, withering grass
 				and crumbling wooden stakes with but a touch.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The character touches the target plant. The
 					player rolls normally, and the number of successes de-
@@ -8458,14 +8456,14 @@ var disciplineMap = map[string]Discipline{
 					five cause it to disintegrate in the wielder’s hand.`,
 				},
 			},
-			"Dance of Vines": disciplineAbility{
+			"Dance of Vines": {
 				BaseDesc: `The thaumaturge can animate a mass of vegetation
 				up to his own size, using it for utilitarian or combat pur-
 				poses with equal ease. Leaves can walk along a desktop,
 				ivy can act as a scribe, and jungle creepers can strangle
 				opponents. Intruders should beware of Tremere work-
 				shops that harbor potted rowan saplings.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `Any total amount of vegetation with a mass
 					less than or equal to the character’s own may be animat-
@@ -8483,7 +8481,7 @@ var disciplineMap = map[string]Discipline{
 					able area all by itself...`,
 				},
 			},
-			"Verdant Haven": disciplineAbility{
+			"Verdant Haven": {
 				BaseDesc: `This power weaves a temporary shelter out of a sufficient
 				amount of plant matter. In addition to providing physical
 				protection from the elements (and even sunlight), the
@@ -8492,7 +8490,7 @@ var disciplineMap = map[string]Discipline{
 				and vines with no discernible opening, and even to the
 				casual observer it appears to be an unnatural construction. Verdant Havens are rumored to have supernatural
 				healing properties, hut no Kindred have reported experiencing such benefits from a stay in one.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `A character must be standing in a heavily
 					vegetated area to use this power. The Verdant Haven
@@ -8507,7 +8505,7 @@ var disciplineMap = map[string]Discipline{
 					impenetrable to sunlight unless physically breached.`,
 				},
 			},
-			"Awaken the Forest Giants": disciplineAbility{
+			"Awaken the Forest Giants": {
 				BaseDesc: `Entire trees can be animated by a master of the
 				Green Path. Ancient oaks can be temporarily given
 				the gift of movement, pulling their roots from the soil
@@ -8515,7 +8513,7 @@ var disciplineMap = map[string]Discipline{
 				versatile as elementals or other summoned spirits, trees
 				brought to ponderous life via this power display awe-
 				some strength and resilience.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The character touches the tree to be animated. The player spends a blood point and rolls normally. If the roll succeeds, the player must spend a blood
 					point for every success. The tree stays animated for one
@@ -8545,12 +8543,12 @@ var disciplineMap = map[string]Discipline{
 		seen outside that Sect, a few Camarilla Tremere have
 		managed to learn the secrets of this path over the centuries. The Hands of Destruction has an infamous history, and some Tremere refuse to practice it due to rumors that it is demonic in origin.`,
 		Abilities: map[string]disciplineAbility{
-			"Decay": disciplineAbility{
+			"Decay": {
 				BaseDesc: `This power accelerates the decrepitude of its target,
 				causing it to wither, rot, or otherwise break down. The
 				target must be inanimate, though dead organic matter
 				can be affected.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `If the roll is successful, the inanimate ob-
 					ject touched by the thaumaturge ages 10 years for every
@@ -8560,7 +8558,7 @@ var disciplineMap = map[string]Discipline{
 					must be made. This power does not affect vampires.`,
 				},
 			},
-			"Gnarl Wood": disciplineAbility{
+			"Gnarl Wood": {
 				BaseDesc: `This power warps and bends wooden objects.
 				Though the wood is otherwise undamaged, this power
 				often leaves the objects completely useless. This power
@@ -8568,7 +8566,7 @@ var disciplineMap = map[string]Discipline{
 				tion to bending it into unwholesome shapes. Unlike
 				other powers of this path, Gnarl Wood requires merely
 				a glance rather than physical contact.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": ` Fifty pounds or twenty-five kilograms of vis-
 					ible wood may be gnarled for each blood point spent
@@ -8579,12 +8577,12 @@ var disciplineMap = map[string]Discipline{
 					vampire-hunters wields.`,
 				},
 			},
-			"Acidic Touch": disciplineAbility{
+			"Acidic Touch": {
 				BaseDesc: `The vampire secretes a bilious, acidic fluid from any
 				portion of his body. The viscous acid corrodes metal,
 				destroys wood, and causes horrendous chemical burns
 				to living tissue.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player spends one blood point to create
 					the acid — the blood literally transmutes into the vola-
@@ -8596,10 +8594,10 @@ var disciplineMap = map[string]Discipline{
 					A thaumaturge is immune to her own acidic touch.`,
 				},
 			},
-			"Atrophy": disciplineAbility{
+			"Atrophy": {
 				BaseDesc: `This power withers a victim’s limb, leaving only a desiccated, almost mummified husk of bone and skin. The effects
 				are instantaneous; in mortals, they are also irreversible.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The victim may resist the effects of Atrophy
 					by scoring three or more successes on a Stamina + Ath-
@@ -8615,11 +8613,11 @@ var disciplineMap = map[string]Discipline{
 					victims’ heads, torsos, etc.`,
 				},
 			},
-			"Turn to Dust": disciplineAbility{
+			"Turn to Dust": {
 				BaseDesc: `This fearsome power accelerates decrepitude in its
 				victims. Mortals literally age at the mere touch of a
 				skilled thaumaturge, gaining decades in moments.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `Each success on the roll ages the victim by
 					10 years. A potential victim may resist with a Stami-
@@ -8653,14 +8651,14 @@ var disciplineMap = map[string]Discipline{
 		the chosen medium but raises them by one when dealing with the opposite. Blood is considered neither fresh
 		nor salty for this purpose, and difficulties in manipulating it are unaffected.`,
 		Abilities: map[string]disciplineAbility{
-			"Eyes of the Sea": disciplineAbility{
+			"Eyes of the Sea": {
 				BaseDesc: `The thaumaturge may peer into a body of water and
 				view events that have transpired on, in, or around it
 				from the water’s perspective. Some older practitioners
 				of this art claim that the vampire communes with the
 				spirits of the waters when using this power; younger
 				Kindred scoff at such claims.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": ` The number of successes rolled determines
 					how far into the past the character can look.`,
@@ -8671,13 +8669,13 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `10 years`,
 				},
 			},
-			"Prison of Water": disciplineAbility{
+			"Prison of Water": {
 				BaseDesc: `The thaumaturge can command a sufficiently large
 				quantity of water to animate itself and imprison a sub-
 				ject. This power requires a significant amount of fluid
 				to be fully effective, although even a few gallons can be
 				used to shape chains of animated water.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The number of successes scored on the roll
 					is the number of successes the victim must score on a
@@ -8691,14 +8689,14 @@ var disciplineMap = map[string]Discipline{
 					is raised by one.`,
 				},
 			},
-			"Blood to Water": disciplineAbility{
+			"Blood to Water": {
 				BaseDesc: `TThe thaumaturge has now attained enough power
 				over water that she can transmute other liquids to this
 				basic element. The most commonly seen use of this
 				power is as an assault; with but a touch, the victim’s
 				blood transforms to water, weakening vampires and
 				killing mortals in moments.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": ` The character must touch her intended vic-
 					tim. The player rolls Willpower normally. Each success
@@ -8716,14 +8714,14 @@ var disciplineMap = map[string]Discipline{
 					this power.`,
 				},
 			},
-			"Flowing Wall": disciplineAbility{
+			"Flowing Wall": {
 				BaseDesc: `Tales of vampires’ inability to cross running water
 				may have derived in part from garbled accounts of this
 				power in action. The thaumaturge can animate water
 				to an even greater degree than is possible with the use
 				of Prison of Water, commanding it to rise up to form a
 				barrier impassable to almost any being.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The character touches the surface of a
 					standing body of water; the player spends three Willpower points and the normal required blood point and
@@ -8738,14 +8736,14 @@ var disciplineMap = map[string]Discipline{
 					9).`,
 				},
 			},
-			"Dehydrate": disciplineAbility{
+			"Dehydrate": {
 				BaseDesc: `At this level of mastery, the thaumaturge can directly attack living and unliving targets by removing the
 				water from their bodies. Victims killed by this power
 				leave behind hideous mummified corpses. This power
 				can also be used for less aggressive purposes, such as
 				drying out wet clothes — or evaporating puddles to
 				keep other practitioners of this path from using them.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `This power can be used on any target in the
 					character’s line of sight. The player rolls normally; the
@@ -8786,35 +8784,35 @@ var disciplineMap = map[string]Discipline{
 		they just came out of their packaging.
 		`,
 		Abilities: map[string]disciplineAbility{
-			"Summon the Simple Form": disciplineAbility{
+			"Summon the Simple Form": {
 				BaseDesc: `At this level of mastery, the conjurer may create
 				simple, inanimate objects. The object cannot have any
 				moving parts and may not be made of multiple materials. For example, the conjurer may summon a steel
 				baton, a lead pipe, a wooden stake, or a chunk of granite.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": ` Each turn the conjurer wishes to keep the
 					object in existence, another Willpower point must be
 					spent or the object vanishes.`,
 				},
 			},
-			"Permanency": disciplineAbility{
+			"Permanency": {
 				BaseDesc: `At this level, the conjurer no longer needs to pay
 				Willpower costs to keep an object in existence. The
 				object is permanent, though simple objects are still all
 				that may be created.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The player must invest three blood points
 					in an object to make it real.`,
 				},
 			},
-			"Magic of the Smith": disciplineAbility{
+			"Magic of the Smith": {
 				BaseDesc: `The Kindred may now conjure complex objects of
 				multiple components and with moving parts. For ex-
 				ample, the thaumaturge can create guns, bicycles,
 				chainsaws, or cellphones.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `Objects created via Magic of the Smith are
 					automatically permanent and cost five blood points
@@ -8823,10 +8821,10 @@ var disciplineMap = map[string]Discipline{
 					addition to the basic roll.`,
 				},
 			},
-			"Reverse Conjuration": disciplineAbility{
+			"Reverse Conjuration": {
 				BaseDesc: `This power allows the conjurer to “banish” into nonexistence any object previously called forth via this
 				path.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": ` This is an extended success roll. The conjurer must accumulate as many successes as the original
 					caster received when creating the object in question.
@@ -8834,7 +8832,7 @@ var disciplineMap = map[string]Discipline{
 					object she created herself with this Path.`,
 				},
 			},
-			"Power Over Life": disciplineAbility{
+			"Power Over Life": {
 				BaseDesc: `This power cannot create true life, though it can
 				summon forth impressive simulacra. Creatures (and
 				people) summoned with this power lack the free will
@@ -8842,7 +8840,7 @@ var disciplineMap = map[string]Discipline{
 				instructions of their conjurer instead. People created
 				in this way can be subject to the use of the Dominate
 				power Possession, if desired.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The player spends 10 blood points. Imperfect and impermanent, creatures summoned via this
 					path are too complex to exist for long. Within a week
@@ -8874,7 +8872,7 @@ var disciplineMap = map[string]Discipline{
 		higher rating in the Path of Corruption than he has in
 		Subterfuge.`,
 		Abilities: map[string]disciplineAbility{
-			"Contradict": disciplineAbility{
+			"Contradict": {
 				BaseDesc: `The vampire can interrupt a subject’s thought pro-
 				cesses, forcing the victim to reverse his current course
 				of action. An Archon may be caused to execute a pris-
@@ -8885,7 +8883,7 @@ var disciplineMap = map[string]Discipline{
 				thaumaturge in advance, but they always take the form
 				of a more negative action than the subject had origi-
 				nally intended to perform.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `This power may be used on any subject
 					within the character’s line of sight. The player rolls as
@@ -8902,12 +8900,12 @@ var disciplineMap = map[string]Discipline{
 					discretion) that are mainly physical and reflexive.`,
 				},
 			},
-			"Subvert": disciplineAbility{
+			"Subvert": {
 				BaseDesc: `This power follows the same principle as does Contradict, the release of a subject’s dark, self-destructive
 				side. However, Subvert’s effects are longer-lasting than
 				the momentary flare of Contradiction. Under the influence of this power, victims act on their own suppressed temptations, pursuing agendas that their morals or self-control would forbid them to follow under
 				normal circumstances.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `This power requires the character to make
 					eye contact with the intended victim. The
@@ -8933,13 +8931,13 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `One week`,
 				},
 			},
-			"Dissociate": disciplineAbility{
+			"Dissociate": {
 				BaseDesc: `“Divide and conquer” is a maxim that is well-understood by the Tremere, and Dissociate is a powerful tool
 				with which to divide the Clan’s enemies. This power
 				is used to break the social ties of interpersonal relationships. Even the most passionate affair or the oldest
 				friendship can be cooled through use of Dissociate, and
 				weaker personal ties can be destroyed altogether.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The character must touch the target. The
 					player rolls normally. The target resists with a Willpower roll (difficulty of the thaumaturge’s Manipulation + Empathy). The victim loses three dice from
@@ -8960,7 +8958,7 @@ var disciplineMap = map[string]Discipline{
 					`5 successes`: `One week`,
 				},
 			},
-			"Addiction": disciplineAbility{
+			"Addiction": {
 				BaseDesc: `This power is a much stronger and more potentially
 				damaging form of Subvert. Addiction creates just that
 				in the victim. By simply exposing the target to a par-
@@ -8970,7 +8968,7 @@ var disciplineMap = map[string]Discipline{
 				substances or thrills that only the mystic can provide,
 				thus creating both a source of income and potential
 				blackmail material.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The subject must encounter or be exposed
 					to the sensation, substance, or action to which the
@@ -8997,7 +8995,7 @@ var disciplineMap = map[string]Discipline{
 					without feeding his addiction.`,
 				},
 			},
-			"Dependence": disciplineAbility{
+			"Dependence": {
 				BaseDesc: `Many former pawns of Clan Tremere claim to have
 				felt a strange sensation similar to depression when not
 				in the presence of their masters. This is usually attributed to the blood bond, but is sometimes the result of
@@ -9006,7 +9004,7 @@ var disciplineMap = map[string]Discipline{
 				her victim’s soul to her own, engendering feelings of
 				lethargy and helplessness when the victim is not in her
 				presence or acting to further her desires.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The character engages the target in conversation. The player rolls normally. The victim rolls
 					Self-Control/Instinct (difficulty equals the number of
@@ -9035,13 +9033,13 @@ var disciplineMap = map[string]Discipline{
 		learned this path, but very few of them have the right
 		temperament to wield this path effectively.`,
 		Abilities: map[string]disciplineAbility{
-			"War Cry": disciplineAbility{
+			"War Cry": {
 				BaseDesc: `A vampire on the attack can focus his will, making
 				him less susceptible to battle fear or the powers of the
 				undead. The vampire shouts a primal scream to start the
 				effect, though some thaumaturges have been known to
 				paint their faces or cut themselves open instead.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `For the duration of one scene, the vampire
 					adds one to his Courage Trait. Additionally, for the
@@ -9051,11 +9049,11 @@ var disciplineMap = map[string]Discipline{
 					only gain the benefits of War Cry once per scene.`,
 				},
 			},
-			"Strike True": disciplineAbility{
+			"Strike True": {
 				BaseDesc: `The vampire makes a single attack, guided by the
 				unholy power of her Blood. This attack strikes its foe
 				infallibly.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `By invoking this power, the player need
 					not roll to see if the vampire’s attack hits — it does,
@@ -9067,12 +9065,12 @@ var disciplineMap = map[string]Discipline{
 					Strike True has no effect if attempted on multiple attacks (dice pool splits) in a single turn from one character.`,
 				},
 			},
-			"Wind Dance": disciplineAbility{
+			"Wind Dance": {
 				BaseDesc: `The thaumaturge invokes the power of the winds,
 				moving in a blur. She gains a preternatural edge in
 				avoiding her enemies’ blows, moving out of their way
 				before the enemy has a chance to throw them.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player can dodge any number of attacks
 					with her full dice pool in a single turn. This advantage
@@ -9080,11 +9078,11 @@ var disciplineMap = map[string]Discipline{
 					This power lasts for one scene.`,
 				},
 			},
-			"Fearless Heart": disciplineAbility{
+			"Fearless Heart": {
 				BaseDesc: `The vampire temporarily augments his abilities as a
 				warrior. Through the mystical powers of blood magic,
 				the character becomes a potent fighting force`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `Fearless Heart grants the vampire an extra
 					point in each of the Physical Attributes (Strength,
@@ -9097,10 +9095,10 @@ var disciplineMap = map[string]Discipline{
 					every 15 minutes until he rests.`,
 				},
 			},
-			"Comrades at Arms": disciplineAbility{
+			"Comrades at Arms": {
 				BaseDesc: `This ability extends the power of the previous abilities in the path. It allows any of the earlier effects to be
 				applied to a group such as a pack or War Party.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The player chooses one of the lower-level
 					powers in the path, invoking it as normal. Afterward,
@@ -9129,7 +9127,7 @@ var disciplineMap = map[string]Discipline{
 		the Clan’s grimoires, but has yet to voice any opinion
 		on the conservative opposition to Technomancy.`,
 		Abilities: map[string]disciplineAbility{
-			"Analyze": disciplineAbility{
+			"Analyze": {
 				BaseDesc: `Mortals are constantly developing new innovations,
 				and any vampire who would work Technomancy must
 				be able to understand that upon which he practices his
@@ -9139,7 +9137,7 @@ var disciplineMap = map[string]Discipline{
 				the principles of its functioning, and its means of operation. This does not grant permanent knowledge,
 				only a momentary flash of insight which fades within
 				minutes.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `A character must touch the device in order
 					to apply this power. The number of successes rolled determines how well the character understands this particular piece of equipment. One success allows a basic
@@ -9156,7 +9154,7 @@ var disciplineMap = map[string]Discipline{
 					it is installed.`,
 				},
 			},
-			"Burnout": disciplineAbility{
+			"Burnout": {
 				BaseDesc: `It is usually easier to destroy than to create, and sensitive electronics are no exception to this rule. Burnout
 				is used to cause a device’s power supply (either internal or external) to surge, damaging or destroying the
 				target. Burnout cannot be used to directly injure another individual, although the sudden destruction of
@@ -9170,7 +9168,7 @@ var disciplineMap = map[string]Discipline{
 				from the Thaumaturgy roll.
 				Burnout may be used to destroy electronic data storage, in which case three successes destroy all information on the target item, and five erase it beyond any
 				hope of non-magical recovery.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `A character can use this power at a range
 					of up to 10 times her Willpower in yards or meters,
@@ -9192,7 +9190,7 @@ var disciplineMap = map[string]Discipline{
 					completely unsalvageable.`,
 				},
 			},
-			"Encrypt/Decrypt": disciplineAbility{
+			"Encrypt/Decrypt": {
 				BaseDesc: `Electronic security is a paramount concern of governments and corporations alike. Those thaumaturges
 				who are techno-savvy enough to understand the issues
 				at stake have become quite enamored of this power,
@@ -9200,7 +9198,7 @@ var disciplineMap = map[string]Discipline{
 				Decrypt also works on electronic media; a DVD under
 				the influence of this power displays just snow and static
 				if played back without the owner’s approval. Some neonates have taken to calling this power “DRM.”`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The character touches the device or data
 					container that he wishes to encrypt. The player rolls
@@ -9217,11 +9215,11 @@ var disciplineMap = map[string]Discipline{
 					rating.`,
 				},
 			},
-			"Remote Access": disciplineAbility{
+			"Remote Access": {
 				BaseDesc: `With this power, a skilled thaumaturge can bypass
 				the need for physical contact to operate a device. This
 				is not a form of telekinesis; the vampire does not manipulate the item’s controls, but rather touches it directly with the power of his mind.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `This power may be used on any electronic
 					device within the character’s line of sight. The number of successes rolled is the maximum number of dice
@@ -9240,13 +9238,13 @@ var disciplineMap = map[string]Discipline{
 					rudely shunted back into his own body.`,
 				},
 			},
-			"Telecommute": disciplineAbility{
+			"Telecommute": {
 				BaseDesc: `A progressive derivation of Remote Access, Telecommute allows a thaumaturge to project her consciousness into the Internet, sending her mind through
 				network connections as fast as they can transfer her.
 				While immersed in the network, she can use any other
 				Technomancy power on the devices with which she
 				makes contact.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The character touches any form of communications device: a cellphone, 3G-equipped netbook,
 					Wi-Fi tablet, or anything else that is connected directly
@@ -9293,11 +9291,11 @@ var disciplineMap = map[string]Discipline{
 		and showing them to the subject will do.
 		These powers apply to vampires only. They do not affect mortals, ghouls, or any other supernatural creatures.`,
 		Abilities: map[string]disciplineAbility{
-			"Zillah’s Litany": disciplineAbility{
+			"Zillah’s Litany": {
 				BaseDesc: `Zillah, the wife of Caine, unknowingly drank from
 				her husband and sire three times, thus becoming bonded to him. This power reveals existing blood bonds and
 				Vinculi to the thaumaturge.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `If the subject has any blood bonds or Vinculi to other vampires, this power reveals them to the
 					caster. Although the caster may not know the vampires in question, this power does reveal the names and
@@ -9305,25 +9303,25 @@ var disciplineMap = map[string]Discipline{
 					question.`,
 				},
 			},
-			"The Crone’s Pride": disciplineAbility{
+			"The Crone’s Pride": {
 				BaseDesc: `This power inflicts the curse of the crone, who bound
 				Caine to her as he fled his wife’s spurning. Hideously
 				ugly, the crone had to resort to trickery to get others to
 				help or serve her.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `This power reduces the target’s Appearance
 					to zero. All Social rolls during this time generally fail,
 					unless the character attempts to intimidate or browbeat the subject. This power lasts for one night.`,
 				},
 			},
-			"Feast of Ashes": disciplineAbility{
+			"Feast of Ashes": {
 				BaseDesc: `Primarily used against wanton or excessive vampires,
 				this power temporarily removes a vampire’s dependency on blood. While some would say this negates the
 				Curse of Caine, it reduces the vampire to little more
 				than a wretched scavenger, as he must consume literal
 				ashes, though he gains little sustenance from them.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The victim of this power can no longer consume blood, vomiting it up as he would mortal food or
 					drink. Instead, the victim can eat only ashes, and the
@@ -9338,14 +9336,14 @@ var disciplineMap = map[string]Discipline{
 					or sunlight. This power lasts for one week.`,
 				},
 			},
-			"Uriel’s Disfavor": disciplineAbility{
+			"Uriel’s Disfavor": {
 				BaseDesc: `This power invokes the darkness of the Angel of
 				Death. All but the dimmest of light causes the subject
 				excruciating pain, and some artificial forms of bright
 				light may even damage the vampire. Uriel delivered
 				God’s curse on Caine, shielding him in the blackness
 				of his wings.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The presence of any light makes the subject
 					uncomfortable, and bright light of any kind — flashlights, headlights, etc. — inflict one health level of aggravated damage on the character for every turn he remains under its direct focus. Most vampires who suffer
@@ -9355,7 +9353,7 @@ var disciplineMap = map[string]Discipline{
 					one week.`,
 				},
 			},
-			"Valediction": disciplineAbility{
+			"Valediction": {
 				BaseDesc: `Many Sabbat rightfully fear this power, though very
 				few have ever seen it used. It levies a punishment for
 				breaking one of Caine’s greatest commandments —
@@ -9363,7 +9361,7 @@ var disciplineMap = map[string]Discipline{
 				power and station through some measure of diablerie,
 				they must reconcile their beliefs with the admonitions
 				of Caine, and this power engenders a great sense of humility.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `When this power takes effect, the subject
 					immediately reverts to her original Generation. This
@@ -9405,7 +9403,7 @@ var disciplineMap = map[string]Discipline{
 		or years (Level Five ritual). Some mystics have studied
 		individual rituals for decades, or even centuries.`,
 		Abilities: map[string]disciplineAbility{
-			"Bind the Accusing Tongue": disciplineAbility{
+			"Bind the Accusing Tongue": {
 				BaseDesc: `This ancient ritual is said to have been one of the
 				first developed by the Tremere and a primary reason
 				for the lack of cohesive opposition to their expansion.
@@ -9413,7 +9411,7 @@ var disciplineMap = map[string]Discipline{
 				the subject that prevents him from speaking ill of the
 				caster, allowing the thaumaturge to commit literally
 				unspeakable acts without fear of reprisal.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The caster must have a picture or other image or effigy of the ritual’s target, a lock of the target‘s
 					hair, and a black silken cord. The caster winds the cord
@@ -9425,13 +9423,13 @@ var disciplineMap = map[string]Discipline{
 					image and the lock of hair crumble to dust.`,
 				},
 			},
-			"Blood Rush": disciplineAbility{
+			"Blood Rush": {
 				BaseDesc: `This ritual allows the vampire to create the sensation
 				of drinking blood in himself without actually feeding.
 				The ritual can be used for pleasure, but it is more often used to prevent frenzy when confronted with fresh
 				blood. The vampire must carry the fang of a predatory
 				animal on his person for this ritual to work`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `Performance of the ritual results in the
 					Beast being kept in check automatically. Blood Rush
@@ -9441,20 +9439,20 @@ var disciplineMap = map[string]Discipline{
 					one turn to enact.`,
 				},
 			},
-			"Communicate with Kindred Sire": disciplineAbility{
+			"Communicate with Kindred Sire": {
 				BaseDesc: `By enacting this ritual, the caster may join minds
 				with her sire, speaking telepathically with him over
 				any distance. The communication may continue until
 				the ritual expires or until either party ends the conversation. The caster must possess an item once owned by
 				her sire for the ritual to work.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The caster must meditate for 30 minutes
 					to create the connection. Conversation may be maintained for 10 minutes per success on the activation
 					roll.`,
 				},
 			},
-			"Defense of the Sacred Haven": disciplineAbility{
+			"Defense of the Sacred Haven": {
 				BaseDesc: `This ritual prevents sunlight from entering an area
 				within 20 feet (six meters) of this ritual’s casting. A
 				mystical darkness blankets the area, keeping the bale-
@@ -9463,7 +9461,7 @@ var disciplineMap = map[string]Discipline{
 				her own blood on all the affected windows and doors.
 				The ritual lasts as long as the thaumaturge stays within
 				the 20-foot (6-meter) radius.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `This ritual requires one hour to perform,
 					during which the caster recites incantations and in-
@@ -9471,7 +9469,7 @@ var disciplineMap = map[string]Discipline{
 					ritual to work.`,
 				},
 			},
-			"Deflection of Wooden Doom": disciplineAbility{
+			"Deflection of Wooden Doom": {
 				BaseDesc: `This ritual protects the caster from being staked,
 				whether she is resting or active. While this ritual is in
 				effect, the first stake that would pierce the vampire’s
@@ -9479,7 +9477,7 @@ var disciplineMap = map[string]Discipline{
 				merely held near the caster is unaffected; for this ritual
 				to work, the stake must actively be used in an attempt
 				to impale the vampire.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The caster must surround herself with a circle of wood for a full hour. Any wood will work: furniture, sawdust, raw timber, 2’ x 4’s, whatever. The circle
 					must remain unbroken, however. At the end of the
@@ -9487,7 +9485,7 @@ var disciplineMap = map[string]Discipline{
 					tongue. If this splinter is removed, the ritual is nullified. This ritual lasts until the following dawn or dusk.`,
 				},
 			},
-			"Devil’s Touch": disciplineAbility{
+			"Devil’s Touch": {
 				BaseDesc: `Thaumaturges use this ritual to place curses upon
 				mortals who earn their ire. Using this ritual marks an
 				individual invisibly, causing all those who come in
@@ -9497,14 +9495,14 @@ var disciplineMap = map[string]Discipline{
 				to make him miserable. Even bums spit at an afflicted
 				individual, and children taunt him and barrage him
 				with vulgarities.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The effects of this ritual last one night, disappearing as the sun rises. The mortal (it doesn’t work
 					on vampires) must be present when the ritual is invoked, and a penny must be placed somewhere on his
 					person (in a pocket, shoe, etc.).`,
 				},
 			},
-			"Domino of Life": disciplineAbility{
+			"Domino of Life": {
 				BaseDesc: `A vampire wanting or needing to simulate a human
 				Characteristic can do so once Domino of Life is cast. For
 				one entire night, the vampire can eat, breathe, main-
@@ -9513,7 +9511,7 @@ var disciplineMap = map[string]Discipline{
 				she desires. Note that only one trait can be replicated
 				in this fashion. The vampire must have a vial of fresh
 				human blood on his person to maintain this ritual.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `Using this ritual adds one die to the caster’s
 					dice pools when attempting to pass as human. Unless onlookers are especially wary, the Domino of Life
@@ -9521,7 +9519,7 @@ var disciplineMap = map[string]Discipline{
 					not that they should have any reason to suspect otherwise.`,
 				},
 			},
-			"Engaging the Vessel of Transference": disciplineAbility{
+			"Engaging the Vessel of Transference": {
 				BaseDesc: `This ritual enchants a container to fill itself with
 				blood from any living or unliving being who holds it,
 				replacing the volume of blood taken with an equal
@@ -9536,7 +9534,7 @@ var disciplineMap = map[string]Discipline{
 				blood it contains until it is opened. The two most common uses of this ritual are to covertly create a blood
 				bond and to obtain a sample of a subject’s blood for
 				ritual or experimental purposes.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": ` This ritual takes three hours to enact (reduced by 15 minutes for each success on the casting
 						roll) and requires one blood point (although not necessarily the caster’s blood), which is sealed inside the
@@ -9546,7 +9544,7 @@ var disciplineMap = map[string]Discipline{
 						nize the Hermetic sigil with two successes on an Intelligence + Occult roll (difficulty 8).`,
 				},
 			},
-			"Illuminate the Trail of Prey": disciplineAbility{
+			"Illuminate the Trail of Prey": {
 				BaseDesc: `This ritual causes the path of the subject’s passing
 				to glow in a manner that only the vampire can see.
 				The tracks shine distinctly, but only to the eyes of the
@@ -9557,7 +9555,7 @@ var disciplineMap = map[string]Discipline{
 				must burn a length of white satin ribbon that has been
 				in her possession for at least 24 hours for this ritual to
 				take effect.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The thaumaturge must have a mental picture of or know the name of her prey. The individual’s
 					wake glows with a level of brightness dependent on
@@ -9565,14 +9563,14 @@ var disciplineMap = map[string]Discipline{
 					tracks burn less brightly, while fresh tracks blaze`,
 				},
 			},
-			"Incantation of the Shepherd": disciplineAbility{
+			"Incantation of the Shepherd": {
 				BaseDesc: `This ritual enables the caster to mystically locate all
 				members of his herd. While intoning the ritual’s vocal
 				component, he spins in a slow circle with a glass object
 				of some sort held to each of his eyes. At the end of the
 				ritual, he has a subliminal sense of the direction and
 				distance to each of his regular vessels.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `This ritual gives the character the location
 					(relative to him) of every member of his Herd. If he
@@ -9584,7 +9582,7 @@ var disciplineMap = map[string]Discipline{
 					kilometers) if he has no points in that Background.`,
 				},
 			},
-			"Purity of Flesh": disciplineAbility{
+			"Purity of Flesh": {
 				BaseDesc: `The caster cleanses her body of all foreign material with this ritual. To perform it, she meditates on
 				bare earth or stone while surrounded by a circle of 13
 				sharp stones. Over the course of the ritual, the caster
@@ -9594,7 +9592,7 @@ var disciplineMap = map[string]Discipline{
 				the caster’s skin and flaking away as a gritty gray film
 				that settles within the circle. Any jewelry, makeup, or
 				clothes that the caster is wearing are also dissolved`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player spends one blood point before
 					rolling. Purity of Flesh removes all physical items from
@@ -9602,14 +9600,14 @@ var disciplineMap = map[string]Discipline{
 					mind control, or diseases of the blood.`,
 				},
 			},
-			"Wake with Evening’s Freshness": disciplineAbility{
+			"Wake with Evening’s Freshness": {
 				BaseDesc: `This ritual allows a vampire to awaken at any sign
 				of danger, especially during the day. If any potentially
 				harmful circumstances arise, the caster immediately
 				rises, ready to face the problem. This ritual requires the
 				ashes of burned feathers to be spread over the area in
 				which the Kindred wishes to sleep.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `This ritual must be performed immediately
 					before the vampire goes to sleep for the day. Any interruption to the ceremonial casting renders the ritual ineffective. If danger arises, the caster awakens and may
@@ -9618,25 +9616,25 @@ var disciplineMap = map[string]Discipline{
 					takes effect, but the thaumaturge will have already risen and will be able to address problematic situations`,
 				},
 			},
-			"Widow’s Spite": disciplineAbility{
+			"Widow’s Spite": {
 				BaseDesc: `This ritual causes a pain, itch, or other significant
 				(but not deadly) sensation in the subject. Similar in
 				effect to legendary “voodoo doll” effects, this ritual is
 				used more out of scorn or malice than actual enmity. In
 				fact, it requires a wax or cloth doll that resembles the
 				target, which bleeds when the power takes effect.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The ceremonial doll must resemble, however rudely, the victim of the ritual. It produces no mechanical effect, other than a simple physical stimulus.
 					The caster may determine where on the subject’s body
 					the pain or itch appears.`,
 				},
 			},
-			"Blood Walk": disciplineAbility{
+			"Blood Walk": {
 				BaseDesc: `Developed during Clan Tremere’s troubled inception, Burning Blade allows a caster to temporarily enchant a melee weapon to inflict unhealable wounds on
 				supernatural creatures. While this ritual is in effect, the
 				weapon flickers with an unholy greenish flame.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `This ritual can only be cast on melee weapons. The caster must cut the palm of her weapon hand
 					during the ritual — with the weapon if it is edged, otherwise with a sharp stone. This inflicts a single health
@@ -9652,11 +9650,11 @@ var disciplineMap = map[string]Discipline{
 					reverts to inflicting normal damage.`,
 				},
 			},
-			"Donning the Mask of Shadows": disciplineAbility{
+			"Donning the Mask of Shadows": {
 				BaseDesc: `This ritual renders its subject translucent; her form
 				appears dark and smoky, and the sounds of her footsteps are muffled. While it does not create true invisibility, the Mask of Shadows makes the subject much
 				less likely to be detected by sight or hearing.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `This ritual may be simultaneously cast on a
 					number of subjects equal to the caster’s Occult rating;
@@ -9667,14 +9665,14 @@ var disciplineMap = map[string]Discipline{
 					or until the caster voluntarily lowers it.`,
 				},
 			},
-			"Eyes of the Night Hawk": disciplineAbility{
+			"Eyes of the Night Hawk": {
 				BaseDesc: `This ritual allows the vampire to see through the
 				eyes of a bird, and to hear through its ears. The bird
 				chosen must be a predatory bird, and the vampire must
 				touch it when initiating this ritual. At the end of this
 				ritual, the caster must put out the bird’s eyes, or suffer
 				blindness herself.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The vampire is able to mentally control
 					where the bird travels for the duration of the ritual.
@@ -9686,7 +9684,7 @@ var disciplineMap = map[string]Discipline{
 					a three-night period of blindness. This ritual ceases effect at sunrise.`,
 				},
 			},
-			"Machine Blitz": disciplineAbility{
+			"Machine Blitz": {
 				BaseDesc: `Machines go haywire when this ritual is cast. It
 				takes effect instantly and lasts as long as the vampire
 				concentrates on it. This ritual may be used to kill car
@@ -9695,14 +9693,14 @@ var disciplineMap = map[string]Discipline{
 				scrap of rusted metal in her possession for this ritual to
 				work, though some vampires use a variant that requires
 				a knot steeped in human saliva to be untied.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `This ritual only stops machines; it does not
 					grant any control over them. The effects of this ritual
 					are invisible and appear to be coincidental.`,
 				},
 			},
-			"Principal Focus of Vitae Infusion": disciplineAbility{
+			"Principal Focus of Vitae Infusion": {
 				BaseDesc: `This ritual imbues a quantity of blood within an
 				object small enough for the vampire to carry in both
 				hands. (The object may not be any larger than this,
@@ -9714,7 +9712,7 @@ var disciplineMap = map[string]Discipline{
 				blood may serve whatever purpose the vampire desires;
 				many thaumaturges wear enchanted baubles to ensure
 				they have emergency supplies of vitae`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `An object may store only one blood point of
 					vitae. If a Kindred wishes to make an infused focus for
@@ -9724,13 +9722,13 @@ var disciplineMap = map[string]Discipline{
 					present at the creation of the focus.`,
 				},
 			},
-			"Recure of the Homeland": disciplineAbility{
+			"Recure of the Homeland": {
 				BaseDesc: `The vampire calls on the power of the earth to heal
 				grave wounds she may have received. The thaumaturge
 				must use at least a handful of dirt from the city or town
 				of her mortal birth and recite a litany of her mortal
 				family tree as she casts this ritual.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The Cainite must mix the earth with two
 					points of her own blood to make a healing paste. One
@@ -9739,7 +9737,7 @@ var disciplineMap = map[string]Discipline{
 					used on the vampire who knows it.`,
 				},
 			},
-			"Ward Versus Ghouls": disciplineAbility{
+			"Ward Versus Ghouls": {
 				BaseDesc: `Wary Tremere created this ritual to protect themselves from the minions of vengeful rivals. By invoking
 				this ritual, the caster creates a glyph that causes great
 				pain to any ghouls who come in contact with it. The
@@ -9747,7 +9745,7 @@ var disciplineMap = map[string]Discipline{
 				a doorknob, etc.), and recites the incantation, which
 				takes 10 minutes. In 10 hours, the magical ward is complete, and will inflict excruciating pain on any ghoul
 				unfortunate enough to touch the warded object.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `Ghouls who touch warded objects suffer
 					three dice of lethal damage. This damage occurs again
@@ -9762,14 +9760,14 @@ var disciplineMap = map[string]Discipline{
 					roll.`,
 				},
 			},
-			"Warding Circle versus Ghouls": disciplineAbility{
+			"Warding Circle versus Ghouls": {
 				BaseDesc: `This ritual is enacted in a manner similar to that of
 				Ward versus Ghouls, but creates a circle centered on
 				the caster into which a ghoul cannot pass without being burned. The circle can be made as large and as permanent as the caster desires, as long as she is willing to
 				pay the necessary price. Many Tremere chantries and
 				havens are protected by this and other Warding Circle
 				rituals.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `The ritual requires three blood points of
 					mortal blood. The caster determines the size of the
@@ -9794,14 +9792,14 @@ var disciplineMap = map[string]Discipline{
 					the roll. Attempts to leave the circle are not blocked.`,
 				},
 			},
-			"Clinging of the Insect": disciplineAbility{
+			"Clinging of the Insect": {
 				BaseDesc: `This ritual allows the caster to cling to walls or ceilings, as would a spider. She may even crawl along these
 				surfaces (as long as they can support her). Use of this
 				power seriously discomfits mortal onlookers. The character must place a live spider under her tongue for the
 				duration of the ritual (though the spider may die while
 				in the thaumaturge’s mouth without canceling the
 				power).`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The character may move at half her nor-
 					mal rate while climbing walls or ceilings. This power
@@ -9809,7 +9807,7 @@ var disciplineMap = map[string]Discipline{
 					spider.`,
 				},
 			},
-			"Flesh of Fiery Touch": disciplineAbility{
+			"Flesh of Fiery Touch": {
 				BaseDesc: `This defensive ritual inflicts painful burns on anyone
 				who deliberately touches the subject’s skin. It requires
 				the subject to swallow a small glowing ember, which
@@ -9817,7 +9815,7 @@ var disciplineMap = map[string]Discipline{
 				Some vain thaumaturges use this ritual purely for its
 				subsidiary effect of darkening the subject’s skin to a
 				healthy sun-bronzed hue.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `Flesh of Fiery Touch takes two hours to cast
 					(reduced by 10 minutes per success). It requires a small
@@ -9837,7 +9835,7 @@ var disciplineMap = map[string]Discipline{
 					a Perception + Medicine roll (difficulty 8).`,
 				},
 			},
-			"Incorporeal Passage": disciplineAbility{
+			"Incorporeal Passage": {
 				BaseDesc: `Use of this ritual allows the thaumaturge to make
 				herself insubstantial. The caster becomes completely
 				immaterial and thus is able to walk through walls, pass
@@ -9850,7 +9848,7 @@ var disciplineMap = map[string]Discipline{
 				be impossible to reach the other side before the ritual
 				lapsed). This ritual requires that the caster carry a shard
 				from a shattered mirror to hold her image.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `This ritual lasts a number of hours equal to
 					the number of successes scored on a Wits + Survival
@@ -9859,7 +9857,7 @@ var disciplineMap = map[string]Discipline{
 					mirror shard away so that it no longer reflects her image.`,
 				},
 			},
-			"Mirror of Second Sight": disciplineAbility{
+			"Mirror of Second Sight": {
 				BaseDesc: `This object is an oval mirror no less than four inches
 				(10 cm) wide and no more than 18 inches (45 cm) in
 				length. It looks like a normal mirror, but once created,
@@ -9867,7 +9865,7 @@ var disciplineMap = map[string]Discipline{
 				the owner to see ghosts as they move though the Underworld. The caster creates the mirror by bathing an
 				ordinary mirror in a quantity of her own blood while
 				reciting a ritual incantation.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The ritual requires one point of the vampire’s blood. Thereafter, the mirror reflects images of
 					other supernatural creatures’ true forms — werewolves
@@ -9877,7 +9875,7 @@ var disciplineMap = map[string]Discipline{
 					those possessed of True Faith in clouds of golden light.`,
 				},
 			},
-			"Pavis of Foul Presence": disciplineAbility{
+			"Pavis of Foul Presence": {
 				BaseDesc: `The Tremere joke privately that this is their “ritual
 				for the Ventrue.” Kindred who invoke the Presence
 				Discipline on the subject of this ritual find the effects of
@@ -9891,7 +9889,7 @@ var disciplineMap = map[string]Discipline{
 				outside their Clan. The magical component for this
 				ritual is a length of blue silken cord, which must be
 				worn around the caster’s neck.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `This ritual lasts against a number of effects
 					equal to the successes rolled, or until the sunrise after it is enacted. Note that the Presence Discipline
@@ -9902,7 +9900,7 @@ var disciplineMap = map[string]Discipline{
 					affected.`,
 				},
 			},
-			"Sanguine Assistant": disciplineAbility{
+			"Sanguine Assistant": {
 				BaseDesc: `Thaumaturges often need laboratory assistants whom
 				they can trust implicitly. This ritual allows the intrepid
 				vampire to conjure a temporary servant. To cast the
@@ -9921,7 +9919,7 @@ var disciplineMap = map[string]Discipline{
 				are temporary creations, but some vampires become
 				fond of their tiny accomplices and create the same one
 				whenever the need arises.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The player spends five blood points and
 					rolls. The servant created by the ritual stands a foot
@@ -9946,7 +9944,7 @@ var disciplineMap = map[string]Discipline{
 					magic, so completely is it bound to its creator’s will`,
 				},
 			},
-			"Shaft of Belated Quiescence": disciplineAbility{
+			"Shaft of Belated Quiescence": {
 				BaseDesc: `This ritual turns an ordinary stake of rowan wood
 				into a particularly vicious weapon. When the stake
 				penetrates a vampire’s body, the tip breaks off and begins working its way through the victim’s flesh to his
@@ -9956,7 +9954,7 @@ var disciplineMap = map[string]Discipline{
 				victim’s body to escape surgery. The only Kindred who
 				are immune to this internal attack are those who have
 				had their hearts removed by Serpentis.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The ritual takes five hours to enact, minus
 					30 minutes per success. The stake must be carved of
@@ -10003,11 +10001,11 @@ var disciplineMap = map[string]Discipline{
 					create a Bullet of Belated Quiescence.`,
 				},
 			},
-			"Ward versus Lupines": disciplineAbility{
+			"Ward versus Lupines": {
 				BaseDesc: `This wards an object in a manner identical to that of
 				the Level Two ritual Ward Versus Ghouls, except that
 				it affects werewolves`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `Ward versus Lupines behaves exactly as does
 					Ward versus Ghouls, but it affects werewolves rather
@@ -10015,7 +10013,7 @@ var disciplineMap = map[string]Discipline{
 					rather than a blood point.`,
 				},
 			},
-			"Bone of Lies": disciplineAbility{
+			"Bone of Lies": {
 				BaseDesc: `This ritual enchants a mortal bone so that anyone
 				who holds it must tell the truth. The bone in question
 				is often a skull, though any part of the skeleton will
@@ -10037,7 +10035,7 @@ var disciplineMap = map[string]Discipline{
 				for this ritual, though different bones from the same
 				corpse can.
 				`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The bone imbued with this magical power
 					must be at least 200 years old and must absorb 10 blood
@@ -10047,7 +10045,7 @@ var disciplineMap = map[string]Discipline{
 					consumed, the bone’s magic ceases to work.`,
 				},
 			},
-			"Firewalker": disciplineAbility{
+			"Firewalker": {
 				BaseDesc: `This ritual imbues the vampire with an unnatural resistance to fire. Only a foolish vampire would actually
 				attempt to walk on or through fire, but this ritual does
 				grant an advanced tolerance to flame. Some Sabbat use
@@ -10056,7 +10054,7 @@ var disciplineMap = map[string]Discipline{
 				caster must cut off the end of one of his fingers and
 				burn it in a Thaumaturgical circle.
 				`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `Cutting off one’s finger does not do any
 					health levels of damage, but it hurts like hell and requires a Willpower roll to perform. This ritual may be
@@ -10068,7 +10066,7 @@ var disciplineMap = map[string]Discipline{
 					This ritual lasts one hour.`,
 				},
 			},
-			"Heart of Stone": disciplineAbility{
+			"Heart of Stone": {
 				BaseDesc: `A vampire under the effect of this ritual experiences
 				the transformation suggested by the ritual’s name: his
 				heart is completely transmuted to solid rock, render-
@@ -10077,7 +10075,7 @@ var disciplineMap = map[string]Discipline{
 				the Hermetic laws of sympathetic magic: The vam-
 				pire’s emotional capacity becomes almost nonexistent,
 				and his ability to relate to others suffers as well.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `This ritual requires nine hours (reduced by
 						one hour for every success). It can only be cast on oneself. The caster lies naked on a flat stone surface and
@@ -10097,7 +10095,7 @@ var disciplineMap = map[string]Discipline{
 						caster wishes it to.`,
 				},
 			},
-			"Splinter Servant": disciplineAbility{
+			"Splinter Servant": {
 				BaseDesc: `Another ritual designed to enchant a stake, Splinter
 				Servant is a progressive development of Shaft of Belated Quiescence. (The two rituals, however, are mutually exclusive.) A Splinter Servant consists of a stake
 				carved from a tree which has nourished itself on the
@@ -10108,7 +10106,7 @@ var disciplineMap = map[string]Discipline{
 				she is too slow in assigning a target. The servant splits
 				itself into a roughly humanoid form and begins singlemindedly trying to impale the target’s heart. Its exertions tear it apart within a few minutes, but if it pierces
 				its victim’s heart before it destroys itself, it is remarkably difficult to remove, as pieces tend to remain behind if the main portion is yanked out.`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The ritual requires 12 hours to cast, minus one per success, and the servant must be created
 					as described above. When the binding is torn off, the
@@ -10141,11 +10139,11 @@ var disciplineMap = map[string]Discipline{
 					heart without leaving behind shards of the stake.`,
 				},
 			},
-			"Ward versus Kindred": disciplineAbility{
+			"Ward versus Kindred": {
 				BaseDesc: `This warding ritual functions exactly as do Ward
 				versus Ghouls and Ward versus Lupines, but it inflicts
 				injury upon Cainites`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `Ward versus Kindred behaves exactly as
 					does Ward versus Ghouls, but it affects vampires rather
@@ -10153,13 +10151,13 @@ var disciplineMap = map[string]Discipline{
 					caster’s own blood and does not affect the caster.`,
 				},
 			},
-			"Blood Contract": disciplineAbility{
+			"Blood Contract": {
 				BaseDesc: `This ritual creates an unbreakable agreement between the two parties who sign it. The contract must
 				be written in the caster’s blood and signed in the blood
 				of whoever applies their name to the document. This
 				ritual takes three nights to enact fully, after which both
 				parties are compelled to fulfill the terms of the contract.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `This ritual is best handled by the Storyteller, who may bring those who sign the blood contract
 					into compliance by whatever means necessary (it is
@@ -10173,11 +10171,11 @@ var disciplineMap = map[string]Discipline{
 					blood point is consumed by those who sign it.`,
 				},
 			},
-			"Ward versus Spirits": disciplineAbility{
+			"Ward versus Spirits": {
 				BaseDesc: `This warding ritual functions exactly as Ward versus
 				Ghouls, but it inflicts injury upon spirits. Several other
 				versions of this ward exist, each geared toward a particular type of non-physical being.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `Ward versus Spirits behaves exactly as does
 					Ward versus Ghouls, but it affects spirits (including those
@@ -10191,7 +10189,7 @@ var disciplineMap = map[string]Discipline{
 					requires a vial of holy water.`,
 				},
 			},
-			"Paper Flesh": disciplineAbility{
+			"Paper Flesh": {
 				BaseDesc: `This dreadful ritual enfeebles the subject, making
 				her skin brittle and weak. Humors rise to the surface
 				and flesh tightens around bones and scales away at the
@@ -10201,7 +10199,7 @@ var disciplineMap = map[string]Discipline{
 				(which is much harder to discern for elders than it is
 				for young vampires) on a piece of paper, which he uses
 				to cut himself and then burns to cinders.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `This ritual causes the subject’s Stamina and
 					Fortitude (if any) to drop to 1 each. For every Generation below Eighth, the subject retains one extra point
@@ -10211,7 +10209,7 @@ var disciplineMap = map[string]Discipline{
 					begin with). This ritual lasts one night.`,
 				},
 			},
-			"Escape to a True Friend": disciplineAbility{
+			"Escape to a True Friend": {
 				BaseDesc: `Escape to a True Friend allows the caster to travel to
 				the person whose friendship and trust she most values.
 				The ritual has a physical component of a yard-wide/
@@ -10222,7 +10220,7 @@ var disciplineMap = map[string]Discipline{
 				the moment. She does not appear directly in front of
 				him, but materializes in a location within a few minutes’ walk that is out of sight of any observer. The circle
 				may be reused indefinitely, as long as it is unmarred.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `This ritual takes six hours a night for six
 					nights to cast, reduced by one night for every two successes. Each night requires the sacrifice of three of the
@@ -10232,7 +10230,7 @@ var disciplineMap = map[string]Discipline{
 					other individual with her when she travels, or a maximum amount of “cargo” equal to her own weight`,
 				},
 			},
-			"Enchant Talisman": disciplineAbility{
+			"Enchant Talisman": {
 				BaseDesc: `This ritual is the first taught to most Tremere once
 				they have attained mastery of their first path. Create
 				Talisman allows the caster to enchant a personal magical item (the fabled wizard’s staff) to act as an amplifier
@@ -10243,7 +10241,7 @@ var disciplineMap = map[string]Discipline{
 				a yard or a meter long. Swords and walking sticks are
 				the most common talismans, but some innovative or
 				eccentric thaumaturges have enchanted violins, shotguns, pool cues, and classroom pointers.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `This ritual requires six hours per night for
 					one complete cycle of the moon, beginning and ending
@@ -10311,7 +10309,7 @@ var disciplineMap = map[string]Discipline{
 				cm) of height gained or lost, for example. She must
 				physically mold the alteration, literally shaping her
 				flesh into the desired result.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `The player must spend a blood point for
 					each body part to be changed, then roll Intelligence +
@@ -10325,13 +10323,13 @@ var disciplineMap = map[string]Discipline{
 					by one.`,
 				},
 			},
-			"Fleshcraft": disciplineAbility{
+			"Fleshcraft": {
 				BaseDesc: `This power is similar to Malleable Visage, above, but
 				allows the vampire to perform drastic, grotesque alterations on other creatures. Tzimisce often use this power
 				to transform their servitors into monstrous guards, the
 				better to frighten foes. Only flesh (skin, muscle, fat,
 				and cartilage, but not bone) may be transformed.`,
-				lvl: 2,
+				Lvl: 2,
 				System: map[string]string{
 					"sys": `After spending a blood point, the vampire must grapple the intended victim. The player of
 					the Flescrafting vampire makes a successful Dexterity + Medicine roll (difficulty variable: 5 for a crude
@@ -10350,12 +10348,12 @@ var disciplineMap = map[string]Discipline{
 					(vampire’s choice).`,
 				},
 			},
-			"Bonecraft": disciplineAbility{
+			"Bonecraft": {
 				BaseDesc: `This terrible power allows a vampire to manipulate
 				bone in the same manner that flesh is shaped. In conjunction with Fleshcraft, above, this power enables a
 				Vicissitude practitioner to deform a victim (or herself)
 				beyond recognition. This power should be used in conjunction with the flesh-shaping arts, unless the vampire wants to inflict injury on the victim.`,
-				lvl: 3,
+				Lvl: 3,
 				System: map[string]string{
 					"sys": `The vampire’s player must spend a blood
 					point and make a Strength + Medicine roll (difficulties
@@ -10386,14 +10384,14 @@ var disciplineMap = map[string]Discipline{
 					the seat of his vitae ruptures in a shower of gore.`,
 				},
 			},
-			"Horrid Form": disciplineAbility{
+			"Horrid Form": {
 				BaseDesc: `Kindred use this power to become hideous and deadly monsters. The vampire’s stature increases to a full
 				eight feet (two and a half meters), the skin becomes a
 				sickly greenish-gray or grayish-black chitin, the arms
 				become apelike and ropy with ragged black nails, and
 				the face warps into something out of a nightmare. A
 				row of spines sprouts from the vertebrae, and the external carapace exudes a foul-smelling grease`,
-				lvl: 4,
+				Lvl: 4,
 				System: map[string]string{
 					"sys": `The Horrid Form costs two blood points to
 					awaken. All Physical Attributes increase by three, but
@@ -10404,13 +10402,13 @@ var disciplineMap = map[string]Discipline{
 					to the jagged ridges and bony knobs creasing the creature’s hands.`,
 				},
 			},
-			"Bloodform": disciplineAbility{
+			"Bloodform": {
 				BaseDesc: `A vampire with this power can physically transform
 				all or part of her body into sentient vitae. This blood
 				is in all respects identical to the vampire’s normal vitae; she can use it to nourish herself or others, create
 				ghouls, or establish blood bonds. If all this blood is imbibed or otherwise destroyed, the vampire meets Final
 				Death.`,
-				lvl: 5,
+				Lvl: 5,
 				System: map[string]string{
 					"sys": `The vampire may transform all or part of
 					herself as she deems fit. Each leg can turn into two
@@ -10434,14 +10432,14 @@ var disciplineMap = map[string]Discipline{
 					roll (difficulty 8) or fly into a panic.`,
 				},
 			},
-			"Chiropteran Marauder": disciplineAbility{
+			"Chiropteran Marauder": {
 				BaseDesc: `Similar to Horrid Form, the Chiropteran Marauder
 				is a terrifying, bipedal bat, bearing a wickedly fanged
 				maw and veined, leathery wings. This power confers all
 				of the benefits of the Horrid Form, in addition to a few
 				others. The mere sight of the marauder is enough to
 				make mortals or weak-willed vampires flee in horror.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": ` The vampire gains all the effects of the Horrid Form. Further, the Marauder’s fluted wings allow
 					flight at 25 mph (40 kph), during which the vampire
@@ -10456,7 +10454,7 @@ var disciplineMap = map[string]Discipline{
 					the Chiropteran Marauder costs three blood points.`,
 				},
 			},
-			"Blood of Acid": disciplineAbility{
+			"Blood of Acid": {
 				BaseDesc: `At this level of mastery, the vampire has converted
 				his blood to a viscous acid. Any blood he consumes
 				likewise becomes acid, which is corrosive enough to
@@ -10467,7 +10465,7 @@ var disciplineMap = map[string]Discipline{
 				ghouls, or give blood to another vampire — the acid
 				would corrode them as they drank it. The obvious benefit, however, is that would-be diablerists are likewise
 				unable to devour the Cainite’s blood.`,
-				lvl: 6,
+				Lvl: 6,
 				System: map[string]string{
 					"sys": `Each acidified blood point that comes in
 					contact with something other than the vampire himself does five dice worth of aggravated damage. If the
@@ -10479,13 +10477,13 @@ var disciplineMap = map[string]Discipline{
 					dice pool on her first attack, which causes many Tzimisce to cackle with glee.)`,
 				},
 			},
-			"Cocoon": disciplineAbility{
+			"Cocoon": {
 				BaseDesc: `The Cainite can form an opaque cocoon from blood
 				and other fluids excreted from her body. The cocoon
 				hardens after a few moments, turning into a tough,
 				white shell. This cocoon provides considerable protection to the vampire, even shielding her from sunlight
 				and, to a limited degree, fire.`,
-				lvl: 1,
+				Lvl: 1,
 				System: map[string]string{
 					"sys": `A vampire may only cocoon herself, and the
 					process takes 10 minutes. Additionally, creating a cocoon costs three blood points. The cocoon offers complete protection from sunlight, and provides a number
@@ -10496,12 +10494,12 @@ var disciplineMap = map[string]Discipline{
 					or other conditions to be met.`,
 				},
 			},
-			"Breath of the Dragon": disciplineAbility{
+			"Breath of the Dragon": {
 				BaseDesc: `The vampire becomes like one of the terrible draculs
 				of the Old World, able to exhale a deadly gout of flame.
 				This flame does not hurt the vampire himself, though
 				he may become trapped in flames if it engulfs flammable objects.`,
-				lvl: 8,
+				Lvl: 8,
 				System: map[string]string{
 					"sys": `The flaming cloud affects a six-foot area, doing two dice of aggravated damage to anyone in the
 					flames’ circumference. This fire may cause combustible
@@ -10509,7 +10507,7 @@ var disciplineMap = map[string]Discipline{
 					damage.`,
 				},
 			},
-			"Command": disciplineAbility{
+			"Command": {
 				BaseDesc: `This power, developed in the nights when the Tzimisce were the terrible masters of Eastern Europe,
 				allows the vampire to sink into and disperse himself
 				through the ground. Unlike the Protean power of Earth
@@ -10521,7 +10519,7 @@ var disciplineMap = map[string]Discipline{
 				fact that this power exists terrifies many Tzimisce, who
 				are secretly unsure of whether or not the diablerie of
 				their Antediluvian was successful.`,
-				lvl: 9,
+				Lvl: 9,
 				System: map[string]string{
 					"sys": `This power costs six blood points to activate, and it lasts as long as the vampire wishes to remain contained within the soil. As per the Cocoon,
 					the vampire may use mental Disciplines that do not
@@ -10534,7 +10532,7 @@ var disciplineMap = map[string]Discipline{
 }
 
 var InfoMap = map[string]map[string]Characteristic{
-	"attribute": map[string]Characteristic{
+	"attribute": {
 		"strength": {
 			BaseDesc: ` Strength is the raw, brute power of a character. It
 			governs how much weight a character can lift, how much he can
@@ -10544,7 +10542,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			used when a character wishes to break, lift, or carry
 			something,as well as when a character tries to jump a distance.
 			`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "You can lift 40 lbs",
 				"Average":     "You can lift 100 lbs",
 				"Good":        "You can lift 250 lbs",
@@ -10559,7 +10557,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			to manipulate objects with control and precision. Also included
 			under Dexterity’s heading are hand-eye coordination, reflexes,
 			and bodily grace.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "You are clumsy and awkward. Put that gun down before you hurt yourself",
 				"Average":     "You’re no klutz, but you’re no ballerina, either",
 				"Good":        "You possess some degree of athletic potential.",
@@ -10574,7 +10572,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			suffering physical trauma. Stamina also includes a bit of
 			psychic fortitude, indicating a character’s grit and tenacity.
 			`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "You have glass skin and paper bones.",
 				"Average":     "You are moderately healthy and can take a punch or two.",
 				"Good":        "You are in good shape and rarely fall ill.",
@@ -10592,7 +10590,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			This Attribute doesn’t necessarily indicate how the character is
 			charismatic, whether she’s a silver-tongued charmer or a
 			grinning bully.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "There’s something a little sketchy about you",
 				"Average":     "You are generally likable and have several friends",
 				"Good":        "People trust you implicitly",
@@ -10613,7 +10611,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			attention, however, many people become quite
 			defensive.Characters with high Manipulation ratings are often
 			distrusted by those around them.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "A person of few (often ineffectual) words",
 				"Average":     "You can fool some of the people some of the time, just like anybody else",
 				"Good":        "You never pay full price.",
@@ -10636,7 +10634,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			critically important to either look your best or get to know
 			people before you start trying to convince them to firebomb the
 			Justicar’s haven.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "Your clothes stink, you turn people off right away, or you’re just damned ugly",
 				"Average":     "You don’t stand out in a crowd, for better or for worse",
 				"Good":        "People sometimes approach you and buy you drinks",
@@ -10657,7 +10655,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			ambushes,distinguish a clue from a pile of refuse, or uncover
 			any other hidden or overlookable detail, whether physical or
 			otherwise.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "Perhaps you are absurdly self-absorbed, perhaps merely an airhead.",
 				"Average":     "he very subtle evades you, but you’re aware of the bigger picture.",
 				"Good":        "You perceive moods, textures, and small changes in your environment.",
@@ -10678,7 +10676,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			thinkers. Likewise, characters with high Intelligence aren’t all
 			Einsteins; they may be better at rote memorization or have
 			particularly keen judgement.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "Not the brightest crayon in the box",
 				"Average":     "Smart enough to realize you’re normal.",
 				"Good":        "More enlightened than the masses.",
@@ -10697,7 +10695,7 @@ var InfoMap = map[string]map[string]Characteristic{
 				striking expedience. Characters with high Wits also manage
 				to keep their cool in stressful situations.
 				`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Poor":        "Your brains a little smooth.",
 				"Average":     "You know when to bet or fold in poker.",
 				"Good":        "You are seldom surprised or left speechless.",
@@ -10706,13 +10704,13 @@ var InfoMap = map[string]map[string]Characteristic{
 			},
 		},
 	},
-	"talents": map[string]Characteristic{
+	"talents": {
 		"alertness": {
 			BaseDesc: ` Alertness describes the attention you pay to the
 			outside world, whether otherwise occupied or not.  This Talent
 			is typically paired with Perception, and is best used when
 			sensing physical stimuli (as opposed to moods or clues).				`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You’re no mindless drone.",
 				"Practiced": "Habitual eavesdropper",
 				"Competent": "You keep a sharp eye on your surroundings.",
@@ -10728,7 +10726,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			Athletics doesn’t cover basic motor actions such as lifting
 			weights, nor does it govern athletic feats covered by another
 			Ability (ex. Melee).`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You had an active childhood.",
 				"Practiced": "High-school athletes",
 				"Competent": "Talented lifelong amateur",
@@ -10746,7 +10744,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			This insight is purely subconscious, and knowing that
 			something’s wrong doesn’t mean that the character knows what it
 			is.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "Once in a while, you get the feeling that something isn’t right.",
 				"Practiced": "You sometimes get strange vibes from a particular direction or vague area (like a building).",
 				"Competent": "You can walk into a room and know that something unusual is going on within.",
@@ -10762,7 +10760,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			coordinated, resistant to pain, quick, strong, and mean. The
 			willingness to do whatever it takes to hurt your opponent wins
 			plenty of fights.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You were picked on as a kid.",
 				"Practiced": "You’ve participated in the occasional barroom tussle.",
 				"Competent": "You’ve fought regularly generally walked away in better shape than your opponents.",
@@ -10777,7 +10775,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			might be able to discern when someone’s lying to you. However,
 			you may be so in tune with other people’s feelings that your own
 			emotions are affected.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You lend the occasional shoulder to cry on.",
 				"Practiced": "You can sometimes literally feel someone else’s suffering.",
 				"Competent": "You have a keen insight into other people’s motivations.",
@@ -10796,7 +10794,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			Talent represents your ability for poetry, creative writing, or
 			other literary art forms. You can choose a specialty in
 			Expression, even if the skill is below expert.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "Your talent has matured past crude poetry on notebook paper. ",
 				"Practiced": "You could lead a collegedebate team.",
 				"Competent": "You could be a successful writer.",
@@ -10811,7 +10809,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			the right circumstances might well be called “diplomacy” in
 			certain circles. You know the right method for each occasion,
 			and can be very… persuasive.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "Shady teenager",
 				"Practiced": "Skinhead thug",
 				"Competent": "Drill sergeant",
@@ -10827,7 +10825,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			some sort of conflict; a good leader can get them back out
 			intact. This Talent is usually paired with Charisma rather than
 			Manipulation.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "Captain of your Little League team",
 				"Practiced": "Student body president",
 				"Competent": "An effective CEO",
@@ -10840,7 +10838,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			to those who know the language. Streetwise allows you to blend
 			in unobtrusively with the local scene, pick up gossip,
 			understand slang, or even dabble in criminal doings.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    " You know who’s holding.",
 				"Practiced": "You’re accorded respect on the street.",
 				"Competent": "You could head your own gang.",
@@ -10855,7 +10853,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			Talent defines your talent for intrigue, secrets, and
 			double-dealing. Mastery of Subterfuge can make you the ultimate
 			seducer or a brilliant spy.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You tell the occasional white lie.",
 				"Practiced": "You can spin elaborate lies",
 				"Competent": "Criminal lawyer",
@@ -10867,7 +10865,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			BaseDesc: ` This category encompasses anything that the
 			Storyteller deems to be mainly self-taught and is usually 
 			(though not always) more active than intellectual.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You’ve dabbled.",
 				"Practiced": "You’ve got a good grasp of your hobby’s basics",
 				"Competent": "Other practitioners regard you as fairly skilled and competent.",
@@ -10880,7 +10878,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			Skill allows you to predict how an animal might react in a given
 			situation, train a domesticated creature, or even try to calm or
 			enrage animals `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You can get a domesticated animals to let you pet them.",
 				"Practiced": "You can housebreak a puppy",
 				"Competent": "You could train a seeing-eye dog.",
@@ -10896,7 +10894,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			with this Skill, depending on the number of successes you
 			achieve. You must always choose a specialization in Crafts, even
 			though you retain some skill in multiple fields.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "High school wood shop",
 				"Practiced": "You’re starting to develop your own style.",
 				"Competent": "You could start your own shop.",
@@ -10910,7 +10908,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			complicated vehicles such as tanks or "1"8-wheelers, and 
 			difficulties may vary depending on your experience with
 			individual automobiles.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You know how to work an automatic transmission",
 				"Practiced": "You can drive a stick shift.",
 				"Competent": "Professional trucker.",
@@ -10927,7 +10925,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			interject.  This Skill is used during meetings, haggling,
 			seduction, dancing, dinner etiquette, and all forms of
 			diplomacy.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You know when to keep your mouth shut",
 				"Practiced": "You’ve been to a black-tie event or two.",
 				"Competent": "You know your way around even obscure silverware ",
@@ -10941,7 +10939,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			someone skilled in Firearms can clean, repair, recognize, and
 			accurately fire most forms of small arms. This Skill is also
 			used to unjam guns (Wits + Firearms).`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You had a BB gun as a kid",
 				"Practiced": "You while away the occasional hour at the gun club.",
 				"Competent": "You’ve survived a firefight or two",
@@ -10961,7 +10959,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			anti-crime technologies such as video surveillance or 
 			alarm systems — those are covered by the Technology 
 			Knowledge.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You can pick a simple lock.",
 				"Practiced": "You could run a shell game hustle on the corner.",
 				"Competent": "You can open a standard locked window from the outside.",
@@ -10977,7 +10975,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			esoteric martial-arts paraphernalia such as sai or nunchaku.
 			And, of course, there is always the utility of the wooden stake.
 			`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You know the right way to hold a knife.",
 				"Practiced": "You may have been in the occasional street fight.",
 				"Competent": "You could make a college fencing team.",
@@ -10996,7 +10994,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			specialty, even though this Skill also imparts a general sense
 			for watching and responding to your audience’s mood regardless
 			of medium.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You could sing in the church choir.",
 				"Practiced": "Your Internet videos have over a hundred thousand views.",
 				"Competent": "You almost always have a gig booked.",
@@ -11011,7 +11009,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			Ability is, for obvious reasons, highly useful in stalking prey.
 			In many cases, Stealth is also used to conceal items, whether on
 			one’s person or somewhere in the environment.  `,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You can hide in a darkened room.",
 				"Practiced": "You can shadow someone from streetlight to streetlight.",
 				"Competent": "You have little difficulty finding prey from evening to evening.",
@@ -11030,7 +11028,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			plenty of Survival that goes into getting by in various parts of
 			modern cities.
 			`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You can survive a night spent outside.",
 				"Practiced": "You’ve “roughed it” on a regular basis.",
 				"Competent": "You can separate poison or spoilage from edible forage.",
@@ -11045,7 +11043,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			existing Skills to determine if a particular task might fall
 			under one of those (e.g. Tracking would be a specialty of
 			Survival).`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"Novice":    "You’ve apprenticed.",
 				"Practiced": "You have a handle on the basics.",
 				"Competent": "You could make a living, although not a fortune, doing what you do.",
@@ -11063,7 +11061,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			salons and other Elysium functions, but it can also offer
 			valuable clues to certain past — and future — movements in the
 			Jyhad.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You’re aware that 1066 isn’t a Beverly Hills area code.",
 				"college":   "You can quote from the classics and identify major cultural movements.",
 				"masters":   "You could get a paper published in a scholarly journal.",
@@ -11075,7 +11073,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			BaseDesc: `This Knowledge represents the ability to operate and 
 		program computers, including mobile devices. Most Computer use also
 		imparts a degree of Internet awareness (if not savvy).`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You can navigate touch-screen and traditional point-and-click ",
 				"college":   "You know your way around various applications and the Internet.",
 				"masters":   "You know what to do with a text command prompt.",
@@ -11090,7 +11088,7 @@ var InfoMap = map[string]map[string]Characteristic{
 		numbers, or playing the stock market. Sufficiently high levels in 
 		Finance allow you to raise your standards of living to a very
 		comfortable level.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You’ve taken a few business classes.",
 				"college":   "You have some practical experience and can keep your books fairly neat.",
 				"masters":   "You’d make a fine stockbroker.",
@@ -11105,7 +11103,7 @@ var InfoMap = map[string]map[string]Characteristic{
 		follow leads. Such research may include Internet searches or more
 		specific research techniques like hitting the law books and
 		periodicals archives at the library.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You can parse a broad Web search for clues.",
 				"college":   "Police officer",
 				"masters":   "Private detective",
@@ -11120,7 +11118,7 @@ var InfoMap = map[string]map[string]Characteristic{
 		more, the Kindred keep their own laws, and more than one vampire has
 		saved his own unlife by deftly exploiting a loophole in one of the
 		Traditions.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   " You know whether to plead guilty, not guilty, or nolo contendere.",
 				"college":   "You’re either studying for or just passed the bar exam.",
 				"masters":   "You can make a living of the practice, and probably do.",
@@ -11135,7 +11133,7 @@ var InfoMap = map[string]map[string]Characteristic{
 		diagnosis or treatment of disease. Medicine is of great use to those
 		Kindred with an interest in repairing, damaging, or reworking the
 		human body.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You’ve taken a CPR course.",
 				"college":   "Premed or paramedic",
 				"masters":   "General practitioner",
@@ -11153,7 +11151,7 @@ var InfoMap = map[string]map[string]Characteristic{
 		deep understanding of vampire lore, as well as a good grounding in
 		other aspects of the occult. At the very least, you can discern what
 		is patently false.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You’ve got a blog about the eerie and the disturbing.",
 				"college":   "There seems to be some unsettling truth to some of the rumors you’ve heard.",
 				"masters":   "You’ve heard a lot and actually seen a little for yourself.",
@@ -11170,7 +11168,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			practically navigate various bureaucracies, as it assumes that
 			certain organizational structures and relationship currencies
 			are universal.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "Activist; you can pay aspeeding ticket online.",
 				"college":   "Political science major; you know how to file a request for information.",
 				"masters":   "Campaign manager or talk-radio host; the clerk will help you navigate the forms you need to complete and tell you who needs the duplicates.",
@@ -11183,7 +11181,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			physical sciences, such as chemistry, biology, physics, 
 			and geology. This Knowledge can be put to all forms 
 			of practical use.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You know most of the high-school basics.",
 				"college":   "You’re familiar with the major theories.",
 				"masters":   "You could teach high-school science.",
@@ -11200,7 +11198,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			Technology Knowledge.  This is the wide-ranging Ability used to
 			build one’s own computer, install (or subvert) a security
 			system, repair a mobile phone, or kitbash a shortwave radio.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You can perform simple modifications or repairs.",
 				"college":   "You could make your living in assembly or repair.",
 				"masters":   "You can design new technologies from a set of objective requirements.",
@@ -11213,7 +11211,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			catchall category. An Expert Knowledge is anything that is
 			primarily intellectual or mental in nature and must be
 			studied.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"student":   "You’ve taken an undergraduate course or read a few books.",
 				"college":   "You may have minored in the field.",
 				"masters":   "You might hold a degree and are well versed in what’s been written.",
@@ -11222,7 +11220,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			},
 		},
 	},
-	"background": map[string]Characteristic{
+	"background": {
 		"allies": {
 			BaseDesc: `Allies are mortals who support and help you — fami-
 			ly, friends, or even a mortal organization that owes you
@@ -11233,7 +11231,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			However, they might have some useful Background
 			Traits of their own, and could provide you with indi-
 			rect access to their contacts, influence, or resources.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": "One ally of moderate influence and power",
 				"2": "Two allies, both of moderate power",
 				"3": "Three allies, one of whom is quite influential",
@@ -11252,7 +11250,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			enemy. Indeed, some vampires may know you as one
 			individual while others believe you to be someone else
 			entirely.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `You are new at this identity game.
 				Sometimes you slip and forget your
 				other persona.`,
@@ -11292,7 +11290,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			you choose to reveal your affiliation you may add your rating in this Background to any
 			Social dice pools. Most Hand members,
 			however, choose not to reveal their allegiance.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `You are a grunt; you may call upon
 				one Black Hand member once per
 				story.`,
@@ -11339,7 +11337,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			cops, DMV clerks, club bouncers, or members of an
 			online social network. You don’t need to detail these
 			various “passing acquaintances” before play.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `One major contact`,
 				"2": `Two major contacts`,
 				"3": `Three major contacts`,
@@ -11366,7 +11364,7 @@ var InfoMap = map[string]map[string]Characteristic{
 				when they find some.Each level of Domain reduces the difficulty of hunt-
 				ing checks by one for your character and those whom
 				the character allows in.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": "A single small building, such as a single-family home or a social establishment — enough for a basic haven.",
 				"2": `A church, factory, warehouse,
 				mid-rise, or other large structure —
@@ -11403,7 +11401,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			a high-profile trial probably has a certain amount of
 			fame, as do a lawmaker and a scientist who has made a
 			popularized discovery.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `You’re known to a select subculture
 				— local club-goers, industry bloggers,
 				or the Park Avenue set, for instance`,
@@ -11429,7 +11427,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			a powerful sire or a decidedly dangerous taste for di-
 			ablerie. If you don’t take any dots in this Trait, you
 			begin play as a Thirteenth Generation vampire.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `Twelfth Generation: 11 blood pool,
 				can spend 1 blood point per turn`,
 				"2": `Eleventh Generation: 12 blood pool,
@@ -11450,7 +11448,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			though they are typically not very controllable, closely
 			connected to you, or particularly skilled (for more effective pawns, purchase Allies or Retainers). Your
 			Herd rating adds dice to your rolls for hunting`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `Three vessels`,
 				"2": `Seven vessels`,
 				"3": `15 vessels`,
@@ -11469,7 +11467,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			es on a local level than a worldwide scale (e.g., having
 			an “abandoned” building demolished is relatively easy,
 			while starting a war is a bit more difficult).`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `Moderately influential; a factor in city
 				politics`,
 				"2": `Well-connected; a force in state
@@ -11500,7 +11498,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			like-minded vampires, such as the elders of the city’s
 			Tremere chantry or a Black Hand cell.
 			`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `Mentor is an ancilla of little
 				influence, or a Ductus or Pack Priest.
 				•• Mentor is respected: an elder or
@@ -11536,7 +11534,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			sources may have enough clothing and supplies to get
 			by, or she may be destitute and squatting in a refrigera-
 			tor box under an overpass.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `Sufficient. You can maintain a typical
 				residence in the style of the working
 				class with stability, even if spending
@@ -11615,7 +11613,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			cising strict control, they might well turn on you.
 			Retainers may be useful, but they should never be
 			flawless.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": "One retainer",
 				"2": "Two retainers",
 				"3": "Three retainers",
@@ -11634,7 +11632,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			priests should have an outstanding reason for acquiring
 			this Background, as Pack Priests are loath to share their
 			secrets with more secular members of the Sect.`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": `You know a few of the auctoritas ritae
 				(your choice).`,
 				"2": `You know some of the auctoritas ritae
@@ -11680,7 +11678,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			the reputation of your pack or the zeal of your outlook.
 			Elders are known for having little respect for their ju-
 			niors; this Background can mitigate that somewhat`,
-			ValDesc: map[string]interface{}{
+			ValDesc: map[string]string{
 				"1": "Known: a neonate/Pack Priest",
 				"2": "Respected: an ancilla/respected Ductus",
 				"3": "Influential: an elder/Templar",
@@ -11692,14 +11690,14 @@ var InfoMap = map[string]map[string]Characteristic{
 	},
 }
 
-var virtueMap = map[string]Characteristic{
+var VirtueMap = map[string]Characteristic{
 	"conscience": {
 		BaseDesc: `Conscience is a Trait that allows characters to evaluate their conduct with relation to what is “right” and
 		“wrong.” A character’s moral judgment with Conscience
 		stems from her attitude and outlook. Conscience is
 		what prevents a vampire from succumbing to the Beast,
 		by defining the Beast’s urges as unacceptable.`,
-		ValDesc: map[string]interface{}{
+		ValDesc: map[string]string{
 			"1": "Uncaring",
 			"2": "Normal",
 			"3": "Ethical",
@@ -11713,7 +11711,7 @@ var virtueMap = map[string]Characteristic{
 		rarely succumb to emotional urges, and are thus able to
 		restrain their darker sides more readily than characters
 		with low Self-Control.`,
-		ValDesc: map[string]interface{}{
+		ValDesc: map[string]string{
 			"1": "Unstable",
 			"2": "Normal",
 			"3": "Temperate",
@@ -11731,7 +11729,7 @@ var virtueMap = map[string]Characteristic{
 		Kindred use the Courage Virtue when faced with cir-
 		cumstances they endemically dread: fire, sunlight, True
 		Faith.`,
-		ValDesc: map[string]interface{}{
+		ValDesc: map[string]string{
 			"1": "Timid",
 			"2": "Normal",
 			"3": "Bold",
@@ -11741,7 +11739,7 @@ var virtueMap = map[string]Characteristic{
 	},
 }
 
-var entryMap = map[string]Entry{
+var EntryMap = map[string]Entry{
 	"lextalionis": {
 		Name: "Lextalionis",
 		Description: `The dreaded blood hunt. A Camarilla Prince declares the hunt in his court, and the word filters down through his Primogen to the Clans. All who hear the call must participate (although “participation” can simply mean staying out of the way whenthe hunters come through). Once in a while such a
@@ -11820,12 +11818,13 @@ var entryMap = map[string]Entry{
 	},
 }
 
-func (c Characteristic) ValDescString() []string {
+func ValDescString(val map[string]string) []string {
 	var arr []string
 
-	for k, v := range c.ValDesc {
+	for k, v := range val {
 		arr = append(arr, fmt.Sprintf("%s//%s", k, v))
 	}
 
 	return arr
 }
+

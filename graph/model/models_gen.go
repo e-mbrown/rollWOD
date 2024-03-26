@@ -57,26 +57,52 @@ func (this Characteristic) GetName() string        { return this.Name }
 func (this Characteristic) GetDescription() string { return this.Description }
 
 type Clan struct {
-	ID             *string           `json:"id,omitempty"`
-	Name           string            `json:"name"`
-	Description    string            `json:"description"`
-	AssociatedSect []*Sect           `json:"associatedSect"`
-	Haven          string            `json:"haven"`
-	Background     string            `json:"background"`
-	Character      string            `json:"character"`
-	Discipline     []*Characteristic `json:"discipline,omitempty"`
-	Weakness       string            `json:"weakness"`
-	Organizations  *string           `json:"organizations,omitempty"`
-	SubClan        []*Clan           `json:"subClan,omitempty"`
-	Strongholds    []string          `json:"strongholds,omitempty"`
-	IsHighClan     *bool             `json:"isHighClan,omitempty"`
-	IsSubclan      *bool             `json:"isSubclan,omitempty"`
+	ID             *string       `json:"id,omitempty"`
+	Name           string        `json:"name"`
+	Description    string        `json:"description"`
+	Appearance     string        `json:"appearance"`
+	AssociatedSect []*Sect       `json:"associatedSect"`
+	Haven          string        `json:"haven"`
+	Background     string        `json:"background"`
+	Character      string        `json:"character"`
+	Discipline     []*Discipline `json:"discipline,omitempty"`
+	Weakness       string        `json:"weakness"`
+	Organizations  *string       `json:"organizations,omitempty"`
+	SubClan        []*Clan       `json:"subClan,omitempty"`
+	Strongholds    []string      `json:"strongholds,omitempty"`
+	IsHighClan     *bool         `json:"isHighClan,omitempty"`
+	IsSubclan      *bool         `json:"isSubclan,omitempty"`
 }
 
 func (Clan) IsEntry()                    {}
 func (this Clan) GetID() *string         { return this.ID }
 func (this Clan) GetName() string        { return this.Name }
 func (this Clan) GetDescription() string { return this.Description }
+
+type DiscAbilities struct {
+	ID          *string  `json:"id,omitempty"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Lvl         int      `json:"lvl"`
+	System      []string `json:"system,omitempty"`
+}
+
+func (DiscAbilities) IsEntry()                    {}
+func (this DiscAbilities) GetID() *string         { return this.ID }
+func (this DiscAbilities) GetName() string        { return this.Name }
+func (this DiscAbilities) GetDescription() string { return this.Description }
+
+type Discipline struct {
+	ID          *string          `json:"id,omitempty"`
+	Name        string           `json:"name"`
+	Description string           `json:"description"`
+	Abilities   []*DiscAbilities `json:"abilities,omitempty"`
+}
+
+func (Discipline) IsEntry()                    {}
+func (this Discipline) GetID() *string         { return this.ID }
+func (this Discipline) GetName() string        { return this.Name }
+func (this Discipline) GetDescription() string { return this.Description }
 
 type GeneralInfo struct {
 	ID          *string `json:"id,omitempty"`

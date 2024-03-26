@@ -6,43 +6,71 @@ package graph
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/e-mbrown/rollWOD/graph/model"
 )
 
 // Characteristics is the resolver for the characteristics field.
-func (r *queryResolver) Characteristics(ctx context.Context, name *string) ([]*model.Characteristic, error) {
-	if name != nil {
-		for _,v := range r.characteristics{
-			if name == &v.Name {
-				return v
-			}
-		}
-	}
+func (r *queryResolver) Characteristics(ctx context.Context) ([]*model.Characteristic, error) {
 	return r.characteristics, nil
 }
 
 // Titles is the resolver for the titles field.
-func (r *queryResolver) Titles(ctx context.Context, name *string) ([]*model.Title, error) {
+func (r *queryResolver) Titles(ctx context.Context) ([]*model.Title, error) {
 	return r.titles, nil
 }
 
 // Sects is the resolver for the sects field.
-func (r *queryResolver) Sects(ctx context.Context, id *string) ([]*model.Sect, error) {
+func (r *queryResolver) Sects(ctx context.Context) ([]*model.Sect, error) {
 	return r.sects, nil
 }
 
 // Traditions is the resolver for the traditions field.
-func (r *queryResolver) Traditions(ctx context.Context, id *string) ([]*model.Tradition, error) {
+func (r *queryResolver) Traditions(ctx context.Context) ([]*model.Tradition, error) {
 	return r.traditions, nil
 }
 
-// GenInfo is the resolver for the genInfo field.
-func (r *queryResolver) GenInfo(ctx context.Context, name *string) ([]*model.GeneralInfo, error) {
-	return r.genInfo, nil
+// GetSect is the resolver for the getSect field.
+func (r *queryResolver) GetSect(ctx context.Context, name []string) ([]*model.Sect, error) {
+	res := []*model.Sect{}
+	for _, v := range name {
+		n := strings.ToLower(v)
+		for _, rv := range r.sects {
+			if strings.ToLower(rv.Name) == n {
+				res = append(res, rv)
+			}
+		}
+	}
+
+	if len(res) == 0 {
+		return nil, fmt.Errorf("%s: is not a sect", name)
+	}
+	return res, nil
+}
+
+// GetTradition is the resolver for the getTradition field.
+func (r *queryResolver) GetTradition(ctx context.Context, name string) (*model.Tradition, error) {
+	panic(fmt.Errorf("not implemented: GetTradition - getTradition"))
+}
+
+// GetGenInfo is the resolver for the getGenInfo field.
+func (r *queryResolver) GetGenInfo(ctx context.Context, name *string) (*model.GeneralInfo, error) {
+	panic(fmt.Errorf("not implemented: GetGenInfo - getGenInfo"))
 }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) GenInfo(ctx context.Context, name *string) ([]*model.GeneralInfo, error) {
+	return r.genInfo, nil
+}
