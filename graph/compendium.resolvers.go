@@ -9,22 +9,35 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/e-mbrown/rollWOD/graph/model"
 )
 
 // Characteristics is the resolver for the characteristics field.
 func (r *queryResolver) Characteristics(ctx context.Context) ([]*model.Characteristic, error) {
-	return r.characteristics, nil
+	allChar := []*model.Characteristic{}
+	for _, v := range r.characteristics {
+		allChar = append(allChar, v)
+	}
+	return allChar, nil
 }
 
 // Titles is the resolver for the titles field.
 func (r *queryResolver) Titles(ctx context.Context) ([]*model.Title, error) {
-	return r.titles, nil
+	allT := []*model.Title{}
+	for _, v := range r.titles {
+		allT = append(allT, v)
+	}
+	return allT, nil
 }
 
 // Sects is the resolver for the sects field.
 func (r *queryResolver) Sects(ctx context.Context) ([]*model.Sect, error) {
-	return r.sects, nil
+	allSects := []*model.Sect{}
+	for _, v := range r.sects {
+		allSects = append(allSects, v)
+	}
+	return allSects, nil
 }
 
 // Traditions is the resolver for the traditions field.
@@ -35,18 +48,22 @@ func (r *queryResolver) Traditions(ctx context.Context) ([]*model.Tradition, err
 // GetSect is the resolver for the getSect field.
 func (r *queryResolver) GetSect(ctx context.Context, name []string) ([]*model.Sect, error) {
 	res := []*model.Sect{}
+
 	for _, v := range name {
 		n := strings.ToLower(v)
-		for _, rv := range r.sects {
-			if strings.ToLower(rv.Name) == n {
-				res = append(res, rv)
-			}
+		val, ok := r.sects[n]
+		if ok {
+			res = append(res, val)
+		} else {
+			fmt.Print(n)
+			graphql.AddErrorf(ctx, "Non-fatal error: parameter '%s' is not a sect", n)
 		}
 	}
 
 	if len(res) == 0 {
-		return nil, fmt.Errorf("%s: is not a sect", name)
+		return nil, graphql.GetErrors(ctx)
 	}
+
 	return res, nil
 }
 
@@ -55,22 +72,21 @@ func (r *queryResolver) GetTradition(ctx context.Context, name string) (*model.T
 	panic(fmt.Errorf("not implemented: GetTradition - getTradition"))
 }
 
-// GetGenInfo is the resolver for the getGenInfo field.
-func (r *queryResolver) GetGenInfo(ctx context.Context, name *string) (*model.GeneralInfo, error) {
-	panic(fmt.Errorf("not implemented: GetGenInfo - getGenInfo"))
+// GenInfoByName is the resolver for the GenInfoByName field.
+func (r *queryResolver) GenInfoByName(ctx context.Context, name string) (*model.GeneralInfo, error) {
+	res, ok := r.genInfo[strings.ToLower(name)]
+	if !ok {
+		return nil, fmt.Errorf("%s: is not a entry in the conpendium", name)
+	}
+	return res, nil
+}
+
+// GenByID is the resolver for the GenByID field.
+func (r *queryResolver) GenByID(ctx context.Context, id string) (*model.GeneralInfo, error) {
+	panic(fmt.Errorf("not implemented: GenByID - GenByID"))
 }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) GenInfo(ctx context.Context, name *string) ([]*model.GeneralInfo, error) {
-	return r.genInfo, nil
-}

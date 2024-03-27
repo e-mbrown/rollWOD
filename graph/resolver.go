@@ -8,49 +8,43 @@ import (
 	"github.com/e-mbrown/rollWOD/pkg/services"
 )
 
-// This file will not be regenerated automatically.
-//
-// It serves as dependency injection for your app, add any dependencies you require here.
-
 type Resolver struct {
-	characteristics []*model.Characteristic
-	sects           []*model.Sect
-	disciplines     []*model.Discipline
-	discAbilities   []*model.DiscAbilities
-	titles          []*model.Title
+	// Ideal query searches by name
+	characteristics map[string]*model.Characteristic
+	sects           map[string]*model.Sect
+	disciplines     map[string]*model.Discipline
+	clans           map[string]*model.Clan
+	genInfo         map[string]*model.GeneralInfo
+	discAbilities   map[string]*model.DiscAbilities
+
+	//Undetermined
+	titles          map[string]*model.Title
 	traditions      []*model.Tradition
-	genInfo         []*model.GeneralInfo
-	clans           []*model.Clan
 }
 
 func NewResolver() Config {
 	r := Resolver{}
 
-	r.genInfo = append(
-		r.genInfo,
-		services.EntrytoModelGenInfo(seed.EntryMap)...,
-	)
-	r.characteristics = append(
-		r.characteristics,
-		services.ChartoModelChar(seed.InfoMap)...,
-	)
+	r.genInfo = services.EntrytoModelGenInfo(seed.EntryMap)
+	r.characteristics = services.ChartoModelChar(seed.InfoMap)
 
 	sects, titles := services.SecttoModelSect(seed.SectMap)
-	r.titles = append(r.titles, titles...)
-	r.sects = append(r.sects, sects...)
+	r.titles = titles
+	r.sects = sects
 
+	//ToDo reformat
 	disc, discab := services.DisciplinetoModelDiscipline(seed.DisciplineMap)
-	r.disciplines = append(r.disciplines, disc...)
-	r.discAbilities = append(r.discAbilities, discab...)
+	r.disciplines = disc
+	r.discAbilities =  discab
 
 	traditions, gen := services.TradtoModelTrad(seed.TraditionMap)
 	r.traditions = append(r.traditions, traditions...)
-	r.genInfo = append(r.genInfo, gen...)
+	for _, v := range gen {
+		r.genInfo[v.Name] = v
+	}
 
 	// Never run clans before Sects and Disciplines are done.
-	r.clans = append(
-		r.clans,
-		services.ClantoModelClan(r.sects, r.disciplines, seed.ClanMap)...)
+	r.clans = services.ClantoModelClan(r.sects, r.disciplines, seed.ClanMap)
 
 	return Config{
 		Resolvers: &r,

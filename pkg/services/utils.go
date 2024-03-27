@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/e-mbrown/rollWOD/graph/model"
 	"github.com/e-mbrown/rollWOD/pkg/seed"
@@ -16,70 +17,65 @@ func GenUUID() *string {
 
 // entrytoModelEntry is a util function that converts []seed.Entry
 // to []model.GeneralInfo
-func EntrytoModelGenInfo(data map[string]seed.Entry) []*model.GeneralInfo {
-	entries := make([]*model.GeneralInfo, len(data))
+func EntrytoModelGenInfo(data map[string]seed.Entry) map[string]*model.GeneralInfo {
+	entries := map[string]*model.GeneralInfo{}
 
 	for _, v := range data {
-		entries = append(
-			entries,
-			&model.GeneralInfo{
-				ID:          GenUUID(),
-				Name:        v.Name,
-				Description: seed.CleanDesc(v.Description),
-			})
+		name :=  strings.ToLower(v.Name)
+		entries[name] = &model.GeneralInfo{
+			ID:          GenUUID(),
+			Name:        name,
+			Description: seed.CleanDesc(v.Description),
+		}
 	}
 
 	return entries
 }
 
-func ChartoModelChar(data map[string]map[string]seed.Characteristic) []*model.Characteristic {
-	entries := []*model.Characteristic{}
+func ChartoModelChar(data map[string]map[string]seed.Characteristic) map[string]*model.Characteristic {
+	entries := map[string]*model.Characteristic{}
 
 	for k, v := range seed.InfoMap {
 		for ik, iv := range v {
-			entries = append(entries,
-				&model.Characteristic{
-					ID:          GenUUID(),
-					Name:        ik,
-					Type:        model.CharType(k),
-					Description: seed.CleanDesc(iv.BaseDesc),
-					DescbyVal:   seed.ValDescString(iv.ValDesc),
-				})
+			name :=strings.ToLower(ik)
+			entries[name] = &model.Characteristic{
+				ID:          GenUUID(),
+				Name:         name,
+				Type:        model.CharType(k),
+				Description: seed.CleanDesc(iv.BaseDesc),
+				DescbyVal:   seed.ValDescString(iv.ValDesc),
+			}
 		}
 	}
 	return entries
 }
 
 // SecttoModelSect & DisciplinetoModelDiscipline needs to take a resolver so that duplicate Sects arent created when making clans
-func SecttoModelSect(data map[string]seed.Sect) ([]*model.Sect, []*model.Title) {
-	sects := []*model.Sect{}
-	titles := []*model.Title{}
-
+func SecttoModelSect(data map[string]seed.Sect) (map[string]*model.Sect, map[string]*model.Title) {
+	sects, titles := map[string]*model.Sect{}, map[string]*model.Title{}
 	for _, v := range seed.SectMap {
+		name := strings.ToLower(v.Name)
 		tempT := []*model.Title{}
 
 		for _, iv := range v.Titles {
-			
-			tempT = append(
-				tempT,
-				&model.Title{
-					ID:          GenUUID(),
-					Name:        iv.Name,
-					Description: seed.CleanDesc(iv.Description),
-				})
+			tName :=  strings.ToLower(iv.Name)
+			title := &model.Title{
+				ID:          GenUUID(),
+				Name:        tName,
+				Description: seed.CleanDesc(iv.Description),
+			}
+			tempT = append(tempT, title)
+			titles[tName] = title
 		}
 
-		sects = append(
-			sects,
-			&model.Sect{
-				ID:          GenUUID(),
-				Name:        v.Name,
-				Description:  seed.CleanDesc(v.Description),
-				Practices:   v.Practices,
-				Rituals:     v.Rituals,
-				Titles:      tempT,
-			})
-			titles = append(titles, tempT...)
+		sects[name] = &model.Sect{
+			ID:          GenUUID(),
+			Name:        name,
+			Description: seed.CleanDesc(v.Description),
+			Practices:   v.Practices,
+			Rituals:     v.Rituals,
+			Titles:      tempT,
+		}
 	}
 
 	return sects, titles
@@ -93,10 +89,10 @@ func TradtoModelTrad(data []seed.Traditions) ([]*model.Tradition, []*model.Gener
 		tempT := make([]*model.GeneralInfo, len(v.Tradition))
 		for i, v := range v.Tradition {
 			tempT[i] = &model.GeneralInfo{
-					ID:          GenUUID(),
-					Name:        v.Name,
-					Description: seed.CleanDesc(v.Description),
-				}
+				ID:          GenUUID(),
+				Name:        v.Name,
+				Description: seed.CleanDesc(v.Description),
+			}
 		}
 
 		trads = append(
@@ -114,65 +110,54 @@ func TradtoModelTrad(data []seed.Traditions) ([]*model.Tradition, []*model.Gener
 	return trads, entries
 }
 
-func DisciplinetoModelDiscipline(data map[string]seed.Discipline) ([]*model.Discipline, []*model.DiscAbilities) {
-	entries := []*model.Discipline{}
-	discAb := []*model.DiscAbilities{}
+func DisciplinetoModelDiscipline(data map[string]seed.Discipline) (map[string]*model.Discipline, map[string]*model.DiscAbilities) {
+	entries := map[string]*model.Discipline{}
+	abEntries := map[string]*model.DiscAbilities{}
 
 	for _, disc := range data {
+		name := strings.ToLower(disc.Name)
 		tempAb := []*model.DiscAbilities{}
 		for k, v := range disc.Abilities {
-			tempAb = append(tempAb, &model.DiscAbilities{
-				ID: GenUUID(),
-				Name:        k,
+			abName :=  strings.ToLower(k)
+			ab := &model.DiscAbilities{
+				ID:          GenUUID(),
+				Name:        abName,
 				Description: seed.CleanDesc(v.BaseDesc),
 				Lvl:         v.Lvl,
 				System:      seed.ValDescString(v.System),
-			})
+			}
+			tempAb = append(tempAb, ab)
+
+			abEntries[abName]= ab
 		}
 
-		entries = append(entries, &model.Discipline{
-			ID: GenUUID(),
-			Name:        disc.Name,
+		entries[disc.Name] = &model.Discipline{
+			ID:          GenUUID(),
+			Name:       name,
 			Description: seed.CleanDesc(disc.Description),
 			Abilities:   tempAb,
-		})
-		discAb = append(discAb, tempAb...)
+		}
+		
 	}
-	return entries, discAb
+	return entries, abEntries
 }
 
 // Always run after Sects and disciplines are made.
-func ClantoModelClan(allSects []*model.Sect, allDisc []*model.Discipline, clanMap map[string]seed.Clan) []*model.Clan {
-	entries := []*model.Clan{}
-	dCache := make(map[string]*model.Discipline, len(allDisc))
-	sCache := make(map[string]*model.Sect, len(allSects))
+func ClantoModelClan(allSects map[string]*model.Sect, allDisc map[string]*model.Discipline, clanMap map[string]seed.Clan) map[string]*model.Clan {
+	entries := map[string]*model.Clan{}
 
 	for _, v := range clanMap {
 		sect := []*model.Sect{}
 		disc := []*model.Discipline{}
 		for _, s := range v.AssociatedSect {
-			v, ok := sCache[s]
-			if !ok {
-				v = RangeSect(allSects, s)
-				sCache[s] = v
-			}
-
-			sect = append(sect, v)
+			sect = append(sect, allSects[s])
 		}
 
 		for _, d := range v.Discipline {
-			v, ok := dCache[d.Name]
-			if !ok {
-				v = RangeDiscipline(allDisc, d.Name)
-				dCache[d.Name] = v
-			}
-
-			disc = append(disc, v)
+			disc = append(disc, allDisc[d.Name])
 		}
 
-		entries = append(
-			entries,
-			&model.Clan{
+		entries[v.Name] = &model.Clan{
 				ID:             GenUUID(),
 				Name:           v.Name,
 				Description:    seed.CleanDesc(v.Description),
@@ -182,32 +167,11 @@ func ClantoModelClan(allSects []*model.Sect, allDisc []*model.Discipline, clanMa
 				Background:     v.Background,
 				Character:      v.Character,
 				Discipline:     disc,
-				Weakness: v.Weakness,
-				Organizations: &v.Organizations,
-				Strongholds: v.Strongholds,
-				IsHighClan: &v.IsHighClan,
-			},
-		)
-	}
+				Weakness:       v.Weakness,
+				Organizations:  &v.Organizations,
+				Strongholds:    v.Strongholds,
+				IsHighClan:     &v.IsHighClan,
+			}
+		}
 	return entries
 }
-
-func RangeSect(allSect []*model.Sect, name string) *model.Sect {
-	for _, sect := range allSect {
-		if sect.Name == name {
-			return sect
-		}
-	}
-
-	return nil
-}
-func RangeDiscipline(allDisc []*model.Discipline, name string) *model.Discipline {
-	for _, disc := range allDisc {
-		if disc.Name == name {
-			return disc
-		}
-	}
-
-	return nil
-}
-

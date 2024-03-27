@@ -11350,22 +11350,17 @@ var InfoMap = map[string]map[string]Characteristic{
 		},
 		"domain": {
 			BaseDesc: `Domain is physical territory (usually within the
-				chronicle’s central city) to which your character con-
-				trols access for the purpose of feeding. Some Kindred
+				chronicle’s central city) to which your character controls access for the purpose of feeding. Some Kindred
 				refer to their domain as hunting grounds, and most
-				jealously guard their domains, even invoking the Tra-
-				dition of the same name to protect their claims. As
+				jealously guard their domains, even invoking the Trdition of the same name to protect their claims. As
 				part of this Background, the character’s claim to the
-				domain is recognized by the Prince or some other Kin-
-				dred authority in the city where it is located.
+				domain is recognized by the Prince or some other Kindred authority in the city where it is located.
 				The Kindred who claims the domain can’t keep the
 				living inhabitants from going about their business,
 				nor does she exercise any direct influence over them,
-				but she can keep watch herself and mind their com-
-				ings and goings. She can also have Allies or Retainers
+				but she can keep watch herself and mind their comings and goings. She can also have Allies or Retainers
 				specifically look for unfamiliar vampires and alert her
-				when they find some.Each level of Domain reduces the difficulty of hunt-
-				ing checks by one for your character and those whom
+				when they find some.Each level of Domain reduces the difficulty of hunting checks by one for your character and those whom
 				the character allows in.`,
 			ValDesc: map[string]string{
 				"1": "A single small building, such as a single-family home or a social establishment — enough for a basic haven.",
@@ -11398,8 +11393,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			manner of privileges when moving in mortal society,
 			but can also attract an unwanted amount of attention
 			now that you’re no longer alive. The greatest weapon
-			fame has to offer is the ability to sway public opin-
-			ion — as modern media constantly proves. Fame isn’t
+			fame has to offer is the ability to sway public opinion — as modern media constantly proves. Fame isn’t
 			always tied to entertainment: A heinous criminal in
 			a high-profile trial probably has a certain amount of
 			fame, as do a lawmaker and a scientist who has made a
@@ -11427,8 +11421,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			BaseDesc: `This Background represents your Generation: the
 			purity of your blood, and your proximity to the First
 			Vampire. A high Generation rating may represent
-			a powerful sire or a decidedly dangerous taste for di-
-			ablerie. If you don’t take any dots in this Trait, you
+			a powerful sire or a decidedly dangerous taste for diablerie. If you don’t take any dots in this Trait, you
 			begin play as a Thirteenth Generation vampire.`,
 			ValDesc: map[string]string{
 				"1": `Twelfth Generation: 11 blood pool,
@@ -11466,8 +11459,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			represents the sum of your opinion- or policy-swaying
 			power in your community, particularly among the police and bureaucracy. In some cases, cultivating Influence is a path to generating Resources (see below).
 			Some rolls may require you to use Influence in place
-			of an Ability, particularly when attempting to sway minor bureaucrats. It’s easier to institute sweeping chang-
-			es on a local level than a worldwide scale (e.g., having
+			of an Ability, particularly when attempting to sway minor bureaucrats. It’s easier to institute sweeping changes on a local level than a worldwide scale (e.g., having
 			an “abandoned” building demolished is relatively easy,
 			while starting a war is a bit more difficult).`,
 			ValDesc: map[string]string{
@@ -11490,8 +11482,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			not be direct. Depending on the number of dots in this
 			Background, your mentor might be nothing more than
 			a vampire with a remarkable information network, or
-			might be a centuries-old creature with tremendous in-
-			fluence and supernatural power. He may offer advice,
+			might be a centuries-old creature with tremendous influence and supernatural power. He may offer advice,
 			speak to the Prince or Archbishop on your behalf,
 			steer other elders clear of you, or warn you when you’re
 			walking into situations you don’t understand.
@@ -11525,18 +11516,14 @@ var InfoMap = map[string]map[string]Characteristic{
 			character controls. These assets may be actual cash,
 			but as this Background increases, they’re more likely
 			to be investments, property, or earning capital of some
-			sort — land, industrial assets, stocks and bonds, com-
-			mercial inventories, criminal infrastructure, contra-
-			band, even taxes or tithes. Remember that vampires
+			sort — land, industrial assets, stocks and bonds, commercial inventories, criminal infrastructure, contraband, even taxes or tithes. Remember that vampires
 			don’t need to arrange for any food except blood and
 			their actual needs (as opposed to wants) for shelter are
 			very easily accommodated. Resources for vampires go
 			mostly to pay for luxuries and the associated expenses
 			of developing and maintaining Status, Influence, and
-			other Backgrounds. A character with no dots in Re-
-			sources may have enough clothing and supplies to get
-			by, or she may be destitute and squatting in a refrigera-
-			tor box under an overpass.`,
+			other Backgrounds. A character with no dots in Resources may have enough clothing and supplies to get
+			by, or she may be destitute and squatting in a refrigerator box under an overpass.`,
 			ValDesc: map[string]string{
 				"1": `Sufficient. You can maintain a typical
 				residence in the style of the working
@@ -11600,20 +11587,16 @@ var InfoMap = map[string]map[string]Characteristic{
 			},
 		},
 		"retainers": {
-			BaseDesc: `Not precisely Allies or Contacts, your retainers are ser-
-			vants, assistants, or other people who are your loyal and
+			BaseDesc: `Not precisely Allies or Contacts, your retainers are servants, assistants, or other people who are your loyal and
 			steadfast companions. Many vampires’ servants are ghouls their supernatural powers and blood bond-en-
 			forced loyalty make them the servants of choice. Retainers
 			may also be people whom you’ve repeatedly Dominated
 			until they have no free will left, or followers so enthralled
-			with your Presence that their loyalty borders on blind fa-
-			naticism. Some vampires, particularly those with the Ani-
-			malism Discipline, use animal ghouls as retainers.
+			with your Presence that their loyalty borders on blind fanaticism. Some vampires, particularly those with the Animalism Discipline, use animal ghouls as retainers.
 			You must maintain some control over your retainers,
 			whether through a salary, the gift of your vitae, or the
 			use of Disciplines. Retainers are never “blindly loyal no
-			matter what” — if you treat them poorly without exer-
-			cising strict control, they might well turn on you.
+			matter what” — if you treat them poorly without exercising strict control, they might well turn on you.
 			Retainers may be useful, but they should never be
 			flawless.`,
 			ValDesc: map[string]string{
@@ -11627,8 +11610,7 @@ var InfoMap = map[string]map[string]Characteristic{
 		"rituals": {
 			BaseDesc: `This Background is for Sabbat characters only.
 			You know the ritae and rituals of the Sabbat, and you
-			can enact many of them. This Background is vital to be-
-			ing a Pack Priest — without this Background, ritae will
+			can enact many of them. This Background is vital to being a Pack Priest — without this Background, ritae will
 			not function. This Background is actually a supernatural
 			investment, drawing on the magic of the eldest Tzimisce
 			sorcerers. Sabbat vampires who are not their pack‘s
@@ -11679,8 +11661,7 @@ var InfoMap = map[string]map[string]Characteristic{
 			particular bloodline as it is by personal achievement.
 			Among the Sabbat, status is more likely to stem from
 			the reputation of your pack or the zeal of your outlook.
-			Elders are known for having little respect for their ju-
-			niors; this Background can mitigate that somewhat`,
+			Elders are known for having little respect for their juniors; this Background can mitigate that somewhat`,
 			ValDesc: map[string]string{
 				"1": "Known: a neonate/Pack Priest",
 				"2": "Respected: an ancilla/respected Ductus",
@@ -11709,8 +11690,7 @@ var VirtueMap = map[string]Characteristic{
 		},
 	},
 	"selfControl": {
-		BaseDesc: `Self-Control defines a character’s discipline and mas-
-		tery over the Beast. Characters with high Self-Control
+		BaseDesc: `Self-Control defines a character’s discipline and mastery over the Beast. Characters with high Self-Control
 		rarely succumb to emotional urges, and are thus able to
 		restrain their darker sides more readily than characters
 		with low Self-Control.`,
@@ -11725,12 +11705,10 @@ var VirtueMap = map[string]Characteristic{
 	"courage": {
 		BaseDesc: `All characters have a Courage Trait, regardless of
 		the Path they follow. Courage is the quality that allows
-		characters to stand in the face of fear or daunting ad-
-		versity. It is bravery, mettle, and stoicism combined. A
+		characters to stand in the face of fear or daunting adversity. It is bravery, mettle, and stoicism combined. A
 		character with high Courage meets her fears head-on,
 		while a character of lesser Courage may flee in terror.
-		Kindred use the Courage Virtue when faced with cir-
-		cumstances they endemically dread: fire, sunlight, True
+		Kindred use the Courage Virtue when faced with circumstances they endemically dread: fire, sunlight, True
 		Faith.`,
 		ValDesc: map[string]string{
 			"1": "Timid",
@@ -11764,14 +11742,11 @@ var EntryMap = map[string]Entry{
 	},
 	"Whither Mortis": {
 		Name: "Rötschreck",
-		Description: `Lost Clans and bloodlines, such as the Cap-
-		padocians and the Lamia, had access to an
+		Description: `Lost Clans and bloodlines, such as the Cappadocians and the Lamia, had access to an
 		ancient Discipline known as Mortis. Some
-		Kindred scholars claim that Mortis and Nec-
-		romancy are distinct Disciplines, but for ease
+		Kindred scholars claim that Mortis and Necromancy are distinct Disciplines, but for ease
 		the three Mortis paths presented in this book
-		are listed as Necromancy paths. The Cappa-
-		docians specialized in either the
+		are listed as Necromancy paths. The Cappadocians specialized in either the
 		Corpse in the Monster or the Grave’s Decay,
 		while the Lamia generally took
 		the Path of the Four Humors as their primary
@@ -11779,8 +11754,7 @@ var EntryMap = map[string]Entry{
 		in the Sabbat have relearned the
 		Corpse in the Monster and the Grave’s Decay,
 		claiming them collectively as the “Mortuus
-		Path,” but they still tend to follow most mod-
-		ern necromancers and choose Sepulchre Path
+		Path,” but they still tend to follow most modern necromancers and choose Sepulchre Path
 		as their primary path before learning Grave’s
 		Decay or the Corpse in the Monster.`,
 	},
@@ -11797,14 +11771,12 @@ var EntryMap = map[string]Entry{
 		his victim laid bare.
 		A target trying to avoid eye contact can make
 		a Willpower roll against a difficulty equal to
-		Dominate user’s Manipulation + Intimida-
-		tion (or other appropriate combination for
+		Dominate user’s Manipulation + Intimidation (or other appropriate combination for
 		other Disciplines or specific situations). The difficulty may be
 		reduced for mitigating factors: -1 in the case
 		of the target obscuring his eyes slightly (such
 		as closing her eyes or wearing dark sunglasses)
-		up to a -3 for the eyes being completely un-
-		seen (such as with a thick blindfold or having
+		up to a -3 for the eyes being completely unseen (such as with a thick blindfold or having
 		her eyes torn out).`,
 	},
 	"vaulderie": {
@@ -11834,6 +11806,6 @@ func ValDescString(val map[string]string) []string {
 func CleanDesc(val string) string {
 	val = strings.ReplaceAll(val, "\n", " ")
 	val = strings.ReplaceAll(val, "\t", "")
-	return val
+	return strings.TrimSpace(val)
 }
 

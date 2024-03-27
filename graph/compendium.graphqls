@@ -97,7 +97,6 @@ enum charType {
     background
 }
 
-
 type Query {
     # GetAll Queries
         characteristics: [Characteristic]!
@@ -107,5 +106,6 @@ type Query {
     # GetOne
         getSect(name: [String!]): [Sect]
         getTradition(name: String!): Tradition
-        getGenInfo(name: String): GeneralInfo
+        GenInfoByName(name: String!): GeneralInfo
+        GenByID(id: ID!): GeneralInfo
 }
