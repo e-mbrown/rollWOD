@@ -1,0 +1,34 @@
+{
+   //jsx-a11y catches simple accessability errors [eslint-plugin-jsx-a11y]
+    //import plugin allows eslint to follow imports [eslint-plugin-import]
+    "extends": 
+    [
+      "next/core-web-vitals",
+      "eslint:recommended",
+      "plugin:import/errors",
+      "plugin:react/recommended",
+      "plugin:jsx-a11y/recommended",
+      "plugin:react-hooks/recommended",
+      //Always last
+      "prettier"
+  ],
+  "rules": {
+    //0 means not error, 1 means warn, 2 error maybe
+    //Turning react prop-types off because either use typescript or dont type
+    "react/prop-types": 0,
+    "react/react-in-jsx": 0,
+    "no-console": "warn"
+  },
+  "settings": {
+    "react": {
+        //look in pkg.json and find my react version
+        "version": "detect"
+    },
+    "import/resolver": {
+        "node": {
+            //Lookat js and jsx files
+            "extensions": [".js", ".jsx"]
+        }
+    }
+}
+}

@@ -13,31 +13,49 @@ import (
 	"github.com/e-mbrown/rollWOD/graph/model"
 )
 
-// Characteristics is the resolver for the characteristics field.
-func (r *queryResolver) Characteristics(ctx context.Context) ([]*model.Characteristic, error) {
-	allChar := []*model.Characteristic{}
-	for _, v := range r.characteristics {
-		allChar = append(allChar, v)
+// Archetypes is the resolver for the archetypes field.
+func (r *queryResolver) Archetypes(ctx context.Context) ([]*model.Archetypes, error) {
+	res := []*model.Archetypes{}
+	for _, v := range r.archetypes {
+		res = append(res, v)
 	}
-	return allChar, nil
+	return res, nil
 }
 
-// Titles is the resolver for the titles field.
-func (r *queryResolver) Titles(ctx context.Context) ([]*model.Title, error) {
-	allT := []*model.Title{}
-	for _, v := range r.titles {
-		allT = append(allT, v)
+// Characteristics is the resolver for the characteristics field.
+func (r *queryResolver) Characteristics(ctx context.Context) ([]*model.Characteristic, error) {
+	res := []*model.Characteristic{}
+	for _, v := range r.characteristics {
+		res = append(res, v)
 	}
-	return allT, nil
+	return res, nil
+}
+
+// Clans is the resolver for the clans field.
+func (r *queryResolver) Clans(ctx context.Context) ([]*model.Clan, error) {
+	res := []*model.Clan{}
+	for _, v := range r.clans {
+		res = append(res, v)
+	}
+	return res, nil
 }
 
 // Sects is the resolver for the sects field.
 func (r *queryResolver) Sects(ctx context.Context) ([]*model.Sect, error) {
-	allSects := []*model.Sect{}
+	res := []*model.Sect{}
 	for _, v := range r.sects {
-		allSects = append(allSects, v)
+		res = append(res, v)
 	}
-	return allSects, nil
+	return res, nil
+}
+
+// Titles is the resolver for the titles field.
+func (r *queryResolver) Titles(ctx context.Context) ([]*model.Title, error) {
+	res := []*model.Title{}
+	for _, v := range r.titles {
+		res = append(res, v)
+	}
+	return res, nil
 }
 
 // Traditions is the resolver for the traditions field.
@@ -55,7 +73,6 @@ func (r *queryResolver) GetSect(ctx context.Context, name []string) ([]*model.Se
 		if ok {
 			res = append(res, val)
 		} else {
-			fmt.Print(n)
 			graphql.AddErrorf(ctx, "Non-fatal error: parameter '%s' is not a sect", n)
 		}
 	}
@@ -84,6 +101,21 @@ func (r *queryResolver) GenInfoByName(ctx context.Context, name string) (*model.
 // GenByID is the resolver for the GenByID field.
 func (r *queryResolver) GenByID(ctx context.Context, id string) (*model.GeneralInfo, error) {
 	panic(fmt.Errorf("not implemented: GenByID - GenByID"))
+}
+
+// CharByType is the resolver for the charByType field.
+func (r *queryResolver) CharByType(ctx context.Context, typeArg *model.CharType) ([]*model.Characteristic, error) {
+	res := []*model.Characteristic{}
+	for _, v := range r.characteristics {
+		if v.Type == *typeArg {
+			res = append(res, v)
+		}
+	}
+	if len(res) == 0 {
+		graphql.AddErrorf(ctx, "Non-fatal error: %s is not a charType", typeArg)
+		return nil, graphql.GetErrors(ctx)
+	}
+	return res, nil
 }
 
 // Query returns QueryResolver implementation.

@@ -36,6 +36,18 @@ func (this Age) GetID() *string         { return this.ID }
 func (this Age) GetName() string        { return this.Name }
 func (this Age) GetDescription() string { return this.Description }
 
+type Archetypes struct {
+	ID          *string `json:"id,omitempty"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Sys         string  `json:"sys"`
+}
+
+func (Archetypes) IsEntry()                    {}
+func (this Archetypes) GetID() *string         { return this.ID }
+func (this Archetypes) GetName() string        { return this.Name }
+func (this Archetypes) GetDescription() string { return this.Description }
+
 type Campaign struct {
 	ID           string      `json:"id"`
 	User         []*User     `json:"user,omitempty"`

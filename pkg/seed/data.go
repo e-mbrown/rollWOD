@@ -56,6 +56,12 @@ type disciplineAbility struct {
 	System   map[string]string
 }
 
+type Archetypes struct {
+	Name        string
+	Description string
+	Sys         string
+}
+
 var ClanMap = map[string]Clan{
 	"Assamite": {
 		Name: "Assamite",
@@ -66,25 +72,20 @@ var ClanMap = map[string]Clan{
 		hire. Outside the purview of the Sects, the Assamites
 		are true independents and mercenaries, hiring out to
 		whoever can pay their blood-price and ungoverned by
-		the will of Prince or Priscus.n truth, the Assamites are more than simple thugs and killers. Theirs is a complex but insular Clan predi-
-		cated upon the three principles of wisdom, sorcery, and
+		the will of Prince or Priscus. In truth, the Assamites are more than simple thugs and killers. Theirs is a complex but insular Clan predicated upon the three principles of wisdom, sorcery, and
 		diablerie. Most Assamites that other vampires encounter
 		are members of the warrior caste, however, so Kindred
 		society has painted them all with that brush. For their
-		part, the Assassins have done nothing to stop this misun-
-		derstanding. If it helps them acquire contracts and it oc-
-		cludes the true nature of their Clan, the better for them.
+		part, the Assassins have done nothing to stop this misunderstanding. If it helps them acquire contracts and it occludes the true nature of their Clan, the better for them.
 		`,
 		Appearance: `Older Assamites often come from Middle
 		Eastern and North African cultures, though more and
 		more young Assamites come from a wider demographic. In traditional
-		environments, the Assamites prefer garb appropriate to religious or Clan custom. When in public, however, Assamites wear whatever the locals do, allowing them to fulfill their contracts without anyone no-
-		ticing anything amiss. An Assamite’s skin grows darker with age (as opposed to other vampires, whose skin gets paler); particularly ancient
+		environments, the Assamites prefer garb appropriate to religious or Clan custom. When in public, however, Assamites wear whatever the locals do, allowing them to fulfill their contracts without anyone noticing anything amiss. An Assamite’s skin grows darker with age (as opposed to other vampires, whose skin gets paler); particularly ancient
 		Assamites are almost ebony in complexion.`,
 		Background: ` Those Embraced into Clan Assamite tend
 		to fall into two distinct types: The “provincial” members of
-		the Clan fit whatever their locality is, and can blend seam-
-		lessly in with the people around them. The higher-profile
+		the Clan fit whatever their locality is, and can blend seamlessly in with the people around them. The higher-profile
 		“jet-setters” transcend cultures, bolstered by their ability
 		to handle interpersonal and intellectual challenges.`,
 		Character: `Physical Attributes tend to be
@@ -124,31 +125,25 @@ var ClanMap = map[string]Clan{
 	"FollowersofSet": {
 		Name: "Follower of Set",
 		AssociatedSect: []string{
-			"Camarilla","Sabbat",
+			"Camarilla", "Sabbat",
 		},
 		Description: `Addiction, debasement, corruption, and desperation strike fear into many Kindred who worry that theirs will become an unlife of ruin, but to the Followers of Set, these and more are the tools of the trade. Pimps, pushers, and
 		priests, the Setites cater to
 		the needs of the desperate,
-		and convert them to a ni-
-		hilistic cause in doing
-		so.he Followers of Set are as much a chthonic reli-
-		gion as they are a Clan, though the faith includes the
-		Clan. Its mythology is complex and convoluted, an im-
-		penetrable pantheon of god-monsters. At the apex of
+		and convert them to a nihilistic cause in doing
+		so.he Followers of Set are as much a chthonic religion as they are a Clan, though the faith includes the
+		Clan. Its mythology is complex and convoluted, an impenetrable pantheon of god-monsters. At the apex of
 		this worship stands a syncretism of the Egyptian Lord
 		of the Underworld Set and the Greek hydra Typhon,
 		as much spiritual guardians of secret places as they are
 		the “liberators” of other’s souls`,
 		Appearance: `Many older Setites hail from the
 		North African and Mediterranean ethnicities native to
-		the Serpents’ historical territory, but they freely Em-
-		brace from among the mortals of their adopted homes.
+		the Serpents’ historical territory, but they freely Embrace from among the mortals of their adopted homes.
 		Some long-standing Setite temples are tied to loca-
 		tions where “Egyptian” Serpents might seem out of
 		place, but where some aspect of serpent mythology is
-		53VAMPIRE THE MASQUERADE 20th ANNIVERSARY EDITION
-		present, as in Mesoamerica or even far-flung Nordic lo-
-		cales, and thus draw their membership from local popu-
+		present, as in Mesoamerica or even far-flung Nordic locales, and thus draw their membership from local popu-
 		lations. Red hair is considered a mark of Set’s favor.
 		`,
 		Background: ` Prospective childer for the Followers of
@@ -159,18 +154,14 @@ var ClanMap = map[string]Clan{
 		loners, or otherwise marginalized by society, which is
 		often what led them to the forbidden fruits offered by
 		the cult of Set in the first place.`,
-		Character: `Sires choose those who demon-
-		strate acumen in Social and Mental Attributes, as the
+		Character: `Sires choose those who demonstrate acumen in Social and Mental Attributes, as the
 		Clan needs its proselytizers and its priests to be charismatic
 		and quick-witted. Knowledges are almost always primary,
 		though Talents may be so instead, especially among those
 		Serpents engaged in dealings with others. Setites focus
 		on Backgrounds that give influence over others whether
-		subtly or overtly, making Allies, Contacts, Influence, Re-
-		sources, and sometimes Retainers popular.`,
-		Haven: `Where their hidden temples stand, the Set-
-		ites make their havens, either individually or commu-
-		nally. These may be anything from “churches” with
+		subtly or overtly, making Allies, Contacts, Influence, Resources, and sometimes Retainers popular.`,
+		Haven: `Where their hidden temples stand, the Setites make their havens, either individually or communally. These may be anything from “churches” with
 		never-before-heard-of denominations or they may be
 		outright cults that have to hide their existences. The
 		secretive Serpents sometimes hide individual havens
@@ -182,8 +173,7 @@ var ClanMap = map[string]Clan{
 		Discipline: []Discipline{
 			DisciplineMap[`presence`], DisciplineMap[`obfuscate`], DisciplineMap[`serpentis`],
 		},
-		Weakness: `Given their origins in darkness, the Ser-
-		pents react negatively to bright light: Add two health
+		Weakness: `Given their origins in darkness, the Serpents react negatively to bright light: Add two health
 		levels to damage caused by exposure to sunlight. Setites
 		also lose one die from dice pools for actions taken in
 		bright light (police spotlights, stage lights, flares, etc.).`,
@@ -213,47 +203,39 @@ var ClanMap = map[string]Clan{
 		connection to passion can be a blessing, but inspiration
 		can also yield to the madness and hunger of the Beast.
 		`,
-		Appearance: `Many Brujah affect styles and manner-
-		isms that reflect an attitude of rebellion. Multicolored
+		Appearance: `Many Brujah affect styles and mannerisms that reflect an attitude of rebellion. Multicolored
 		hair, shaven heads, spikes, rivets, fetish gear, and t-shirts
 		with bold slogans might appeal to a Brujah. While not
 		every Brujah wears the “uniform,” the Rabble often enjoy
 		adorning themselves in outfits intended to provoke. Some
-		young Brujah prefer mobile devices as their tools of resis-
-		tance, and can summon a riot at the touch of a screen.`,
+		young Brujah prefer mobile devices as their tools of resistance, and can summon a riot at the touch of a screen.`,
 		Background: `As creatures of passion, Brujah often
 		Embrace without really thinking much about it, and
 		their childer tend to be a disparate lot. Sometimes, the
 		Rabble Embrace those who share a similar outlook or
 		enthusiasm for a cause as the prospective sire. Other
-		times, they inflict the Embrace on those of opposite ide-
-		ology, cursing a rival with vampirism as punishment.`,
+		times, they inflict the Embrace on those of opposite ideology, cursing a rival with vampirism as punishment.`,
 		Character: `Brujah are usually — though
 		not exclusively — drawn from mortals with violent
-		or ungovernable personalities. Their Natures and De-
-		meanors are often similar, as Brujah have little use for
-		guile. They lean toward physical Attributes, with So-
-		cial and Mental about equal afterwards. Many favor
+		or ungovernable personalities. Their Natures and Demeanors are often similar, as Brujah have little use for
+		guile. They lean toward physical Attributes, with Social and Mental about equal afterwards. Many favor
 		Skills and Talents, but most respect the Knowledges
 		that make them more than just thugs. Contacts, Allies,
 		and Herd are common Backgrounds.`,
 		AssociatedSect: []string{
-			"Camarilla","Sabbat",
+			"Camarilla", "Sabbat",
 		},
-		Haven: `Brujah may feel kinship to a city, but they rare-
-		ly develop such ties to individual locations. Thus, at any
+		Haven: `Brujah may feel kinship to a city, but they rarely develop such ties to individual locations. Thus, at any
 		given time, a Brujah probably has a half-dozen or more
 		hideouts, safehouses, and flats available. These are often
 		shabby and ill-kept until the Brujah needs them. Brujah
 		havens might also have mortals who follow the Brujah’s
 		ideology or his cult of personality. This works out fine: It
 		never hurts to have a spare vessel in an emergency.`,
-		Weakness: `The same passions that inspire Bru-
-		jah to greatness or depravity, left unchecked, can send
+		Weakness: `The same passions that inspire Brujah to greatness or depravity, left unchecked, can send
 		them into incandescent rages: The difficulties of rolls
 		to resist or guide frenzy (p. 298) are two higher than
-		normal. Additionally, a Brujah may never spend Will-
-		power to avoid frenzy, though he may spend a point of
+		normal. Additionally, a Brujah may never spend Willpower to avoid frenzy, though he may spend a point of
 		Willpower to end a frenzy that has already begun.`,
 		Discipline: []Discipline{
 			DisciplineMap[`celerity`], DisciplineMap[`potence`], DisciplineMap[`presence`],
@@ -279,8 +261,7 @@ var ClanMap = map[string]Clan{
 		},
 		Haven: `Gangrel often lair where they can, taking
 		refuge when the sun threatens to rise. Those who do
-		maintain permanent havens often lean toward the util-
-		itarian: Everything from a cave to a covered alley to an
+		maintain permanent havens often lean toward the utilitarian: Everything from a cave to a covered alley to an
 		illegal squat may serve as a Gangrel haven, usually with
 		little demarcating them as any sort of personal territory
 		(until it’s too late for the unfortunate interloper).`,
@@ -288,10 +269,8 @@ var ClanMap = map[string]Clan{
 		 after long hunts during which the prospective childe
 		 doesn’t even know she’s being followed. Creating a
 		 fledgling means sharing limited resources, so each sire-
-		 childe relationship is unique and significant. Outland-
-		 ers Embrace because they choose an individual, not
-		 out of whim or recklessness. Those who earn their at-
-		 tention are hardy, whether physically or emotionally.`,
+		 childe relationship is unique and significant. Outlanders Embrace because they choose an individual, not
+		 out of whim or recklessness. Those who earn their attention are hardy, whether physically or emotionally.`,
 		Character: `Sufficiency is the Gangrel hallmark, and many have outsider or loner personality archetypes. Physical Attributes are far and away most
 		frequent, as are Talents with a smattering of Skills and Knowledges. Many Gangrel focus on Disciplines rather than Backgrounds, preferring to rely on themselves more than others. Gangrel almost never have significant Resources, Influence, or Retainers.`,
 		Discipline: []Discipline{
@@ -301,16 +280,14 @@ var ClanMap = map[string]Clan{
 		acquires a temporary animal Characteristic (which
 		may replace an existing temporary one). A patch of
 		fur, a brief torpor after feeding, or skittishness around
-		crowds — all of these may mar an Outlander after fren-
-		zy. Characteristics acquired in Gangrel frenzies need
+		crowds — all of these may mar an Outlander after frenzy. Characteristics acquired in Gangrel frenzies need
 		not only be physical – they can be behavioral as well.
 		Players should work with the Storyteller to determine
 		what new animal trait is acquired (whether the frenzy
 		involved the fight-or-flight impulse may be relevant).
 		Over time, or in an exceptional situation, a particular animal feature may become permanent, with the
 		next frenzy adding a new feature.`,
-		Organizations: `Regional groups of Gangrel occasion-
-		ally assemble in convocations that draw from ethnic or
+		Organizations: `Regional groups of Gangrel occasionally assemble in convocations that draw from ethnic or
 		cultural influences. These are informal affairs, geared
 		more toward sharing information and revelry than advancing any cogent agenda. Aside from these infrequent gatherings, almost all Gangrel organization is very local where it exists at all, from pairs of sire-and-childe through terrifying packs centered around one
 		accomplished Outlander.`,
@@ -362,11 +339,9 @@ var ClanMap = map[string]Clan{
 		bay or give themselves wholly to it, the Lasombra beat
 		the Beast into submission,
 		invoking it when it
-		suits them but leav-
-		ing it trapped inside
+		suits them but leaving it trapped inside
 		when they wish to
-		govern themselves. the Clan was instru-
-		mental not only in establishing many of the rituals of
+		govern themselves. the Clan was instrumental not only in establishing many of the rituals of
 		the Sabbat, but in the institutions that keep it from
 		descending into chaos each night.
 		Whether they see themselves as God’s instruments
@@ -410,11 +385,9 @@ var ClanMap = map[string]Clan{
 		the Keeper does not reflect.`,
 		Organizations: `For the Lasombra, the nights of high
 		aristocracy never faded, and the titles and offices a
-		modern onlooker might associate with history still car-
-		ry great weight among the Keepers. A complex system
+		modern onlooker might associate with history still carry great weight among the Keepers. A complex system
 		of patronage, mentorship, and lineage characterizes
-		the Clan, similar to the courts and churches of cen-
-		turies gone by. Childer benefit greatly from esteemed
+		the Clan, similar to the courts and churches of centuries gone by. Childer benefit greatly from esteemed
 		sires and vice versa, while acts that confer Sect or Clan
 		status may also elevate a Lasombra’s peers, so long as
 		she associates her success with her fellows.`,
@@ -428,37 +401,30 @@ var ClanMap = map[string]Clan{
 		may appear disheveled, injured, or simply dirty. They
 		could still be wearing the same clothes from the night
 		of their Embrace or they may have stolen clothes from
-		a laundromat or a department store during a fit of con-
-		fusion or fugue. Of course, Malkavians are just as likely
+		a laundromat or a department store during a fit of confusion or fugue. Of course, Malkavians are just as likely
 		to be meticulous and exacting in their appearance, trying obsessively to appear as normal as possible.`,
 		Description: `Clan Malkavian is twice damned: once by the curse
-		of being Kindred, and again by the turmoil that dis-
-		turbs their hearts and minds. Upon the Embrace, ev-
-		ery Malkavian is afflicted with an insurmountable
+		of being Kindred, and again by the turmoil that disturbs their hearts and minds. Upon the Embrace, every Malkavian is afflicted with an insurmountable
 		insanity that fractures her outlook for every night
 		thereafter, making her unlife one of madness.
 		Some consider this a form of oracular insight,
 		while others simply consider them dangerous.Make no mistake: Malkavian insanity is a
 		painful, alienating phenomenon, but it occa-
-		sionally provides the Lunatics with bursts of in-
-		sight or heretofore unknown perspective. Madness
+		sionally provides the Lunatics with bursts of insight or heretofore unknown perspective. Madness
 		for the Malkavians may take the form of any clinical
 		form of insanity, or it may be a hyperacuity of senses
-		others don’t know they have; a supernatural puppe-
-		teer pulling the Malkavian’s strings, or a sense that
+		others don’t know they have; a supernatural puppeteer pulling the Malkavian’s strings, or a sense that
 		the Malkavian is somehow ahead of evolutionary
 		schedule. Their precarious stability makes it hard for other
 		Kindred (or, indeed, any vessels with whom they may
 		meet) to interact with Malkavians. `,
 		AssociatedSect: []string{
-			"Camarilla",	},
+			"Camarilla"},
 		Haven: `Consistency is rare among Malkavians.
 		Quite simply, they establish havens where they think
-		to, where they can, and where they can recall. A sig-
-		nificant number of Malkavians have literally no home,
+		to, where they can, and where they can recall. A significant number of Malkavians have literally no home,
 		spending each night where exhaustion or the sun’s rays
-		leave them. Others may permanently have the presi-
-		dential suite in a posh hotel, a squat in the Barrens,
+		leave them. Others may permanently have the presidential suite in a posh hotel, a squat in the Barrens,
 		the dispensary at a county jail, or a broom closet in a
 		historical landmark.
 		`,
@@ -466,22 +432,18 @@ var ClanMap = map[string]Clan{
 		 one would assume from them. Lunatic childer come from
 		 all economic and cultural strata, though most have
 		 some sort of hard-luck story or black secret behind
-		 them that caused their sire to take note. Truly dam-
-		 aged Malkavians who are unaware of the meanings
+		 them that caused their sire to take note. Truly damaged Malkavians who are unaware of the meanings
 		 of their actions may not even be aware that they
 		 have sired childer, which makes for very difficult
 		 entry into Kindred society for these castoffs, many
 		 of whom end up among the Caitiff.`,
 		Character: `Loner, outsider, and deviant
-		concepts and archetypes prevail among the Malka-
-		vians, as do Mental Attributes (with an occasional
+		concepts and archetypes prevail among the Malkavians, as do Mental Attributes (with an occasional
 		Social-primary madman or Physical-primary maniac
 		hiding among the ranks). Talents and Knowledges
 		are likely most popular among Malkavians. Backgrounds
-		tend to be either broad and shallow or few and deep, rep-
-		resenting the way the way the Malkavian caroms through
-		unlife. Virtues, Humanity, and Paths often tumble quick-
-		ly, usually in the wake of Willpower doing the same.
+		tend to be either broad and shallow or few and deep, representing the way the way the Malkavian caroms through
+		unlife. Virtues, Humanity, and Paths often tumble quickly, usually in the wake of Willpower doing the same.
 		`,
 		Discipline: []Discipline{
 			DisciplineMap[`auspex`], DisciplineMap[`dementation`], DisciplineMap[`obsfucate`],
@@ -493,13 +455,11 @@ var ClanMap = map[string]Clan{
 		they can never recover from their original derangement.
 		`,
 		Organizations: ` Rumor is more widespread than truth with
-		regard to Malkavian organization, and any number of har-
-		rowing tales describe the function of the Clan. Some say
+		regard to Malkavian organization, and any number of harrowing tales describe the function of the Clan. Some say
 		the Lunatics all share a hive consciousness; others claim
 		that this is in fact the lingering consciousness of the Clan’s
 		progenitor Malkav. Still others claim that a network of
-		madness puts all Malkavians in contact with one anoth-
-		er and is the cause of their crippling insanity. If nothing
+		madness puts all Malkavians in contact with one another and is the cause of their crippling insanity. If nothing
 		else, the Malkavians prove inscrutable and uncanny. One night, each of them frenzies when they see one another,
 		while the next night, they all converge at the same time
 		at the Sheriff’s haven and accuse him of harboring Sabbat
@@ -508,16 +468,12 @@ var ClanMap = map[string]Clan{
 	},
 	"Nosferatu": {
 		Name: "Nosferatu",
-		Appearance: `Physical horror is the lot of the Nosfer-
-		atu, and their unsettling deformations are countless.
-		No two Nosferatu share the exact same malforma-
-		tion, and the Clan is a freakshow of snarled limbs,
-		fanged protrusions, hellish countenances, serpen-
-		tine spines, ruined faces, spasmodic appendages, and
+		Appearance: `Physical horror is the lot of the Nosferatu, and their unsettling deformations are countless.
+		No two Nosferatu share the exact same malformation, and the Clan is a freakshow of snarled limbs,
+		fanged protrusions, hellish countenances, serpentine spines, ruined faces, spasmodic appendages, and
 		even features not usually seen on the mortal stock
 		from which the Nosferatu are drawn. The Sewer
-		Rats often hide these disfigurements under shape-
-		less robes and rags, but some exult in the discomfort
+		Rats often hide these disfigurements under shapeless robes and rags, but some exult in the discomfort
 		their presence causes, and don’t bother disguising
 		them. They may even emphasize them`,
 		Description: `Those who doubt that the Embrace is a curse need
@@ -535,7 +491,7 @@ var ClanMap = map[string]Clan{
 		to be an object of utter revulsion and not let it shape
 		one’s disposition toward one’s “Kindred” in some way.`,
 		AssociatedSect: []string{
-			"Camarilla","Autarkis", "Anarchs",
+			"Camarilla", "Autarkis", "Anarchs",
 		},
 		Haven: `Nosferatu Kindred often make their havens
 		far from the scorn and spite of other vampires. Whether they construct warrens in the sewers suggested by their
@@ -565,9 +521,7 @@ var ClanMap = map[string]Clan{
 		`,
 		Organizations: `Occasionally, a coterie of Nosferatu
 		becomes a brood or cult, often based around a remote
-		warren. These can sprawl into vast “kingdoms” of Sew-
-		er Rats, who often exist without the knowledge of a do-
-		main’s Prince or Archbishop. The Nosferatu are among
+		warren. These can sprawl into vast “kingdoms” of Sewer Rats, who often exist without the knowledge of a domain’s Prince or Archbishop. The Nosferatu are among
 		the Kindred most likely to share a communal haven, if
 		only for protection in numbers. As well, Nosferatu share
 		information with each other via networks — whether
@@ -601,42 +555,31 @@ var ClanMap = map[string]Clan{
 		on the fringes of established territories
 		where they can escape if local Kindred
 		sentiment turns against them. The Ravnos practice a unique Discipline known as Chimerstry that convinces their enemies that they see
-		things that do not exist. Chimerstry does much to con-
-		vince Kindred that the Ravnos trade in lies and misdi-
-		rection, but it can also prove to be a Deceiver’s salva-
-		tion and ease the vagaries of an outcast unlife`,
+		things that do not exist. Chimerstry does much to convince Kindred that the Ravnos trade in lies and misdirection, but it can also prove to be a Deceiver’s salvation and ease the vagaries of an outcast unlife`,
 		AssociatedSect: []string{
 			"Independent",
 		},
 		Haven: `Many Ravnos take to the
-		road instead of establishing perma-
-		nent havens, dwelling temporar-
+		road instead of establishing permanent havens, dwelling temporar-
 		ily among itinerant communities,
-		at roadside rest stops, or even in ve-
-		hicles. When a Deceiver does put
-		down roots in a domain, his per-
-		manent haven is often away from
+		at roadside rest stops, or even in vehicles. When a Deceiver does put
+		down roots in a domain, his permanent haven is often away from
 		high-profile Kindred territories.
-		Havens in ethnic ghettos, indus-
-		trial outskirts, and isolated geog-
-		raphy are safest and most easily
+		Havens in ethnic ghettos, industrial outskirts, and isolated geography are safest and most easily
 		cultivated for the Ravnos.`,
 		Background: `The Ravnos are
 		 scattered and suspicious, and those
 		 childer who don’t have the tendency toward self-sufficiency don’t last long. In many
-		 cases, a Ravnos will either never sire, or sire for com-
-		 panionship or safety, with little concern for how well
+		 cases, a Ravnos will either never sire, or sire for companionship or safety, with little concern for how well
 		 a childe will fare as a vampire. Ravnos rarely seek out
 		 childer actively, instead drawing from those whose
 		 paths they cross on any given night. As such, the hard-
 		 luck drifter reputation tends to follow the Deceivers.`,
 		Character: `Outsider and selfish Natures
-		are common among the Clan. Physical and Social At-
-		tributes predominate, as do Talents and Skills. Savvy
+		are common among the Clan. Physical and Social Attributes predominate, as do Talents and Skills. Savvy
 		Ravnos develop a breadth of Backgrounds that can
 		give them an edge when they’re on the move or in a
-		tight spot, such as stashed Resources, defensible Do-
-		main, and a few Allies or Contacts.`,
+		tight spot, such as stashed Resources, defensible Domain, and a few Allies or Contacts.`,
 		Discipline: []Discipline{
 			DisciplineMap[`animalism`], DisciplineMap[`chimerstry`], DisciplineMap[`fortitude`],
 		},
@@ -644,15 +587,13 @@ var ClanMap = map[string]Clan{
 		slaves to their vices. Each Ravnos has a penchant for
 		some sort of vice — lying, cruelty, or theft, for example.
 		When presented with the opportunity to engage in that
-		vice, the Ravnos must indulge it unless her player suc-
-		ceeds on a Self-Control or Instinct roll.`,
+		vice, the Ravnos must indulge it unless her player succeeds on a Self-Control or Instinct roll.`,
 		Organizations: `The Ravnos are a far-flung Clan, with
 		little to unite them and an open acknowledgement
 		that each Deceiver looks after his own interests first.
 		That said, Ravnos often like to make a great show of
 		Clan camaraderie and cultural ritual, even though they
-		know that promises made to one another are as fleet-
-		ing as whispers on a night wind. Deceivers have been
+		know that promises made to one another are as fleeting as whispers on a night wind. Deceivers have been
 		known to ally against common enemies such as tyrant
 		Princes or Sabbat pogroms, but these alliances quickly
 		fade once the threat no longer exists.`,
@@ -662,17 +603,13 @@ var ClanMap = map[string]Clan{
 		Name: "Toreador",
 		Appearance: `Almost to the last, they
 		are attractive in some way, whether
-		the traditional beauty of a run-
-		way model or the dangerous al-
-		lure of something more predatory.
+		the traditional beauty of a runway model or the dangerous allure of something more predatory.
 		The Degenerates augment their
 		physical beauty with a sense of
 		personal style, which may take
-		the form of expensive cou-
-		ture, avant-garde street wear,
+		the form of expensive couture, avant-garde street wear,
 		or classical fashions designed
-		to emphasize their appeal-
-		ing qualities. This isn’t to say
+		to emphasize their appealing qualities. This isn’t to say
 		that ugly Toreador don’t exist.
 		Indeed, those gifted with less
 		physical beauty often go that
@@ -680,8 +617,7 @@ var ClanMap = map[string]Clan{
 		of accoutrements.`,
 		Description: `From the Toreador perspective, when the sun fades,
 		darkness gives rise to an eternal and wondrous world.
-		Everything is fraught with wonder and terror, low poli-
-		tics and sensual glories, the profound and the profane,
+		Everything is fraught with wonder and terror, low politics and sensual glories, the profound and the profane,
 		and an undeniable undercurrent of the sanguinary.
 		These Kindred are the Toreador, and they spend
 		unlives ensconced in pleasure. Toreador often
@@ -695,8 +631,7 @@ var ClanMap = map[string]Clan{
 		monsters, sinking to
 		unimaginable levels of
 		depravity in order to feel
-		anything at all. Toreador culture is a mixture of syba-
-		rites, dilettantes, and visionaries. Some
+		anything at all. Toreador culture is a mixture of sybarites, dilettantes, and visionaries. Some
 		Toreador, with echoes of mortal passion,
 		Embrace lovers or “project” progeny who
 		seem to fly in the face of every Toreador
@@ -706,15 +641,13 @@ var ClanMap = map[string]Clan{
 		“the next great thing” spread through the Clan, and
 		other Kindred often look to the Toreador to guide
 		them. The Degenerates know this, and many become
-		Harpies, Princes, and other key figures in vampiric so-
-		ciety.
+		Harpies, Princes, and other key figures in vampiric society.
 		`,
 		AssociatedSect: []string{
-			"Camarilla",	
+			"Camarilla",
 		},
 		Haven: `The Degenerates
-		spare no expense in appoint-
-		ing their havens in luxury,
+		spare no expense in appointing their havens in luxury,
 		often with many original
 		works of art. It is a point of
 		pride among Toreador to
@@ -725,21 +658,17 @@ var ClanMap = map[string]Clan{
 		have striking lofts and
 		penthouses, while the
 		bolder among them renovate or repurpose everything from abandoned
-		aquariums or deconsecrated churches to rooftop gar-
-		dens or converted warehouse-galleries in fashion-for-
-		ward neighborhoods. Share a communal haven? How
+		aquariums or deconsecrated churches to rooftop gardens or converted warehouse-galleries in fashion-forward neighborhoods. Share a communal haven? How
 		déclassé.`,
 		Background: `Many Toreador hail from high-society
-		 or “bohemian” backgrounds. Indeed, many are them-
-		 selves artists or influential among local art scenes or
+		 or “bohemian” backgrounds. Indeed, many are themselves artists or influential among local art scenes or
 		 other subcultures. Actors, singers, musicians, sculptors,
 		 poets, playwrights, authors, and creative folk of any
 		 stripe may well find a home in the Clan, as do those
 		 who serve as patrons to (or travel in the entourages of)
 		 those artistic types.
 		 `,
-		Character: ` Social attributes are almost al-
-		ways primary, with an even split among Talents, Skills,
+		Character: ` Social attributes are almost always primary, with an even split among Talents, Skills,
 		and Knowledges depending on how the Toreador
 		distinguishes herself. Toreador also love to cultivate
 		Backgrounds. Allies, Contacts, Resources, Domain,
@@ -752,22 +681,18 @@ var ClanMap = map[string]Clan{
 		Discipline: []Discipline{
 			DisciplineMap[`celerity`], DisciplineMap[`auspex`], DisciplineMap[`presence`],
 		},
-		Weakness: `When a Toreador experiences some-
-		thing truly remarkable — a person, an objet d’art, a
+		Weakness: `When a Toreador experiences something truly remarkable — a person, an objet d’art, a
 		lovely sunrise — the player must make a Self-Control
 		or Instinct roll. Failure means that the
 		Kindred finds herself enthralled by the experience. The
 		dazzled Toreador cannot act for the duration of the
 		scene aside from commenting on or continuing their
-		involvement with whatever has captured their atten-
-		tion. If the experience no longer affects her (whether
-		by moving, being destroyed, or whatever is appropri-
-		ate to the situation), the captivation ends. Enraptured
+		involvement with whatever has captured their attention. If the experience no longer affects her (whether
+		by moving, being destroyed, or whatever is appropriate to the situation), the captivation ends. Enraptured
 		Toreador may not even defend themselves if attacked,
 		though being wounded allows them to make another
 		Self-Control or Instinct roll.`,
-		Organizations: `Clan Toreador is cliquish and paro-
-		chial in its local domains, but very rarely on a level that
+		Organizations: `Clan Toreador is cliquish and parochial in its local domains, but very rarely on a level that
 		affects Clan-wide custom. Certain Toreador (and a few
 		outside the Clan) sometimes use the terms “artiste” and “poseur” when describing individual Toreador,
 		often derisively, to describe whether the Degenerate
@@ -789,8 +714,7 @@ var ClanMap = map[string]Clan{
 		When in their chantries
 		or convening with others of their Clan,
 		they often prefer robes
-		decorated with subtle oc-
-		cult symbols or garb
+		decorated with subtle occult symbols or garb
 		with various folds and
 		pockets for their bizarre
 		ritual ingredients.`,
@@ -804,9 +728,7 @@ var ClanMap = map[string]Clan{
 		treacherous or even blasphemous, haunt the Tremere,
 		as the other Clans look upon them with mistrust and
 		suspicion. Tonight, Clan Tremere is a Clan shaped
-		by its practice of blood sorcery. A flex-
-		ible Discipline, Thaumaturgy is heav-
-		ily entrenched within the Tremere,
+		by its practice of blood sorcery. A flexible Discipline, Thaumaturgy is heavily entrenched within the Tremere,
 		and they maintain cultic havens
 		known as chantries to study
 		its uses and share secrets
@@ -820,30 +742,23 @@ var ClanMap = map[string]Clan{
 		unlives.`,
 		AssociatedSect: []string{
 			"Camarilla",
-			},
+		},
 		Haven: `Many Tremere rely on a central chantry the
-		Clan maintains in cities where it has a notable pres-
-		ence. More solitary Warlocks develop private havens,
-		with all of the trappings one might expect from an oc-
-		cult scholar, from libraries to alchemical laboratories to
+		Clan maintains in cities where it has a notable presence. More solitary Warlocks develop private havens,
+		with all of the trappings one might expect from an occult scholar, from libraries to alchemical laboratories to
 		moonlit balcony observatories and even more sinister
 		oubliettes where vivisected “research subjects” bleed
 		according to experimental Tremere-controlled stimuli.`,
 		Background: `The Tremere draw from a fairly narrow
-		 pool of potential acolytes. Those who have an aware-
-		 ness of the supernatural, who are driven to succeed,
-		 who seek answers that elude less inquisitive individu-
-		 als, yet who also have the discipline to heed the edicts
+		 pool of potential acolytes. Those who have an awareness of the supernatural, who are driven to succeed,
+		 who seek answers that elude less inquisitive individuals, yet who also have the discipline to heed the edicts
 		 of the hierarchy make good Tremere. This isn’t to say
 		 that individualists don’t have room in the Clan; rather,
 		 those who go their own way may well find themselves
-		 leading a chantry — or greeting the sun if their inter-
-		 ests don’t align with those of the pyramid.`,
-		Character: `Mental Attributes and Knowl-
-		edges are prominent among the Tremere. Many have
+		 leading a chantry — or greeting the sun if their interests don’t align with those of the pyramid.`,
+		Character: `Mental Attributes and Knowledges are prominent among the Tremere. Many have
 		high Courage and Willpower, but are somewhat lacking
-		in Conscience or Conviction. They often favor Back-
-		grounds that heighten their relationship to the Clan, like
+		in Conscience or Conviction. They often favor Backgrounds that heighten their relationship to the Clan, like
 		Mentor, Status, and Retainers (whom an accomplished
 		Warlock may craft from otherwise inert components).`,
 		Discipline: []Discipline{
@@ -875,8 +790,7 @@ var ClanMap = map[string]Clan{
 		ancestral home. Since time out of mind the Fiends
 		have been masters and lords of the domains of much of
 		Eastern Europe. But theirs is a proud, selfish Clan for
-		which tradition goes only so far despite their aristocrat-
-		ic origins. In fact, the Clan claims to have destroyed
+		which tradition goes only so far despite their aristocratic origins. In fact, the Clan claims to have destroyed
 		its Antediluvian, and in the wake of that momentous
 		event, helped establish the foundations of the Sabbat.Tzimisce practice a strange Discipline known as Vicissitude that allows them to twist the skin and
 		bone of their victims. Clan Tzimisce is a Clan of extremes, and
@@ -903,35 +817,26 @@ var ClanMap = map[string]Clan{
 		Sabbat
 		Priests or
 		Ducti and prefer to maintain communal havens with their
-		packs. They encourage the pack to live in fearsome loca-
-		tions, such as beneath a hospital or morgue, or in the dank
+		packs. They encourage the pack to live in fearsome locations, such as beneath a hospital or morgue, or in the dank
 		recesses of a mausoleum. Elders of the Clan sometimes
 		have ancestral holdings in the Old World, and the image
 		of the vampire on the craggy mountain in a crumbling
-		castle owes much to Tzimisce lords. Rarely are these an-
-		cient holdings kept to any modern standards of comfort,
+		castle owes much to Tzimisce lords. Rarely are these ancient holdings kept to any modern standards of comfort,
 		but their lords are strangely hospitable to invited guests
 		(and terribly intolerant of uninvited bores).`,
 		Background: `Elder Tzimisce, particularly those of
 		 the still-landed nobility in hoary old domains, may
 		 have family lines from which they Embrace, or they
-		 may restrict their occasional siring to the terrified vil-
-		 lages suffering in thrall beneath their estates. New
+		 may restrict their occasional siring to the terrified villages suffering in thrall beneath their estates. New
 		 World and younger Tzimisce aren’t as discriminating
-		 and are more practical. Indeed, many Tzimisce fledg-
-		 lings are little more than shock troops, Embraced and
+		 and are more practical. Indeed, many Tzimisce fledglings are little more than shock troops, Embraced and
 		 warped to the limits of their frames to cause revulsion
 		 and revel in bloodshed until put down.`,
-		Character: `Few Tzimisce know modera-
-		tion, and thus often favor Physical or Mental Attri-
-		butes, usually with one extraordinarily high Trait.
-		Knowledges are usually favored, though Skills are val-
-		ued as well. Mentor, Allies, Domain, and Retainers are
-		all quite appropriate to Tzimisce, as are narrow — al-
-		most overdeveloped — Disciplines. Their alien mind-
+		Character: `Few Tzimisce know moderation, and thus often favor Physical or Mental Attributes, usually with one extraordinarily high Trait.
+		Knowledges are usually favored, though Skills are valued as well. Mentor, Allies, Domain, and Retainers are
+		all quite appropriate to Tzimisce, as are narrow — almost overdeveloped — Disciplines. Their alien mind-
 		sets often lead them to follow Paths of Enlightenment.
-		The ghastliness to which many Tzimisce are often ex-
-		posed during their fledgling years sometimes results in
+		The ghastliness to which many Tzimisce are often exposed during their fledgling years sometimes results in
 		complicated derangements.`,
 		Discipline: []Discipline{
 			DisciplineMap[`animalism`], DisciplineMap[`auspex`], DisciplineMap[`vicissitude`],
@@ -946,7 +851,7 @@ var ClanMap = map[string]Clan{
 		pools to one-half, cumulatively, until she has only a
 		single die in her pool. The penalty remains until she
 		rests for a full day amid her earth once more.`,
-		Organizations: `The Fiends are, on the whole, mistrust=ful of other Kindred, especially others of their own Clan.
+		Organizations: `The Fiends are, on the whole, mistrustful of other Kindred, especially others of their own Clan.
 		As such, Tzimisce organization, such as it is, has a high
 		regard for solitude. It is against their nature to be inclusive, and thus they have to work at being Sabbat (though
 		this is less difficult for younger Tzimisce of at least somewhat modern outlooks). This is also a key reason so many
@@ -966,10 +871,8 @@ var ClanMap = map[string]Clan{
 		while young Blue Bloods
 		display their own achieve-
 		ment via suits, ties, dresses,
-		and accessories that are eas-
-		ily overlooked singularly
-		but add up to a stunning to-
-		tal effect. If a Ventrue has so
+		and accessories that are easily overlooked singularly
+		but add up to a stunning total effect. If a Ventrue has so
 		much as a hair out of place,
 		it’s because he spent all night
 		running down the Society of
@@ -1000,7 +903,7 @@ var ClanMap = map[string]Clan{
 		one resource that makes Kindred society egalitarian:
 		precious blood.`,
 		AssociatedSect: []string{
-			"Camarilla",	},
+			"Camarilla"},
 		Haven: `A Ventrue’s haven
 		displays both her great power
 		(read: wealth) and distinguished
@@ -1015,9 +918,7 @@ var ClanMap = map[string]Clan{
 		see it in less than flawless state implies weakness, distraction, or even madness.`,
 		Background: `Anyone who has “made something of
 		 herself” may attract the attention of the Ventrue, who
-		 judge their childer based on their prominence and suc-
-		 cess even before they start to groom them for the Em-
-		 brace. Socialites, moneyed family, corporate wunderkinds,
+		 judge their childer based on their prominence and success even before they start to groom them for the Embrace. Socialites, moneyed family, corporate wunderkinds,
 		 military leaders, and even untested newcomers who show
 		 great promise are keenly valued among the Blue Bloods`,
 		Character: `Ventrue usually have directorial
@@ -1030,23 +931,18 @@ var ClanMap = map[string]Clan{
 			DisciplineMap[`dominate`], DisciplineMap[`fortitude`], DisciplineMap[`presence`],
 		},
 		Weakness: `The Ventrue have rarified tastes, and
-		they find only one specific type of mortal blood palat-
-		able and vital for them. When a player creates a Ven-
-		true character, they should decide with the Storyteller
+		they find only one specific type of mortal blood palatable and vital for them. When a player creates a Ventrue character, they should decide with the Storyteller
 		what specific type of blood suits the character, and this
-		choice is permanent. Blood of other types (even ani-
-		mals) simply offers the vampire no blood pool increase,
+		choice is permanent. Blood of other types (even animals) simply offers the vampire no blood pool increase,
 		no matter how much he consumes — he simply vomits
 		it back up. This refined palate may be very narrow or
 		very broad — say, the blood of younger sisters, or the
 		blood of nude children. Vampiric blood is exempt from
 		this restriction`,
 		Organizations: `The Clan-wide organization of the
-		Ventrue is localized and feudal, with various universal-
-		ly understood peerages, vassalages, oaths of fealty, and
+		Ventrue is localized and feudal, with various universally understood peerages, vassalages, oaths of fealty, and
 		sworn boons taking the place of a rigid hierarchy. Many
-		Ventrue style themselves as secret masters of their do-
-		mains, consolidating power in longstanding networks
+		Ventrue style themselves as secret masters of their domains, consolidating power in longstanding networks
 		and forming conspiracies. The Ventrue greatly value
 		propriety and honor, and use many forms of address
 		and respect — their Laws of Decorum are complex
@@ -1069,7 +965,7 @@ var SectMap = map[string]Sect{
 		The leaders of the Camarilla ruthlessly enforced the
 		Tradition of the Masquerade, elevating it to the Sect’s
 		highest law, a priority they continue to pursue even
-		in modern nights. It is the largest Sect of Kindred, after all, and nearly any city on the globe likely has some Camarilla presence. This expansiveness is partially due to the fact that the Camarilla says that any vampire, regardless of Clan or bloodline, may go to a Prince and claim membership in the Camarilla. While Kindred of any lineage can claim membership, most come from the founding Clans of the Camarilla: the Brujah, Gangrel, Malkavians, Nosferatu,nToreador, Tremere, and Ventrue. These Clans helped
+		in modern nights. It is the largest Sect of Kindred, after all, and nearly any city on the globe likely has some Camarilla presence. This expansiveness is partially due to the fact that the Camarilla says that any vampire, regardless of Clan or bloodline, may go to a Prince and claim membership in the Camarilla. While Kindred of any lineage can claim membership, most come from the founding Clans of the Camarilla: the Brujah, Gangrel, Malkavians, Nosferatu, Toreador, Tremere, and Ventrue. These Clans helped
 		to create the Camarilla, and they have a seat on the
 		Inner Circle. Vampires of other bloodlines
 		can attend conclave and meetings, but they are treated
@@ -1085,8 +981,7 @@ var SectMap = map[string]Sect{
 		within their domains and punishes those who violate
 		their law.
 		 Many Princes hold a regular court, which
-		function as a combination of social affair and legal pro-
-		ceeding. At court, vampires gossip, politick, and gain
+		function as a combination of social affair and legal proceeding. At court, vampires gossip, politick, and gain
 		favor with the Prince, and the Prince and his officers
 		handle matters of the law and render judgment or enact policies.When a vampire is found guilty of high crimes (such
 		as an egregious breach of the Masquerade, the diablerie
@@ -1098,18 +993,14 @@ var SectMap = map[string]Sect{
 		attend a conclave, and the proceedings can be over in
 		a few hours or stretch on for many weeks. Given the
 		open-door policy of conclaves, security is an issue, and
-		the location of a particular conclave might not be an-
-		nounced until a few days beforehand.Generally, conclaves are called because of the actions of a powerful individual (such as a Prince) or due to a serious breach of the Traditions, but once called, any Kindred may bring a grievance to the conclave and
+		the location of a particular conclave might not be announced until a few days beforehand.Generally, conclaves are called because of the actions of a powerful individual (such as a Prince) or due to a serious breach of the Traditions, but once called, any Kindred may bring a grievance to the conclave and
 		have it addressed.`,
 		Titles: []Entry{
 			{
 				Name: "Prince",
-				Description: `The preeminent vampire of a Camarilla city and probably the most numerous position of ultimate au-
-				thority among Western Kindred, Princes are the rul-
-				ers of given cities. Some Princes are tyrants or absolute
+				Description: `The preeminent vampire of a Camarilla city and probably the most numerous position of ultimate authority among Western Kindred, Princes are the rulers of given cities. Some Princes are tyrants or absolute
 				monarchs of the Damned while others are politically
-				feeble puppets propped up by more powerful support-
-				ers, but the position of Prince is one acknowledged
+				feeble puppets propped up by more powerful supporters, but the position of Prince is one acknowledged
 				and even (grudgingly) respected by all vampires, even
 				those not of the Camarilla.  Prince’s duties and privileges are many, but the
 				most important is the interpretation and enforcement
@@ -1117,20 +1008,17 @@ var SectMap = map[string]Sect{
 				that, a Prince has any individual powers he can claim
 				and uphold, such as declaring Elysium, calling a Blood
 				Hunt, adjudicating disputes between residents of his
-				domain, the right to claim a blood-tribute, and poten-
-				tially even the right to name, ignore, or even disband
+				domain, the right to claim a blood-tribute, and potentially even the right to name, ignore, or even disband
 				the Primogen.`,
 			},
 			{
 				Name: "Harpy",
 				Description: `Harpies are the opinion leaders and the
 				trend-setters to whom other Kindred look when it
-				comes to matters of taste, style, philosophy, or poli-
-				tics. A Harpy’s word influences the domain’s attitudes
+				comes to matters of taste, style, philosophy, or politics. A Harpy’s word influences the domain’s attitudes
 				and can be a powerful supporter of the status quo or a
 				force for insidious change. Harpies are rarely appointed
-				directly (and Kindred rarely trust those who are). In-
-				stead, a Harpy paradoxically becomes so by acting as
+				directly (and Kindred rarely trust those who are). Instead, a Harpy paradoxically becomes so by acting as
 				a Harpy. The Harpy’s role is often intertwined with
 				domain politics, and it is a bold or foolish Prince who
 				neglects those vampires who represent the cutting edge
@@ -1141,8 +1029,7 @@ var SectMap = map[string]Sect{
 				Description: `This is a largely honorific title,
 				though it has many practical responsibilities. The
 				Keeper of Elysium assures that the customs of Elysium
-				are observed, and is a caretaker of sites declared Ely-
-				sium by a Prince.`,
+				are observed, and is a caretaker of sites declared Elysium by a Prince.`,
 			},
 			{
 				Name: "Scourge",
@@ -1226,9 +1113,7 @@ var SectMap = map[string]Sect{
 		political faction, and one part combat unit. Between moral devotion, pack loyalty, and the need to rebel, Sabbat cities are devoid of the calm, quiet society of the Camarilla court. Tensions are always high in Sabbat “dioceses,” and the Cainite’s surroundings often reflect their explosive natures. In cities controlled by Sabbat, murder, robberies, rape, and assault are commonplace. cause of these tensions, the Sabbat is hardly a uni-
 		fied entity, and the Sect is home to numerous factions
 		of vampires united under the Sabbat’s banner. One of
-		the most feared is the Black Hand, a special militia hid-
-		den within the packs of the Sword of Caine. All mem-
-		bers of the Black Hand bear a distinguishing mark — a
+		the most feared is the Black Hand, a special militia hidden within the packs of the Sword of Caine. All members of the Black Hand bear a distinguishing mark — a
 		permanent, mystical sigil on the palms of their right
 		hands. Although this brand may be concealed or made
 		over, it may never be removed — once you’re in the
@@ -11720,6 +11605,675 @@ var VirtueMap = map[string]Characteristic{
 	},
 }
 
+var ArchMap = []Archetypes{
+	{
+		Name: "Architect",
+		Description: `The Architect has a sense of purpose even greater
+		than herself. She is truly happy only when creating
+		something of lasting value for others. People will always need things, and the Architect strives to provide
+		at least one necessity. Inventors, pioneers, town founders, entrepreneurs, and the like are all Architect Archetypes. A Kindred Architect might seek to create
+		new laws that affect her fellow undead, or she might
+		aim to establish a new Anarch domain.`,
+		Sys: `Regain a point of Willpower whenever you establish something of importance or lasting value.`,
+	},
+	{
+		Name: "Autocrat",
+		Description: `The Autocrat wants to be in charge. He seeks prominence for its own sake, not because he has an operation’s best interests at heart or because he has the best
+		ideas (though he may certainly think so). He may genuinely believe others are incompetent, but ultimately
+		he craves power and control. Dictators, gang leaders,
+		bullies, corporate raiders, and their ilk are Autocrat
+		Archetypes. A Kindred Autocrat may crave a title, or
+		he may wish to be recognized as the leader of a coterie`,
+		Sys: `Regain a point of Willpower when you achieve
+		control over a group or organization involving other
+		individuals.`,
+	},
+	{
+		Name: "Bon Vivant",
+		Description: `The Bon Vivant knows that life — and unlife — is
+		shallow and meaningless. As such, the Bon Vivant
+		decides to enjoy her time on Earth. The Bon Vivant
+		is not necessarily irresponsible. Rather, she is simply
+		predisposed to having a good time along the way. Most
+		Bon Vivants have low Self-Control ratings, as they are
+		so given to excess. Hedonists, sybarites, and dilettantes
+		are all examples of the Bon Vivant Archetype. A Kindred Bon Vivant may sire a brood of fawning childer,
+		or he may spend his time gorging on the blood of drug
+		abusers for the contact high`,
+		Sys: `Regain a point of Willpower whenever you truly
+		enjoy yourself and can fully express your exultation. At
+		the Storyteller’s option, a particularly fabulous revel
+		may yield multiple Willpower points`,
+	},
+	{
+		Name: "Bravo",
+		Description: `The Bravo is a tough and a bully, and often takes perverse pleasure in tormenting the weak. To the Bravo’s
+		mind, might makes right. Power is what matters, and
+		only those with power should be respected. Naturally,
+		physical power is the best kind, but any kind will do.
+		The Bravo sees overt threats as a perfectly reasonable
+		means of gaining cooperation. The Bravo is not incapable of pity or kindness; he just prefers to do things his
+		way. Robbers, bigots, and thugs are all Bravo Archetypes. A Kindred Bravo may abuse authority the system
+		has granted him, or he may — violently or otherwise
+		— force other Kindred out of his way to get what he
+		wants. He’s almost certainly an asshole`,
+		Sys: `Regain a point of Willpower any time you achieve
+		your agenda through brutishness or intimidation. This
+		need not be physical, as many Bravos verbally or socially cow their victims`,
+	},
+	{
+		Name: "Capitalist",
+		Description: `You are the ultimate mercenary, realizing that there
+		is always a market to be developed — anything can be a
+		commodity. You have a keen understanding of how to
+		manipulate both kine and Cainites into thinking that
+		they need specific goods or services. Appearance and
+		influence are everything when it comes to the big sale,
+		though you’ll use anything to your advantage. Salesmen, soldiers of fortune, and bootlickers all adhere to
+		the Capitalist Archetype.`,
+		Sys: `Regain a point of Willpower whenever you make
+		a successful “sale” of any commodity. Commodities
+		need not be physical items; they may be bits of information, favors, or other intangibles.`,
+	},
+	{
+		Name: "Caregiver",
+		Description: `Everyone needs a shoulder to cry on. A Caregiver
+		takes her comfort in consoling others, and people often come to her with their problems. Vampires with
+		Caregiver Archetypes often attempt, as best they can,
+		to protect the mortals on whom they feed. Nurses,
+		doctors, and psychiatrists are examples of potential
+		Caregivers. Caregiver Kindred are often the type who
+		— tragically — Embrace mortal loves they’ve left behind in hopes of softening their loss, or even those who
+		create situations of grief in order to ease it and thus
+		validate themselves.`,
+		Sys: `Regain a point of Willpower whenever you successfully protect or nurture someone else.`,
+	},
+	{
+		Name: "Celebrant",
+		Description: `The Celebrant takes joy in her cause. Whether the
+		character’s passion is battle, religion, foiling her rivals,
+		or reading fine literature, it gives the Celebrant the
+		strength to withstand adversity. Given the chance, the
+		Celebrant will indulge in her passion as deeply as possible. Unlike the Fanatic, the Celebrant pursues her cause not out of duty, but out of enthusiasm.
+		Crusaders, hippies, political activists, and art enthusiasts are Celebrant Archetypes. Celebrant Kindred may
+		cleave to mortal ideologies that are incongruous with
+		their new Damned conditions, or they may be the advocates of new trends and causes that move through
+		undead society.`,
+		Sys: `Regain a point of Willpower whenever you pursue
+		your cause or convert another character to the same
+		passion. Conversely, lose a point of temporary Willpower whenever you are denied your passion or it is
+		badly lost to you.`,
+	},
+	{
+		Name: "Chameleon",
+		Description: `Independent and self-reliant, you carefully study
+		the behavior and mannerisms of everyone you come
+		in contact with so you can pass yourself off as someone
+		else later. You spend so much time altering your mannerisms and appearance that your own sire may not
+		even recognize you. Spies, con artists, drag queens, and
+		impostors best represent the Chameleon.`,
+		Sys: `Regain a point of Willpower whenever you fool
+		someone into thinking you’re someone else for your
+		own (or your pack or coterie‘s) benefit.`,
+	},
+	{
+		Name: "Child",
+		Description: `The Child is still immature in personality and temperament. He wants what he wants now, and often prefers someone to give it to him. Although he can typically care for himself, he would rather have someone
+		cater to his capricious desires. Some Child Archetypes
+		are actually innocent rather than immature, ignorant
+		of the cold ways of the real world. Actual children,
+		spoiled individuals, and some drug abusers are Child
+		Archetypes. Kindred with the Child Archetype might
+		have not yet fully reached an understanding of the
+		world and have some characteristic such as cruelty, entitlement, sympathy, or hunger that is out of balance
+		with their other personality aspects, as they haven’t yet
+		reached the “rounded” state of adulthood. Note that a
+		Child Archetype need not be a physical, literal child at
+		the time of Embrace. Some people simply never grow
+		up`,
+		Sys: `Regain a point of Willpower whenever you manage to convince someone to help you with no gain to
+		herself, or to nurture you.`,
+	},
+	{
+		Name: "Competitor",
+		Description: `The Competitor takes great excitement in the pursuit of victory. To the Competitor, every task is a new
+		challenge to meet and a new contest to win. Indeed,
+		the Competitor sees all interactions as some sort of opportunity for her to be the best — the best leader, the
+		most productive, the most valuable, or whatever. Corporate raiders, professional athletes, and impassioned
+		researchers are all examples of Competitor Archetypes.
+		Kindred Competitors have any number of resources
+		and accomplishments over which to assert themselves,
+		from mortal herds and creature comforts to titles and
+		prestige in Kindred society.`,
+		Sys: `Regain one point of Willpower whenever you
+		succeed at a test or challenge. Note that a test or challenge is more than just a dice roll; it’s an entire dramatic situation. Especially difficult victories may, at
+		the Storyteller’s discretion, allow you to regain multiple Willpower points.`,
+	},
+	{
+		Name: "Conformist",
+		Description: `The Conformist is a follower, taking another’s lead
+		and finding security in the decisions of others. She prefers not to take charge, instead seeking to throw in with
+		the rest of the group and lend her own unique aid. The
+		Conformist is drawn to the most dynamic personality
+		or the individual she perceives to be the “best.” Being
+		a Conformist is not necessarily a bad thing — every
+		group needs followers to lend stability to their causes.
+		Groupies, party voters, and “the masses” are Conformist Archetypes. Conformist Kindred can take many
+		forms, from the ardent Sabbat pack member, to the
+		Kindred who follows a Clan-first agenda, to the trusted
+		supporters of a titled vampire or rising star.`,
+		Sys: `Regain a point of Willpower whenever the group
+		or your supported leader achieves a goal due to your
+		support.`,
+	},
+	{
+		Name: "Conniver",
+		Description: `Why work for something when you can trick somebody else into getting it for you? The Conniver always
+		tries to find the easy way, the fast track to success and
+		wealth. Some people call him a thief, a swindler, or
+		less pleasant terms, but he knows that everybody in the
+		world would do unto him if they could. He just does
+		it first, and better. Criminals, con artists, salespeople,
+		urchins, and entrepreneurs might be Connivers. Some
+		would argue that all Kindred are Connivers in some
+		sense, but those that have the Conniver archetype may
+		be abusive to their childer and ghouls, or they may be
+		more persuasive in gaining support for their machinations.`,
+		Sys: `Regain a point of Willpower whenever you trick
+		someone into doing something for you, or when you
+		convince someone to help you against their own best
+		interests.`,
+	},
+	{
+		Name: "Creep Show",
+		Description: `You strive to shock and disgust those around you with
+		gratuitous acts and ostentatiously “evil” mannerisms.
+		You realize, of course, that it’s all show and merely a
+		way to intimidate and control others. Outsiders, on the
+		other hand, think you are the Devil incarnate, and you
+		revel in this image. Shock-rockers, rebellious teenagers, circus freaks, and the attention-starved exemplify
+		the Creep Show Archetype.`,
+		Sys: `Regain a point of Willpower whenever someone
+		recoils from you in horror or otherwise reacts in fear.`,
+	},
+	{
+		Name: "Curmudgeon",
+		Description: `A Curmudgeon is bitter and cynical, finding flaws
+		in everything and seeing little humor in life or unlife.
+		He is often fatalistic or pessimistic, and has very little
+		esteem for others. To the Curmudgeon, the glass is
+		never more than half-full, though it may be damn near
+		empty when other people are involved. Many Internet junkies, pop-culture fans, and Generation Xers are
+		Curmudgeons. Kindred Curmudgeons see elder oppression or spoiled neonates running amok behind every
+		development in undead society, and may or may not
+		rise beyond acerbic grumbling to change any problems
+		they perceive.`,
+		Sys: `Regain a point of Willpower whenever someone
+		does something specific and negative, just like you said
+		they would. You must predict and quantify this failure aloud, such as by warning, “The Prince is going
+		to fuck us on this one,” or “Just watch, that Malkavian’s ghoul is going to do something really reckless.”
+		You may simply whisper your prophecy of grief to the
+		Storyteller if you wish, instead of announcing it to the
+		whole troupe`,
+	},
+	{
+		Name: "Dabbler",
+		Description: `The Dabbler is interested in everything but focuses
+		on nothing. He flits from idea to idea, passion to passion, and project to project without actually finishing
+		anything. Others may get swept up in the Dabbler’s
+		enthusiasm, and be left high and dry when he moves
+		on to something else without warning. Most Dabblers
+		have high Intelligence, Charisma, and Manipulation
+		ratings, but not much in the way of Wits or Stamina.
+		Toreador are often Dabblers, particularly those afflicted with the derisive sobriquet “Poseurs.”`,
+		Sys: `Regain Willpower whenever you find a new enthusiasm and drop your old one completely.`,
+	},
+	{
+		Name: "Deviant",
+		Description: `The Deviant is a freak, ostracized from society by
+		unique tastes or beliefs that place her outside the mainstream. Deviants are not indolent rebels or shiftless
+		“unrecognized geniuses”; rather, they are independent
+		thinkers who don’t quite fit in the status quo. Deviant Archetypes often feel that the world stands against
+		them, and as such reject traditional morality. Some
+		have bizarre tastes, preferences, and ideologies. Extremists, eccentric celebrities, and straight-up weirdoes
+		are Deviant Archetypes. Kindred deviants may observe
+		heretical or outlawed habits like diablerie or deference
+		to elders, and they may well go Anarch or Autarkis
+		instead of having to constantly defend their subversion
+		of Traditions or Sect customs.`,
+		Sys: `Regain a point of Willpower any time you are able
+		to flout social mores without retribution.`,
+	},
+	{
+		Name: "Director",
+		Description: `To the Director, nothing is worse than chaos and
+		disorder. The Director seeks to be in charge, adopting a “my way or the highway” attitude on matters of
+		decision-making. The Director is more concerned with
+		bringing order out of strife, however, and need not be
+		truly “in control” of a group to guide it. Coaches, teachers, and many political figures exemplify the Director
+		Archetype. Kindred Directors may be simple advocates
+		of established codes, or they may prove instrumental in
+		tearing down corrupt existing orders to make way for
+		new leaders or factional movements.`,
+		Sys: `Regain a point of Willpower when you influence
+		or aid a group or influential individual in the completion of a difficult task.`,
+	},
+	{
+		Name: "Enigma",
+		Description: `Your actions are bizarre, puzzling, and inexplicable
+		to everyone except yourself. Your strangeness may be a
+		residual effect from your Embrace, or the most effective
+		way for you to carry out your work. To the rest of the
+		world, however, your erratic actions suggest that you’re
+		eccentric if not completely crazy. Conspiracy theorists,
+		deep-cover agents, and Jyhad fanatics all live up to the
+		Enigma Archetype`,
+		Sys: ` Regain a point of Willpower whenever someone
+		is completely perplexed or baffled by one of your actions that later turns out to be a fruitful endeavor.`,
+	},
+	{
+		Name: "Eye of the Storm",
+		Description: `Despite your calm appearance, chaos and havoc
+		seems to follow you. From burning cities to emotional
+		upheaval, death and destruction circle you like albatrosses. For you, unlife is a never-ending trial with uncertainty around every corner. Gang leaders, political
+		figures, and other influential individuals exemplify the
+		Eye of the Storm Archetype.`,
+		Sys: ` Regain a point of Willpower whenever a ruckus,
+		riot, or less violent but equally chaotic phenomenon
+		occurs around you.`,
+	},
+	{
+		Name: "Fanatic",
+		Description: `The Fanatic has a purpose, and that purpose consumes his existence. The Fanatic pours himself into
+		his cause, and he may even feel guilty for undertaking
+		any objective that deviates from his higher goal. To
+		the Fanatic, the end justifies the means — the cause is
+		more important than those who serve it. Players who
+		choose Fanatic Archetypes must select a cause for their
+		character to further. Revolutionaries, zealots, and sincere firebrands are all examples of Fanatic Archetypes.
+		Kindred Fanatics are often champions for or against
+		a particular aspect of undead society, such as equality
+		among all vampires, the extermination of Anarchs, or
+		stamping infernalism out of the Sword of Caine.`,
+		Sys: `Regain a point of Willpower whenever you accomplish some task that directly relates to your cause.`,
+	},
+	{
+		Name: "Gallant",
+		Description: `Gallants are flamboyant souls, always seeking atten-
+		tion and the chance to be the brightest star. Gallants
+		seek the company of others, if only to earn their adoration. Attention drives the Gallant, and the chase is
+		often as important as its end. Nothing excites a Gallant so much as a new audience to woo. Performers,
+		only children, and those with low self-esteem often
+		embody the Gallant Archetype. Kindred Gallants may
+		be Harpies, or they may have enormous herds of doting
+		thralls.`,
+		Sys: ` Regain a Willpower point whenever you successfully impress another person. Ultimately, the Storyteller is the arbiter of how much you dazzle someone, even
+		in the case of other players’ characters.`,
+	},
+	{
+		Name: "Guru",
+		Description: `Your enlightenment draws others to you. You may
+		be a mentor of a particular Path of Enlightenment, a
+		priest with the Church, or merely an idealist. Whatever the case, your presence motivates and moves others
+		to engage in spiritual or ideological pursuits. Your peers
+		view you as calm, centered, and “with it,” even when
+		you are preaching violence as a means to an end. Cult
+		leaders, Zen masters, and Pack Priests are examples of
+		Gurus.`,
+		Sys: `Regain a point of Willpower whenever someone
+		seeks out your help in spiritual matters and your guidance moves that individual to an enlightened action
+		that he normally would not have taken. Also, regain a
+		point of Willpower whenever you achieve an epiphany
+		that relates to your personal philosophy.`,
+	},
+	{
+		Name: "Idealist",
+		Description: `The Idealist believes — truly, madly, deeply — in
+		some higher goal or morality. The object of his idealism may be something as pragmatic as the Camarilla’s
+		eventual triumph or as amorphous as the ultimate
+		good, but the belief is there. Idealists are frequently either very new to the Blood or very old, and many seek
+		Golconda as the final expression of their idealism. In
+		the meantime, an Idealist tries to reconcile his beliefs
+		with the demands of vampiric existence, often acting
+		contrary to his self-interest in doing so.`,
+		Sys: `Regain a point of Willpower any time an action
+		in pursuit of your ideals furthers your goals and brings
+		your ideal closer to fruition.`,
+	},
+	{
+		Name: "Judge",
+		Description: `The Judge perpetually seeks to improve the system.
+		A Judge takes pleasure in her rational nature and ability to draw the right conclusion when presented with
+		facts. The Judge respects justice, as it is the most efficient model for resolving issues. Judges, while they pursue the “streamlining” of problems, are rarely visionary,
+		as they prefer proven models to insight. Engineers, lawyers, and doctors are often Judge Archetypes. Kindred
+		Judges might gravitate toward enforcement roles in local society, or they might be a voice of reason in an
+		otherwise radical coterie.`,
+		Sys: `Regain a point of Willpower whenever you correctly solve a problem by considering the evidence
+		presented, or when one of your arguments unites dissenting parties.`,
+	},
+	{
+		Name: "Loner",
+		Description: `Even in a crowd the Loner sticks out, because he
+		so obviously does not belong. Others view Loners as
+		pariahs, remote, and isolated, but in truth the Loner
+		prefers his own company to that of others. For whatever reason, the Loner simply disdains others, and this
+		feeling is often reciprocated. Criminals, radicals, and
+		free thinkers are all Loner Archetypes. Kindred Loners
+		often hail from one of the rugged individualist Clans
+		like the Gangrel or Ravnos, and they have a proclivity for ending up Autarkis by dint of not giving a shit
+		what some up-his-own-ass Prince or Archbishop says
+		is a law.`,
+		Sys: `Regain a point of Willpower when you accomplish something by yourself, yet which still benefits the
+		coterie in some way.`,
+	},
+	{
+		Name: "Martyr",
+		Description: `The Martyr suffers for his cause, enduring his trials
+		out of the belief that his discomfort will ultimately improve others’ lot. Some Martyrs simply want the at-
+		tention or sympathy their ordeals engender, while others are sincere in their cause, greeting their opposition
+		with unfaltering faith. Many revolutionaries, staunch
+		idealists, and outcasts are Martyr Archetypes. Kindred
+		Martyrs are often associated with reform movements
+		among Kindred society, but rarely as figureheads —
+		and they need not necessarily be on the pro-reform
+		side of the issue.`,
+		Sys: `Regain a point of Willpower when you suffer
+		some amount of damage or loss of a definable resource
+		for your ideals or another’s immediate gain.`,
+	},
+	{
+		Name: "Masochist",
+		Description: `The Masochist exists to test his limits, to see how
+		much pain he can tolerate before he collapses. He
+		gains satisfaction in humiliation, suffering, denial, and
+		even physical pain. The Masochist defines who he is
+		by his capacity to feel discomfort — he rises each night
+		only to greet a new pain. Certain extreme athletes, urban tribalists, and the clinically depressed exemplify
+		the Masochist Archetype. Kindred Masochists might
+		be overtly self-mortifying horrors who play to their
+		Beast’s self-destructive whims, or they may be ambitious taskmasters, as with a coterie leader who refuses
+		to accept failure and pushes his own limits in his exacting schemes.`,
+		Sys: `Regain one point of Willpower when your own
+		suffering leads to some tangible gain for you, and two
+		points of Willpower whenever you experience pain in
+		a truly unique way.`,
+	},
+	{
+		Name: "",
+		Description: `The Monster knows she is a creature of darkness
+		and acts like it. Evil and suffering are the Monster’s
+		tools, and she uses them wherever she goes. No villainy is below her, no hurt goes uninflicted, and no lie
+		remains untold. The Monster does not commit evil for
+		its own sake, but rather as a means to understand what
+		she has become. Unstable individuals, those who have
+		been greatly wronged or harmed, and those defined as
+		sociopaths may come to display characteristics of the
+		Monster Archetype. Kindred Monsters include many
+		Sabbat, degenerate Kindred elders, and those who never adjust properly to what they have become after the
+		Embrace.`,
+		Sys: ``,
+	},
+	{
+		Name: "Monster",
+		Description: `The Monster knows she is a creature of darkness
+		and acts like it. Evil and suffering are the Monster’s
+		tools, and she uses them wherever she goes. No villainy is below her, no hurt goes uninflicted, and no lie
+		remains untold. The Monster does not commit evil for
+		its own sake, but rather as a means to understand what
+		she has become. Unstable individuals, those who have
+		been greatly wronged or harmed, and those defined as
+		sociopaths may come to display characteristics of the
+		Monster Archetype. Kindred Monsters include many
+		Sabbat, degenerate Kindred elders, and those who never adjust properly to what they have become after the
+		Embrace.`,
+		Sys: `Malignant deeds reinforce the Monster’s sense
+		of purpose. Monster characters should pick a specific
+		atrocity, regaining Willpower whenever they indulge
+		that urge. For example, a tempter regains Willpower
+		for luring someone into wickedness, while an apostate
+		earns back Willpower for causing another to doubt her
+		faith. Pick a destiny and fulfill it. Storytellers, be careful with how you reward this Archetype. For example,
+		a player who chooses violence as an atrocity shouldn’t
+		recoup Willpower in every combat, but perhaps only
+		in those that involve wanton destruction, or even
+		cause degeneration checks due to their gruesomeness.
+		Monster is a difficult Archetype for which to offer rewards, and those rewards should come as a result of the
+		character challenging his own descent into the Beast,
+		not rampaging ungovernably because he gains an ever-
+		refreshing pool of bonus dice.`,
+	},
+	{
+		Name: "Pedagogue",
+		Description: `The Pedagogue knows it all, and desperately wants to
+		inform others. Whether through a sense of purpose or
+		a genuine desire to help others, the Pedagogue makes
+		sure his message is heard — at length, if necessary.
+		Pedagogue Archetypes may range from well-meaning
+		mentors to verbose blowhards who love to hear them-
+		selves talk. Instructors, the overeducated, and “veterans of their field” are all examples of Pedagogue Archetypes. Kindred Pedagogues include watchdogs of
+		the Traditions, ideological Anarchs, and perhaps even
+		that rare soul seeking Golconda who wants company
+		on the journey.`,
+		Sys: `Regain one point of Willpower whenever you see
+		or learn of someone who has benefited from the wisdom you shared with them.`,
+	},
+	{
+		Name: "Penitent",
+		Description: `The Penitent exists to atone for the grave sin she commits simply by being who she is. Penitents have either
+		low self-esteem or traumatic past experiences, and feel
+		compelled to “make up” for inflicting themselves upon
+		the world. Penitent Archetypes are not always religious
+		in outlook; some truly want to scourge the world of the
+		grief they bring to it. Repentant sinners, persons with
+		low self-esteem, and remorseful criminals are examples
+		of the Penitent Archetype. Penitent Kindred include
+		those who scourge themselves of the Beast like medieval
+		monks, vampires who stand up for the rights of mortals,
+		and those who subsist entirely on the vitae of animals.`,
+		Sys: `Regain a point of Willpower whenever you feel
+		that you have achieved absolution for a given grievance. This redemption should be of the same magnitude as the transgression — the greater the crime, the
+		greater the penance. The Storyteller is the ultimate arbiter of what constitutes a reasonable act of reparation`,
+	},
+	{
+		Name: "Perfectionist",
+		Description: `Perfectionist Archetypes demand flawless execution.
+		A half-hearted job gives the Perfectionist no satisfaction, and she expects the same degree of commitment
+		and attention to detail from others that she demands
+		from herself. Although the Perfectionist may be exacting, the achievement of the end goal drives her, and
+		often those for whom she is responsible. Primadonnas, artists, and architects exemplify the Perfectionist
+		Archetype. A Perfectionist Kindred might be a zealous Sabbat member who expects more than his pack
+		can consistently deliver, or she may be a moralist who
+		sometimes applies her own high standards of Humanity
+		to others in her coterie.`,
+		Sys: `Regain a point of Willpower whenever you accomplish your goal without any demonstrable flaw or
+		impediment, and regain a Willpower point whenever
+		you motivate another character to succeed as a result
+		of your own shining example`,
+	},
+	{
+		Name: "Rebel",
+		Description: `The Rebel is a malcontent, never satisfied with the
+		status quo or the system as it is. He hates the very idea
+		of authority and does everything in his power to challenge and undermine it. Perhaps the Rebel truly believes in his ideals, but it is just as likely that he bears
+		authority figures some ill will over a “wrong” done to
+		him in the past. A Rebel may hate institutions categorically, or she may be consumed with opposition toward
+		a single particular authority. Teenagers, insurrectionists, and nonconformists all exemplify the Rebel Archetype. Rebel Kindred certainly include the Sabbat,
+		Anarchs, and temperamental Brujah, but also have
+		room for Tremere who chafe at the rigid Clan hierarchy or neonates who deplore their sires`,
+		Sys: ` Regain a point of Willpower whenever your actions adversely affect your chosen opposition. Rebels
+		may oppose the government, the Church, a vampire
+		Prince, or any other holder of authority. The player
+		should choose whom or what his character rebels
+		against when he adopts this Archetype. Storytellers
+		should take rebellion against “all authority” with a
+		grain of salt, and apply the Willpower reward for such
+		a broad concept to only greater and greater actions of
+		insurgency`,
+	},
+	{
+		Name: "Rogue",
+		Description: `Only one thing matters to the Rogue: herself. To
+		each his own, and if others cannot protect their claims,
+		they have no right to them. The Rogue is not necessarily a thug or bully, however. She simply refuses to
+		succumb to the whims of others. Rogues almost universally possess a sense of self-sufficiency. They have their
+		own best interests in mind at all times. Prostitutes,
+		capitalists, and criminals all embody the Rogue Archetype. Kindred Rogues include diablerists, Autarkis, and
+		a Primogen who puts his Clan’s opportunities before
+		the supremacy of the Kindred as a whole.`,
+		Sys: ` Regain a point of Willpower when your self-centered disposition leads you to profit, materially or otherwise. At the Storyteller’s discretion, accumulating
+		gain without exposing your own weaknesses may let
+		you regain two points of Willpower. As well, you may
+		regain a point of Willpower when your efforts benefit
+		the group to which you belong when that benefit comes
+		at the expense of another group.`,
+	},
+	{
+		Name: "Sadist",
+		Description: `You exist to inflict pain and suffering upon others.
+		Killing is too easy; torture is the best way to truly harm
+		a person, and you seek the slowest, most painful means
+		to push others to the ultimate limits. Pain — others’
+		pain — gives you immense pleasure. Drill sergeants,
+		jilted ex-lovers, and some of the terminally deranged
+		may all embody the Sadist Archetype at one time or
+		another; sadism is rare enough to appear only in aberrant cases, rather than reliably in any type or class of
+		person.`,
+		Sys: `Regain a point of Willpower whenever you inflict
+		pain upon someone for no reason other than your own
+		pleasure.`,
+	},
+	{
+		Name: "Scientist",
+		Description: `To a Scientist, existence is a puzzle which she can
+		help to reassemble. A Scientist logically and methodically examines her every situation and maneuver, looking for logical outcomes and patterns. This is not to say
+		that the Scientist is always looking for a scientific or
+		rational explanation, but rather she examines her surroundings rigorously and with a critical eye. The system a Scientist attempts to impose on the world may
+		be completely ludicrous, but it is a system, and she
+		sticks by it.`,
+		Sys: `Regain Willpower any time a logical, systematic
+		approach to a problem helps you solve it, or information gathered logically is of use in another, similar situation.`,
+	},
+	{
+		Name: "Sociopath",
+		Description: `All inferior beings both living and undead should
+		be exterminated in order to bring about a harmonious existence. You likely feel no remorse when you
+		kill (depending upon your Humanity or Path). On
+		the contrary, you are doing a glorious deed for society.
+		Some vampires are critical of your violent nature, but
+		you sometimes manage to sway them with arguments
+		like, “Darwin would agree that I’m only helping nature
+		along!” and, “Only the strongest shall survive!”`,
+		Sys: `Regain Willpower whenever you are the greatest
+		contributor to a body count after everything has settled
+		down. This count includes times when you are the only
+		killer, and it needs not result from a massive combat —
+		like killing every member of a movie audience or gunning down defenseless patrons in a bank robbery.`,
+	},
+	{
+		Name: "Soldier",
+		Description: `The Soldier is not a blindly loyal follower. While
+		she exists for orders, she does not adhere to them unquestioningly. More independent than a Conformist
+		but too tied into the idea of command to be a Loner, the Soldier applies her own techniques to others’
+		goals. While she may seek command herself someday,
+		her ambitions lie within the established hierarchy and
+		structure. The Soldier has no compunctions about using whatever means necessary to do what needs to be
+		done, so long as the orders to do so came from the right
+		place.`,
+		Sys: `Regain a point of Willpower when you achieve
+		your orders’ objectives. The more difficult the orders
+		are to fulfill, the better it feels to accomplish them. At
+		Storyteller discretion, pulling off a spectacular success
+		or fulfilling a lengthy mission may well be worth additional Willpower points.`,
+	},
+	{
+		Name: "Survivor",
+		Description: `No matter what happens, no matter the odds or op-
+		position, the Survivor always manages to pull through.
+		Whether alone or with a group, the Survivor’s utter
+		refusal to accept defeat often makes the difference between success and failure. Survivors are frustrated by
+		others’ acceptance of “what fate has in store” or willingness to withstand less than what they can achieve.
+		Outcasts, street folk, and idealists may well be Survivor
+		Archetypes. A Kindred Survivor might be a renegade
+		under a Prince’s edict of Blood Hunt, an erstwhile
+		Bishop forced from power, or a lowly Nosferatu who
+		finds himself kicked from hunting ground to hunting
+		ground with no acknowledged claim of domain.`,
+		Sys: `Regain one point of Willpower whenever you survive a threatening situation through tenacity, or when
+		your counsel causes someone else to persist in spite of
+		opposition.`,
+	},
+	{
+		Name: "Thrill-Seeker",
+		Description: `The Thrill-Seeker lives for the rush of danger. Un-
+		like those of arguably saner disposition, the Thrill-
+		Seeker actively pursues hazardous and possibly deadly
+		situations. The Thrill-Seeker is not consciously suicidal or self-destructive — he simply seeks the stimulation of imminent disaster. Gangbangers, petty thieves,
+		and exhibitionists are all examples of the Thrill-Seeker
+		Archetype. Kindred Thrill-Seekers might habitually
+		break the Masquerade just to see if they’ll get caught,
+		they might maintain contacts in a rival Clan or Sect,
+		or they might actively plot a Prince’s overthrow just to
+		see if they can pull it off.`,
+		Sys: `Regain a point of Willpower any time you succeed at a dangerous task that you have deliberately undertaken. Thrill-Seekers are not stupid, however, and
+		the Storyteller may choose not to reward a player who
+		heedlessly sends her character into danger for the sole
+		intent of harvesting Willpower.`,
+	},
+	{
+		Name: "Traditionalist",
+		Description: `The orthodox ways satisfy the Traditionalist, who
+		prefers to accomplish her goals with time-tested methods. Why vary your course when what has worked in
+		the past is good enough? The Traditionalist finds the
+		status quo acceptable, even preferable, to a change that
+		might yield unpredictable results. Conservatives, judges, and authority figures are all examples of Traditionalist Archetypes. Traditionalist Kindred unsurprisingly
+		look to the Traditions as a behavior model, though a
+		few Anarchs and elders may espouse a “traditionalism”
+		that predates both Camarilla and Sabbat.`,
+		Sys: `Regain a point of Willpower any time the proven
+		ways turn out to be the best. Also, regain a point of
+		Willpower any time you adhere to one of your previously espoused positions and it proves to be a wise
+		course of action.`,
+	},
+	{
+		Name: "Tricksters",
+		Description: `The Trickster finds the absurd in everything. No matter how grim life (or unlife) may become, the Trickster
+		always uncovers a kernel of humor within it. Tricksters cannot abide sorrow or pain, and so they strive to
+		lighten the spirits of those around them. Some Tricksters have even higher ideals, challenging static dogma
+		by exposing its failures in humorous ways. Comedians,
+		satirists, and social critics are examples of Trickster
+		Archetypes. Kindred Tricksters may call attention to
+		the flaws in a leader’s policy, they may be glib-tongued
+		devil’s advocates who question the Traditions or ritae
+		of their Sect, or they may simply have an acute sense
+		of the ironies of a world that makes vampiric predator
+		and mortal prey almost indistinguishable physically.`,
+		Sys: `Regain a point of Willpower any time you manage
+		to lift others’ spirits, especially if you are able to assuage
+		your own pain in the process.`,
+	},
+	{
+		Name: "Visionary",
+		Description: `The Visionary is strong enough to look beyond the
+		mundane and perceive the truly wondrous. Visionaries
+		test accepted societal limits, and seek what few others
+		have the courage to imagine. The Visionary rarely finds
+		satisfaction in what society has to offer; she prefers to
+		encourage society to offer what it could instead of what
+		it does. Typically, society responds poorly to Visionaries, though it is they who are responsible for bringing
+		about progress and change. Philosophers, inventors,
+		and the most inspired artists often have Visionary
+		Natures. Kindred Visionaries may want to plunge all
+		mortals into vampiric thrall, they may adapt technologies that other, more static Kindred fear or overlook,
+		or they may have a “better way” to coexist with other
+		vampires than all of this Prince-and-Regent nonsense.`,
+		Sys: `Regain a point of Willpower each time you are
+		able to convince others to have faith in your dreams
+		and follow the course of action dictated by your vision. Note that gaining support is the key to a Visionary regaining Willpower. Success need not come to a
+		Visionary, at least not with every step in changing the
+		structures in question. Her greatest successes may indeed come after her Final Death.`,
+	},
+}
+
 var EntryMap = map[string]Entry{
 	"lextalionis": {
 		Name: "Lextalionis",
@@ -11808,4 +12362,3 @@ func CleanDesc(val string) string {
 	val = strings.ReplaceAll(val, "\t", "")
 	return strings.TrimSpace(val)
 }
-

@@ -32,6 +32,21 @@ func EntrytoModelGenInfo(data map[string]seed.Entry) map[string]*model.GeneralIn
 	return entries
 }
 
+func ArchtoModelArch(data []seed.Archetypes) map[string]*model.Archetypes {
+	entries := map[string]*model.Archetypes{}
+
+	for _, arch := range data {
+		name := strings.ToLower(arch.Name)
+		entries[name] = &model.Archetypes{
+			ID: GenUUID(),
+			Name: name,
+			Description: arch.Description,
+			Sys: arch.Sys,
+		}
+	}
+	return entries
+}
+
 func ChartoModelChar(data map[string]map[string]seed.Characteristic) map[string]*model.Characteristic {
 	entries := map[string]*model.Characteristic{}
 

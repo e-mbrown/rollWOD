@@ -29,6 +29,13 @@ type Title implements Entry {
     description: String!
 }
 
+type Archetypes implements Entry {
+    id: ID
+    name: String!
+    description: String!
+    sys: String!
+}
+
 type Clan implements Entry {
     id: ID
     name: String!
@@ -99,13 +106,20 @@ enum charType {
 
 type Query {
     # GetAll Queries
+        archetypes: [Archetypes]!
         characteristics: [Characteristic]!
-        titles: [Title]!
+        clans: [Clan]!
         sects: [Sect]!
+        titles: [Title]!
         traditions: [Tradition]!
+        
+
     # GetOne
         getSect(name: [String!]): [Sect]
         getTradition(name: String!): Tradition
         GenInfoByName(name: String!): GeneralInfo
         GenByID(id: ID!): GeneralInfo
+        
+    # FilterEntries
+        charByType(type: charType): [Characteristic]!
 }

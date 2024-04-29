@@ -16,16 +16,19 @@ type Resolver struct {
 	clans           map[string]*model.Clan
 	genInfo         map[string]*model.GeneralInfo
 	discAbilities   map[string]*model.DiscAbilities
+	archetypes      map[string]*model.Archetypes
 
 	//Undetermined
-	titles          map[string]*model.Title
-	traditions      []*model.Tradition
+	titles     map[string]*model.Title
+	traditions []*model.Tradition
 }
 
 func NewResolver() Config {
 	r := Resolver{}
 
+
 	r.genInfo = services.EntrytoModelGenInfo(seed.EntryMap)
+	r.archetypes = services.ArchtoModelArch(seed.ArchMap)
 	r.characteristics = services.ChartoModelChar(seed.InfoMap)
 
 	sects, titles := services.SecttoModelSect(seed.SectMap)
@@ -35,7 +38,7 @@ func NewResolver() Config {
 	//ToDo reformat
 	disc, discab := services.DisciplinetoModelDiscipline(seed.DisciplineMap)
 	r.disciplines = disc
-	r.discAbilities =  discab
+	r.discAbilities = discab
 
 	traditions, gen := services.TradtoModelTrad(seed.TraditionMap)
 	r.traditions = append(r.traditions, traditions...)

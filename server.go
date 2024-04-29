@@ -39,11 +39,12 @@ func main() {
 
 	gqlHandler.AddTransport(transport.POST{})
 	gqlHandler.Use(extension.AutomaticPersistedQuery{Cache: cache})
+	http.Handle("/", gqlHandler)
 	//TODO: Remove following line
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", gqlHandler)
+	http.Handle("/playground", playground.Handler("GraphQL playground", "/query"))
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+
+	log.Printf("connect to http://localhost:%s/playground for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }
