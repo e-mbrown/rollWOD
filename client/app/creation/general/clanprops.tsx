@@ -1,5 +1,5 @@
 'use server'
-import { gql, useQuery } from "@apollo/client"
+import { gql } from "@apollo/client"
 import { getClient } from "@/app/apolloclient"
 
 const GET_CLANS = gql`
@@ -20,10 +20,11 @@ const ClanProps = async () => {
 
     return (
         <div>
-           {data.clans.map((clan: Clan) => (
-            <div key="clan">
+           {data.clans.map((clan: Clan, idx: number) => (
+            <div key={"clan" + idx}>
                 <h2>{clan.name}</h2>
-                <p>{clan.description}</p>    
+                <p>{clan.description}</p> 
+                <input type="radio" name={"clan"} value={clan.name}/> 
             </div>
            ))}
         </div>

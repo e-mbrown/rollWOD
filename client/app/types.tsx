@@ -56,7 +56,6 @@ class MasqueradeChar extends Character {
         public attributes: [[string, number]],
         public abilities: [[string, number]], 
         public advantages: [[string, number]],
-        
         ){
 
         super(id,name,user,nature,demeanor, concept)

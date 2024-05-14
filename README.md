@@ -3,6 +3,7 @@
 ## Server
     - [] Connect to DynamoDB
         - [] Think involves apollo server
+    - [] Deploy
     - [] Character resolvers
         - [] Create character
         - [] Update character
@@ -11,9 +12,9 @@
         - [] Figure out how campaign is going to work
         - [] Character inventory by campaign?
 ## Client
-    - [] Deploy with Vercel
+    - [] Deploy with Vercel(Delayed by server deployment)
     - [] Map out Character creation
-        - [] Step One - Concept, Nature, Clan
+        - [x] Step One - Concept, Nature, Clan
         - [] Step Two - Attribute selection [Physical, Social, Mental]
         - [] Step Three - Abilities Selection [Talents, SKills, Knowledge]
         - [] Step Four - Advantages Selection [Discpline, Background, Virtues]

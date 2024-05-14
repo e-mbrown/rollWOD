@@ -21,11 +21,12 @@ const ArchProp = async () => {
 
     return (
         <div>
-            {data.archetypes.map((arch: Archetype) => (
-                <div key="arch">
+            {data.archetypes.map((arch: Archetype, idx: number) => (
+                <div key={"arch" + idx}>
                     <h2>{arch.name}</h2>
                     <p>{arch.description}</p>
                     <p>{arch.sys}</p>
+                    <input type="radio" name={"demeanor"} value={arch.name} /> 
                 </div>
             ))}
         </div>
