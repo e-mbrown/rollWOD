@@ -1,24 +1,9 @@
+
 import React, { FormEvent } from "react"
-
- const Concept: React.FC<{setChar: Function, setState: Function, clan: React.ReactNode, arc: React.ReactNode}> = (props) => {
-    function submitConcept(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault()
-        const formData = new FormData(e.currentTarget)
-
-        const obj:Partial<MasqueradeChar> = {
-            clan: String(formData.get("clan")),
-            demeanor: String(formData.get("demeanor")),
-            concept: String(formData.get("concept")),
-        }
-
-        props.setChar(obj)
-        props.setState("concept")
-    }
-    
-
+import {ClanProps, ArchProp} from "./serverActions"
+ const Concept: React.FC = () => {
     return (
-        <div>
-            <form onSubmit={submitConcept}>
+        <div key="concept">
                 <div>
                     <h1>Concept</h1>
                     <p>
@@ -79,7 +64,7 @@ import React, { FormEvent } from "react"
                     <h1>Clan</h1>
                     <p> Clans determine the characters look, abilities and to some
                     extent their political affiliation.</p>
-                    {props.clan}
+                    <ClanProps/>
                 </div>
                 <div>
                     <h1>Nature and Demeanor</h1>
@@ -97,9 +82,7 @@ import React, { FormEvent } from "react"
                     personality, merely the most dominant. Nature is also used to
                     determine a character’s ability to regain Willpower points</p>
                 </div>
-                {props.arc}
-                <button onClick={(e) => submitConcept}>Submit</button>
-            </form>
+                <ArchProp />
         </div> 
     )
 }

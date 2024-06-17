@@ -1,8 +1,4 @@
-import Image from "next/image";
-import styles from "./page.module.css";
 import Link from "next/link";
-import ClanProps from "./creation/general/clanprops";
-
 
 export default function Home() {
   return (
