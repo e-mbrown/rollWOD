@@ -85,3 +85,12 @@ models:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int32
+  Clan:
+      fields:
+          associatedsect:
+            resolver: true
+          subclan:
+            resolver: true
+          discipline:
+            resolver: true
+  

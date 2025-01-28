@@ -1,9 +1,11 @@
 package services
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/e-mbrown/rollWOD/graph/model"
 	"github.com/e-mbrown/rollWOD/pkg/seed"
 	guuid "github.com/google/uuid"
@@ -15,13 +17,19 @@ func GenUUID() *string {
 
 }
 
+// TODO: Maybe instead of returning context, specialize to take
+// arg and return value
+func ForcedResolverParentContext(ctx context.Context) graphql.FieldContext {
+	return *graphql.GetFieldContext(ctx).Parent.Parent
+}
+
 // entrytoModelEntry is a util function that converts []seed.Entry
 // to []model.GeneralInfo
 func EntrytoModelGenInfo(data map[string]seed.Entry) map[string]*model.GeneralInfo {
 	entries := map[string]*model.GeneralInfo{}
 
 	for _, v := range data {
-		name :=  strings.ToLower(v.Name)
+		name := strings.ToLower(v.Name)
 		entries[name] = &model.GeneralInfo{
 			ID:          GenUUID(),
 			Name:        name,
@@ -38,10 +46,10 @@ func ArchtoModelArch(data []seed.Archetypes) map[string]*model.Archetypes {
 	for _, arch := range data {
 		name := strings.ToLower(arch.Name)
 		entries[name] = &model.Archetypes{
-			ID: GenUUID(),
-			Name: name,
+			ID:          GenUUID(),
+			Name:        name,
 			Description: arch.Description,
-			Sys: arch.Sys,
+			Sys:         arch.Sys,
 		}
 	}
 	return entries
@@ -52,13 +60,13 @@ func ChartoModelChar(data map[string]map[string]seed.Characteristic) map[string]
 
 	for k, v := range seed.InfoMap {
 		for ik, iv := range v {
-			name :=strings.ToLower(ik)
+			name := strings.ToLower(ik)
 			entries[name] = &model.Characteristic{
 				ID:          GenUUID(),
-				Name:         name,
+				Name:        name,
 				Type:        model.CharType(k),
 				Description: seed.CleanDesc(iv.BaseDesc),
-				DescbyVal:   seed.ValDescString(iv.ValDesc),
+				Descbyval:   seed.ValDescString(iv.ValDesc),
 			}
 		}
 	}
@@ -69,11 +77,10 @@ func ChartoModelChar(data map[string]map[string]seed.Characteristic) map[string]
 func SecttoModelSect(data map[string]seed.Sect) (map[string]*model.Sect, map[string]*model.Title) {
 	sects, titles := map[string]*model.Sect{}, map[string]*model.Title{}
 	for _, v := range seed.SectMap {
-		name := strings.ToLower(v.Name)
 		tempT := []*model.Title{}
 
 		for _, iv := range v.Titles {
-			tName :=  strings.ToLower(iv.Name)
+			tName := strings.ToLower(iv.Name)
 			title := &model.Title{
 				ID:          GenUUID(),
 				Name:        tName,
@@ -83,9 +90,9 @@ func SecttoModelSect(data map[string]seed.Sect) (map[string]*model.Sect, map[str
 			titles[tName] = title
 		}
 
-		sects[name] = &model.Sect{
+		sects[v.Name] = &model.Sect{
 			ID:          GenUUID(),
-			Name:        name,
+			Name:        v.Name,
 			Description: seed.CleanDesc(v.Description),
 			Practices:   v.Practices,
 			Rituals:     v.Rituals,
@@ -133,7 +140,7 @@ func DisciplinetoModelDiscipline(data map[string]seed.Discipline) (map[string]*m
 		name := strings.ToLower(disc.Name)
 		tempAb := []*model.DiscAbilities{}
 		for k, v := range disc.Abilities {
-			abName :=  strings.ToLower(k)
+			abName := strings.ToLower(k)
 			ab := &model.DiscAbilities{
 				ID:          GenUUID(),
 				Name:        abName,
@@ -143,16 +150,16 @@ func DisciplinetoModelDiscipline(data map[string]seed.Discipline) (map[string]*m
 			}
 			tempAb = append(tempAb, ab)
 
-			abEntries[abName]= ab
+			abEntries[abName] = ab
 		}
 
 		entries[disc.Name] = &model.Discipline{
 			ID:          GenUUID(),
-			Name:       name,
+			Name:        name,
 			Description: seed.CleanDesc(disc.Description),
 			Abilities:   tempAb,
 		}
-		
+
 	}
 	return entries, abEntries
 }
@@ -165,28 +172,28 @@ func ClantoModelClan(allSects map[string]*model.Sect, allDisc map[string]*model.
 		sect := []*model.Sect{}
 		disc := []*model.Discipline{}
 		for _, s := range v.AssociatedSect {
-			sect = append(sect, allSects[s])
+			sect = append(sect, allSects[(s)])
 		}
 
 		for _, d := range v.Discipline {
-			disc = append(disc, allDisc[d.Name])
+			disc = append(disc, allDisc[(d.Name)])
 		}
 
 		entries[v.Name] = &model.Clan{
-				ID:             GenUUID(),
-				Name:           v.Name,
-				Description:    seed.CleanDesc(v.Description),
-				Appearance:     v.Appearance,
-				AssociatedSect: sect,
-				Haven:          v.Haven,
-				Background:     v.Background,
-				Character:      v.Character,
-				Discipline:     disc,
-				Weakness:       v.Weakness,
-				Organizations:  &v.Organizations,
-				Strongholds:    v.Strongholds,
-				IsHighClan:     &v.IsHighClan,
-			}
+			ID:             GenUUID(),
+			Name:           v.Name,
+			Description:    seed.CleanDesc(v.Description),
+			Appearance:     v.Appearance,
+			Associatedsect: sect,
+			Haven:          v.Haven,
+			Background:     v.Background,
+			Character:      v.Character,
+			Discipline:     disc,
+			Weakness:       v.Weakness,
+			Organizations:  &v.Organizations,
+			Strongholds:    v.Strongholds,
+			Ishighclan:     &v.IsHighClan,
 		}
+	}
 	return entries
 }

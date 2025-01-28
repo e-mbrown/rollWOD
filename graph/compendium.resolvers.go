@@ -11,7 +11,40 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/e-mbrown/rollWOD/graph/model"
+	"github.com/e-mbrown/rollWOD/pkg/services"
 )
+
+// TODO(maybe): Create query related argument constants so that they arent just hardcoded all over. Also look into N+1 problem.
+func (r *clanResolver) Associatedsect(ctx context.Context, obj *model.Clan) ([]*model.Sect, error) {
+	var res []*model.Sect
+	pCtx := services.ForcedResolverParentContext(ctx)
+	if pCtx.Args["expand"].(bool) {
+		res = append(res, obj.Associatedsect...)
+	}
+
+	return res, nil
+}
+
+// Discipline is the resolver for the discipline field.
+func (r *clanResolver) Discipline(ctx context.Context, obj *model.Clan) ([]*model.Discipline, error) {
+	var res []*model.Discipline
+	pCtx := services.ForcedResolverParentContext(ctx)
+	if pCtx.Args["expand"].(bool) {
+		res = append(res, obj.Discipline...)
+	}
+
+	return res, nil
+}
+
+// Subclan is the resolver for the subclan field.
+func (r *clanResolver) Subclan(ctx context.Context, obj *model.Clan) ([]*model.Clan, error) {
+	var res []*model.Clan
+	pCtx := services.ForcedResolverParentContext(ctx)
+	if pCtx.Args["expand"].(bool) {
+		res = append(res, obj.Subclan...)
+	}
+	return res, nil
+}
 
 // Archetypes is the resolver for the archetypes field.
 func (r *queryResolver) Archetypes(ctx context.Context) ([]*model.Archetypes, error) {
@@ -32,11 +65,13 @@ func (r *queryResolver) Characteristics(ctx context.Context) ([]*model.Character
 }
 
 // Clans is the resolver for the clans field.
-func (r *queryResolver) Clans(ctx context.Context) ([]*model.Clan, error) {
+func (r *queryResolver) Clans(ctx context.Context, expand bool) ([]*model.Clan, error) {
 	res := []*model.Clan{}
+
 	for _, v := range r.clans {
 		res = append(res, v)
 	}
+
 	return res, nil
 }
 
@@ -118,7 +153,11 @@ func (r *queryResolver) CharByType(ctx context.Context, typeArg *model.CharType)
 	return res, nil
 }
 
+// Clan returns ClanResolver implementation.
+func (r *Resolver) Clan() ClanResolver { return &clanResolver{r} }
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+type clanResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

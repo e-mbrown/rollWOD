@@ -41,17 +41,17 @@ type Clan implements Entry {
     name: String!
     description: String!
     appearance: String!
-    associatedSect: [Sect]!
+    associatedsect: [Sect]!
     haven: String!
     background: String!
     character: String!
-    discipline: [Discipline!]
+    discipline: [Discipline]!
     weakness: String!
     organizations: String
-    subClan: [Clan!]
+    subclan: [Clan]!
     strongholds: [String!]
-    isHighClan: Boolean
-    isSubclan: Boolean
+    ishighclan: Boolean
+    issubclan: Boolean
 }
 
 type Sect implements Entry{
@@ -92,7 +92,7 @@ type Characteristic implements Entry{
     name: String!
     type: charType!
     description: String!
-    DescbyVal: [String!]!
+    descbyval: [String!]!
 }
 
 
@@ -108,7 +108,7 @@ type Query {
     # GetAll Queries
         archetypes: [Archetypes]!
         characteristics: [Characteristic]!
-        clans: [Clan]!
+        clans(expand: Boolean!): [Clan]!
         sects: [Sect]!
         titles: [Title]!
         traditions: [Tradition]!

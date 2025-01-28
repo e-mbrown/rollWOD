@@ -60,7 +60,7 @@ type Characteristic struct {
 	Name        string   `json:"name"`
 	Type        CharType `json:"type"`
 	Description string   `json:"description"`
-	DescbyVal   []string `json:"DescbyVal"`
+	Descbyval   []string `json:"descbyval"`
 }
 
 func (Characteristic) IsEntry()                    {}
@@ -73,17 +73,17 @@ type Clan struct {
 	Name           string        `json:"name"`
 	Description    string        `json:"description"`
 	Appearance     string        `json:"appearance"`
-	AssociatedSect []*Sect       `json:"associatedSect"`
+	Associatedsect []*Sect       `json:"associatedsect"`
 	Haven          string        `json:"haven"`
 	Background     string        `json:"background"`
 	Character      string        `json:"character"`
-	Discipline     []*Discipline `json:"discipline,omitempty"`
+	Discipline     []*Discipline `json:"discipline"`
 	Weakness       string        `json:"weakness"`
 	Organizations  *string       `json:"organizations,omitempty"`
-	SubClan        []*Clan       `json:"subClan,omitempty"`
+	Subclan        []*Clan       `json:"subclan"`
 	Strongholds    []string      `json:"strongholds,omitempty"`
-	IsHighClan     *bool         `json:"isHighClan,omitempty"`
-	IsSubclan      *bool         `json:"isSubclan,omitempty"`
+	Ishighclan     *bool         `json:"ishighclan,omitempty"`
+	Issubclan      *bool         `json:"issubclan,omitempty"`
 }
 
 func (Clan) IsEntry()                    {}
