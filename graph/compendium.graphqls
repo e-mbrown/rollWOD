@@ -109,16 +109,20 @@ type Query {
         archetypes: [Archetypes]!
         characteristics: [Characteristic]!
         clans(expand: Boolean!): [Clan]!
-        sects: [Sect]!
+        disciplines(expand: Boolean!): [Discipline]!
+        sects(expand: Boolean!): [Sect]!
         titles: [Title]!
         traditions: [Tradition]!
         
 
-    # GetOne
-        getSect(name: [String!]): [Sect]
-        getTradition(name: String!): Tradition
-        GenInfoByName(name: String!): GeneralInfo
-        GenByID(id: ID!): GeneralInfo
+    # GetOne/getAfew? Not sure why get sect takes multiple names
+        getSect(name: [String], expand: Boolean!): [Sect]
+        getTradition(name: String): Tradition
+        getDiscipline(name: [String], expand: Boolean!): [Discipline]
+        getClan(name: [String], expand: Boolean!): [Clan]
+        GenInfoByName(name: String): GeneralInfo
+        GenByID(id: ID): GeneralInfo
+        getDiscAb(name: [String]): [DiscAbilities]
         
     # FilterEntries
         charByType(type: charType): [Characteristic]!

@@ -93,4 +93,12 @@ models:
             resolver: true
           discipline:
             resolver: true
+  Sect:
+    fields:
+      titles:
+        resolver: true
+  Discipline:
+    fields:
+      abilities:
+        resolver: true
   

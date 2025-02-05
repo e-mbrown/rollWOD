@@ -40,7 +40,9 @@ type Config struct {
 
 type ResolverRoot interface {
 	Clan() ClanResolver
+	Discipline() DisciplineResolver
 	Query() QueryResolver
+	Sect() SectResolver
 }
 
 type DirectiveRoot struct {
@@ -125,11 +127,15 @@ type ComplexityRoot struct {
 		CharByType      func(childComplexity int, typeArg *model.CharType) int
 		Characteristics func(childComplexity int) int
 		Clans           func(childComplexity int, expand bool) int
-		GenByID         func(childComplexity int, id string) int
-		GenInfoByName   func(childComplexity int, name string) int
-		GetSect         func(childComplexity int, name []string) int
-		GetTradition    func(childComplexity int, name string) int
-		Sects           func(childComplexity int) int
+		Disciplines     func(childComplexity int, expand bool) int
+		GenByID         func(childComplexity int, id *string) int
+		GenInfoByName   func(childComplexity int, name *string) int
+		GetClan         func(childComplexity int, name []*string, expand bool) int
+		GetDiscAb       func(childComplexity int, name []*string) int
+		GetDiscipline   func(childComplexity int, name []*string, expand bool) int
+		GetSect         func(childComplexity int, name []*string, expand bool) int
+		GetTradition    func(childComplexity int, name *string) int
+		Sects           func(childComplexity int, expand bool) int
 		Titles          func(childComplexity int) int
 		Traditions      func(childComplexity int) int
 	}
@@ -186,18 +192,28 @@ type ClanResolver interface {
 
 	Subclan(ctx context.Context, obj *model.Clan) ([]*model.Clan, error)
 }
+type DisciplineResolver interface {
+	Abilities(ctx context.Context, obj *model.Discipline) ([]*model.DiscAbilities, error)
+}
 type QueryResolver interface {
 	Archetypes(ctx context.Context) ([]*model.Archetypes, error)
 	Characteristics(ctx context.Context) ([]*model.Characteristic, error)
 	Clans(ctx context.Context, expand bool) ([]*model.Clan, error)
-	Sects(ctx context.Context) ([]*model.Sect, error)
+	Disciplines(ctx context.Context, expand bool) ([]*model.Discipline, error)
+	Sects(ctx context.Context, expand bool) ([]*model.Sect, error)
 	Titles(ctx context.Context) ([]*model.Title, error)
 	Traditions(ctx context.Context) ([]*model.Tradition, error)
-	GetSect(ctx context.Context, name []string) ([]*model.Sect, error)
-	GetTradition(ctx context.Context, name string) (*model.Tradition, error)
-	GenInfoByName(ctx context.Context, name string) (*model.GeneralInfo, error)
-	GenByID(ctx context.Context, id string) (*model.GeneralInfo, error)
+	GetSect(ctx context.Context, name []*string, expand bool) ([]*model.Sect, error)
+	GetTradition(ctx context.Context, name *string) (*model.Tradition, error)
+	GetDiscipline(ctx context.Context, name []*string, expand bool) ([]*model.Discipline, error)
+	GetClan(ctx context.Context, name []*string, expand bool) ([]*model.Clan, error)
+	GenInfoByName(ctx context.Context, name *string) (*model.GeneralInfo, error)
+	GenByID(ctx context.Context, id *string) (*model.GeneralInfo, error)
+	GetDiscAb(ctx context.Context, name []*string) ([]*model.DiscAbilities, error)
 	CharByType(ctx context.Context, typeArg *model.CharType) ([]*model.Characteristic, error)
+}
+type SectResolver interface {
+	Titles(ctx context.Context, obj *model.Sect) ([]*model.Title, error)
 }
 
 type executableSchema struct {
@@ -579,6 +595,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Clans(childComplexity, args["expand"].(bool)), true
 
+	case "Query.disciplines":
+		if e.complexity.Query.Disciplines == nil {
+			break
+		}
+
+		args, err := ec.field_Query_disciplines_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Disciplines(childComplexity, args["expand"].(bool)), true
+
 	case "Query.GenByID":
 		if e.complexity.Query.GenByID == nil {
 			break
@@ -589,7 +617,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GenByID(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.GenByID(childComplexity, args["id"].(*string)), true
 
 	case "Query.GenInfoByName":
 		if e.complexity.Query.GenInfoByName == nil {
@@ -601,7 +629,43 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GenInfoByName(childComplexity, args["name"].(string)), true
+		return e.complexity.Query.GenInfoByName(childComplexity, args["name"].(*string)), true
+
+	case "Query.getClan":
+		if e.complexity.Query.GetClan == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getClan_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetClan(childComplexity, args["name"].([]*string), args["expand"].(bool)), true
+
+	case "Query.getDiscAb":
+		if e.complexity.Query.GetDiscAb == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getDiscAb_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDiscAb(childComplexity, args["name"].([]*string)), true
+
+	case "Query.getDiscipline":
+		if e.complexity.Query.GetDiscipline == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getDiscipline_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDiscipline(childComplexity, args["name"].([]*string), args["expand"].(bool)), true
 
 	case "Query.getSect":
 		if e.complexity.Query.GetSect == nil {
@@ -613,7 +677,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetSect(childComplexity, args["name"].([]string)), true
+		return e.complexity.Query.GetSect(childComplexity, args["name"].([]*string), args["expand"].(bool)), true
 
 	case "Query.getTradition":
 		if e.complexity.Query.GetTradition == nil {
@@ -625,14 +689,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetTradition(childComplexity, args["name"].(string)), true
+		return e.complexity.Query.GetTradition(childComplexity, args["name"].(*string)), true
 
 	case "Query.sects":
 		if e.complexity.Query.Sects == nil {
 			break
 		}
 
-		return e.complexity.Query.Sects(childComplexity), true
+		args, err := ec.field_Query_sects_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Sects(childComplexity, args["expand"].(bool)), true
 
 	case "Query.titles":
 		if e.complexity.Query.Titles == nil {
@@ -963,10 +1032,10 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Query_GenByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 *string
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -978,10 +1047,10 @@ func (ec *executionContext) field_Query_GenByID_args(ctx context.Context, rawArg
 func (ec *executionContext) field_Query_GenInfoByName_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 *string
 	if tmp, ok := rawArgs["name"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1035,13 +1104,52 @@ func (ec *executionContext) field_Query_clans_args(ctx context.Context, rawArgs 
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getSect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_disciplines_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []string
+	var arg0 bool
+	if tmp, ok := rawArgs["expand"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expand"))
+		arg0, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["expand"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getClan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []*string
 	if tmp, ok := rawArgs["name"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
+	var arg1 bool
+	if tmp, ok := rawArgs["expand"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expand"))
+		arg1, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["expand"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getDiscAb_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []*string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1050,18 +1158,81 @@ func (ec *executionContext) field_Query_getSect_args(ctx context.Context, rawArg
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getTradition_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_getDiscipline_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 []*string
 	if tmp, ok := rawArgs["name"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
 	args["name"] = arg0
+	var arg1 bool
+	if tmp, ok := rawArgs["expand"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expand"))
+		arg1, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["expand"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getSect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []*string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
+	var arg1 bool
+	if tmp, ok := rawArgs["expand"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expand"))
+		arg1, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["expand"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTradition_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_sects_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 bool
+	if tmp, ok := rawArgs["expand"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expand"))
+		arg0, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["expand"] = arg0
 	return args, nil
 }
 
@@ -2855,7 +3026,7 @@ func (ec *executionContext) _Discipline_abilities(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Abilities, nil
+		return ec.resolvers.Discipline().Abilities(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2873,8 +3044,8 @@ func (ec *executionContext) fieldContext_Discipline_abilities(ctx context.Contex
 	fc = &graphql.FieldContext{
 		Object:     "Discipline",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -3349,6 +3520,71 @@ func (ec *executionContext) fieldContext_Query_clans(ctx context.Context, field 
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_disciplines(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_disciplines(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Disciplines(rctx, fc.Args["expand"].(bool))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Discipline)
+	fc.Result = res
+	return ec.marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_disciplines(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Discipline_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Discipline_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Discipline_description(ctx, field)
+			case "abilities":
+				return ec.fieldContext_Discipline_abilities(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Discipline", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_disciplines_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_sects(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_sects(ctx, field)
 	if err != nil {
@@ -3363,7 +3599,7 @@ func (ec *executionContext) _Query_sects(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Sects(rctx)
+		return ec.resolvers.Query().Sects(rctx, fc.Args["expand"].(bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3405,6 +3641,17 @@ func (ec *executionContext) fieldContext_Query_sects(ctx context.Context, field 
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Sect", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_sects_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -3529,7 +3776,7 @@ func (ec *executionContext) _Query_getSect(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetSect(rctx, fc.Args["name"].([]string))
+		return ec.resolvers.Query().GetSect(rctx, fc.Args["name"].([]*string), fc.Args["expand"].(bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3597,7 +3844,7 @@ func (ec *executionContext) _Query_getTradition(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTradition(rctx, fc.Args["name"].(string))
+		return ec.resolvers.Query().GetTradition(rctx, fc.Args["name"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3645,6 +3892,152 @@ func (ec *executionContext) fieldContext_Query_getTradition(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_getDiscipline(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getDiscipline(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetDiscipline(rctx, fc.Args["name"].([]*string), fc.Args["expand"].(bool))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Discipline)
+	fc.Result = res
+	return ec.marshalODiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getDiscipline(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Discipline_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Discipline_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Discipline_description(ctx, field)
+			case "abilities":
+				return ec.fieldContext_Discipline_abilities(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Discipline", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getDiscipline_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getClan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getClan(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetClan(rctx, fc.Args["name"].([]*string), fc.Args["expand"].(bool))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Clan)
+	fc.Result = res
+	return ec.marshalOClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getClan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Clan_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Clan_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Clan_description(ctx, field)
+			case "appearance":
+				return ec.fieldContext_Clan_appearance(ctx, field)
+			case "associatedsect":
+				return ec.fieldContext_Clan_associatedsect(ctx, field)
+			case "haven":
+				return ec.fieldContext_Clan_haven(ctx, field)
+			case "background":
+				return ec.fieldContext_Clan_background(ctx, field)
+			case "character":
+				return ec.fieldContext_Clan_character(ctx, field)
+			case "discipline":
+				return ec.fieldContext_Clan_discipline(ctx, field)
+			case "weakness":
+				return ec.fieldContext_Clan_weakness(ctx, field)
+			case "organizations":
+				return ec.fieldContext_Clan_organizations(ctx, field)
+			case "subclan":
+				return ec.fieldContext_Clan_subclan(ctx, field)
+			case "strongholds":
+				return ec.fieldContext_Clan_strongholds(ctx, field)
+			case "ishighclan":
+				return ec.fieldContext_Clan_ishighclan(ctx, field)
+			case "issubclan":
+				return ec.fieldContext_Clan_issubclan(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Clan", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getClan_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_GenInfoByName(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_GenInfoByName(ctx, field)
 	if err != nil {
@@ -3659,7 +4052,7 @@ func (ec *executionContext) _Query_GenInfoByName(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GenInfoByName(rctx, fc.Args["name"].(string))
+		return ec.resolvers.Query().GenInfoByName(rctx, fc.Args["name"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3719,7 +4112,7 @@ func (ec *executionContext) _Query_GenByID(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GenByID(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GenByID(rctx, fc.Args["id"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3759,6 +4152,70 @@ func (ec *executionContext) fieldContext_Query_GenByID(ctx context.Context, fiel
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_GenByID_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getDiscAb(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getDiscAb(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetDiscAb(rctx, fc.Args["name"].([]*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.DiscAbilities)
+	fc.Result = res
+	return ec.marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscAbilities(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getDiscAb(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_DiscAbilities_id(ctx, field)
+			case "name":
+				return ec.fieldContext_DiscAbilities_name(ctx, field)
+			case "description":
+				return ec.fieldContext_DiscAbilities_description(ctx, field)
+			case "lvl":
+				return ec.fieldContext_DiscAbilities_lvl(ctx, field)
+			case "system":
+				return ec.fieldContext_DiscAbilities_system(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DiscAbilities", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getDiscAb_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -4104,7 +4561,7 @@ func (ec *executionContext) _Sect_titles(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Titles, nil
+		return ec.resolvers.Sect().Titles(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4122,8 +4579,8 @@ func (ec *executionContext) fieldContext_Sect_titles(ctx context.Context, field 
 	fc = &graphql.FieldContext{
 		Object:     "Sect",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -7677,15 +8134,46 @@ func (ec *executionContext) _Discipline(ctx context.Context, sel ast.SelectionSe
 		case "name":
 			out.Values[i] = ec._Discipline_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "description":
 			out.Values[i] = ec._Discipline_description(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "abilities":
-			out.Values[i] = ec._Discipline_abilities(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Discipline_abilities(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7886,6 +8374,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "disciplines":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_disciplines(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "sects":
 			field := field
 
@@ -7990,6 +8500,44 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getDiscipline":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getDiscipline(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getClan":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getClan(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "GenInfoByName":
 			field := field
 
@@ -8019,6 +8567,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_GenByID(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getDiscAb":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getDiscAb(ctx, field)
 				return res
 			}
 
@@ -8097,24 +8664,55 @@ func (ec *executionContext) _Sect(ctx context.Context, sel ast.SelectionSet, obj
 		case "name":
 			out.Values[i] = ec._Sect_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "description":
 			out.Values[i] = ec._Sect_description(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "titles":
-			out.Values[i] = ec._Sect_titles(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Sect_titles(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "practices":
 			out.Values[i] = ec._Sect_practices(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "rituals":
 			out.Values[i] = ec._Sect_rituals(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "strongholds":
 			out.Values[i] = ec._Sect_strongholds(ctx, field, obj)
@@ -9556,6 +10154,47 @@ func (ec *executionContext) marshalOCharacteristic2ᚖgithubᚗcomᚋeᚑmbrown�
 	return ec._Characteristic(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v []*model.Clan) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) marshalOClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v *model.Clan) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -9609,6 +10248,47 @@ func (ec *executionContext) marshalODiscAbilities2ᚖgithubᚗcomᚋeᚑmbrown�
 		return graphql.Null
 	}
 	return ec._DiscAbilities(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalODiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx context.Context, sel ast.SelectionSet, v []*model.Discipline) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalODiscipline2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
 }
 
 func (ec *executionContext) marshalODiscipline2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx context.Context, sel ast.SelectionSet, v *model.Discipline) graphql.Marshaler {
