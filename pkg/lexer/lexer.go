@@ -166,6 +166,7 @@ func (l *Lexer) skipWhitespace() {
 
 func (l *Lexer) TakeInput(input string) {
 	l.input = []byte(input)
+	l.readChar()
 }
 
 // TODO: Add other allowed identifiers when they are thought of.

@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/e-mbrown/rollWOD/pkg/graph/model"
+	"github.com/e-mbrown/rollWOD/graph/model"
 	"github.com/e-mbrown/rollWOD/pkg/services"
 )
 
