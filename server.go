@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -8,7 +9,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/e-mbrown/rollWOD/graph"
+	"github.com/e-mbrown/rollWOD/pkg/graph"
+	"github.com/e-mbrown/rollWOD/pkg/repl"
 )
 
 const defaultPort = "8080"
@@ -20,6 +22,14 @@ func init() {
 }
 
 func main() {
+
+	//REPL//
+
+	if len(os.Args[1:]) > 0 {
+		fmt.Println("This is the WQL REPL")
+		fmt.Println("Type some commands")
+		repl.Start(os.Stdin, os.Stdout)
+	}
 	// ctx, cancel := context.WithCancel(context.Background())
 	// defer cancel()
 	port := os.Getenv("PORT")

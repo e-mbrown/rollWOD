@@ -21,4 +21,5 @@ go.work.sum
 .env
 
 # Temp directory
-pkg/seed
+seed/data.go
+.vscode

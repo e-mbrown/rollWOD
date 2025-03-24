@@ -18,20 +18,25 @@ type Lexer struct {
 }
 
 func NewLexer(input *os.File) (*Lexer, error) {
+	var l *Lexer
 	var err error
-	l := &Lexer{
-		filename: input.Name(),
-		reader:   bufio.NewReader(input),
+	if input == nil {
+		l = &Lexer{}
+	} else {
+		l = &Lexer{
+			filename: input.Name(),
+			reader:   bufio.NewReader(input),
+		}
+		// TODO: This may need to be a scanner, not a reader. The purpose
+		// is to read the file & store the bytes. Dont need a delimiter.
+		l.input, err = l.reader.ReadBytes(byte('~'))
+		if err != nil && err.Error() != "EOF" {
+			return nil, err
+		}
+
+		l.readChar()
 	}
 
-	// TODO: This may need to be a scanner, not a reader. The purpose
-	// is to read the file & store the bytes. Dont need a delimiter.
-	l.input, err = l.reader.ReadBytes(byte('~'))
-	if err != nil && err.Error() != "EOF" {
-		return nil, err
-	}
-
-	l.readChar()
 	return l, nil
 }
 
@@ -157,6 +162,10 @@ func (l *Lexer) skipWhitespace() {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
 	}
+}
+
+func (l *Lexer) TakeInput(input string) {
+	l.input = []byte(input)
 }
 
 // TODO: Add other allowed identifiers when they are thought of.

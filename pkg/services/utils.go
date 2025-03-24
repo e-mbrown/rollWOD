@@ -3,11 +3,8 @@ package services
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/e-mbrown/rollWOD/graph/model"
-	"github.com/e-mbrown/rollWOD/pkg/seed"
 	guuid "github.com/google/uuid"
 )
 
@@ -23,6 +20,8 @@ func ForcedResolverParentContext(ctx context.Context) graphql.FieldContext {
 	return *graphql.GetFieldContext(ctx).Parent.Parent
 }
 
+// TODO: After fixing the seed data fix or delete these functions
+/*
 // entrytoModelEntry is a util function that converts []seed.Entry
 // to []model.GeneralInfo
 func EntrytoModelGenInfo(data map[string]seed.Entry) map[string]*model.GeneralInfo {
@@ -197,3 +196,4 @@ func ClantoModelClan(allSects map[string]*model.Sect, allDisc map[string]*model.
 	}
 	return entries
 }
+*/

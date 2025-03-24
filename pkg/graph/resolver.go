@@ -22,7 +22,9 @@ type Resolver struct {
 }
 
 func NewResolver() Config {
-	r := hydrateResolver(Resolver{})
+	// TODO: Fix hydrateResolver 
+	// r := hydrateResolver(Resolver{})
+	r := Resolver{}
 
 	return Config{
 		Resolvers: &r,

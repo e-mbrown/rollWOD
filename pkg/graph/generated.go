@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/e-mbrown/rollWOD/graph/model"
+	"github.com/e-mbrown/rollWOD/pkg/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1080,7 +1080,7 @@ func (ec *executionContext) field_Query_charByType_args(ctx context.Context, raw
 	var arg0 *model.CharType
 	if tmp, ok := rawArgs["type"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
-		arg0, err = ec.unmarshalOcharType2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharType(ctx, tmp)
+		arg0, err = ec.unmarshalOcharType2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharType(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1645,7 +1645,7 @@ func (ec *executionContext) _Campaign_user(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Campaign_user(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1733,7 +1733,7 @@ func (ec *executionContext) _Campaign_characters(ctx context.Context, field grap
 	}
 	res := resTmp.([]model.Character)
 	fc.Result = res
-	return ec.marshalOCharacter2ᚕgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacterᚄ(ctx, field.Selections, res)
+	return ec.marshalOCharacter2ᚕgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacterᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Campaign_characters(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1862,7 +1862,7 @@ func (ec *executionContext) _Characteristic_type(ctx context.Context, field grap
 	}
 	res := resTmp.(model.CharType)
 	fc.Result = res
-	return ec.marshalNcharType2githubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharType(ctx, field.Selections, res)
+	return ec.marshalNcharType2githubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Characteristic_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2167,7 +2167,7 @@ func (ec *executionContext) _Clan_associatedsect(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Sect)
 	fc.Result = res
-	return ec.marshalNSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐSect(ctx, field.Selections, res)
+	return ec.marshalNSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐSect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Clan_associatedsect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2359,7 +2359,7 @@ func (ec *executionContext) _Clan_discipline(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Discipline)
 	fc.Result = res
-	return ec.marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx, field.Selections, res)
+	return ec.marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscipline(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Clan_discipline(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2498,7 +2498,7 @@ func (ec *executionContext) _Clan_subclan(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Clan)
 	fc.Result = res
-	return ec.marshalNClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
+	return ec.marshalNClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Clan_subclan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3037,7 +3037,7 @@ func (ec *executionContext) _Discipline_abilities(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.DiscAbilities)
 	fc.Result = res
-	return ec.marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscAbilities(ctx, field.Selections, res)
+	return ec.marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscAbilities(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Discipline_abilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3351,7 +3351,7 @@ func (ec *executionContext) _Query_archetypes(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.Archetypes)
 	fc.Result = res
-	return ec.marshalNArchetypes2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐArchetypes(ctx, field.Selections, res)
+	return ec.marshalNArchetypes2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐArchetypes(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_archetypes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3405,7 +3405,7 @@ func (ec *executionContext) _Query_characteristics(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristic(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristic(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_characteristics(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3461,7 +3461,7 @@ func (ec *executionContext) _Query_clans(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Clan)
 	fc.Result = res
-	return ec.marshalNClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
+	return ec.marshalNClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_clans(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3548,7 +3548,7 @@ func (ec *executionContext) _Query_disciplines(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Discipline)
 	fc.Result = res
-	return ec.marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx, field.Selections, res)
+	return ec.marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscipline(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_disciplines(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3613,7 +3613,7 @@ func (ec *executionContext) _Query_sects(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Sect)
 	fc.Result = res
-	return ec.marshalNSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐSect(ctx, field.Selections, res)
+	return ec.marshalNSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐSect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_sects(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3684,7 +3684,7 @@ func (ec *executionContext) _Query_titles(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Title)
 	fc.Result = res
-	return ec.marshalNTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTitle(ctx, field.Selections, res)
+	return ec.marshalNTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTitle(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_titles(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3736,7 +3736,7 @@ func (ec *executionContext) _Query_traditions(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.Tradition)
 	fc.Result = res
-	return ec.marshalNTradition2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTradition(ctx, field.Selections, res)
+	return ec.marshalNTradition2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTradition(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_traditions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3787,7 +3787,7 @@ func (ec *executionContext) _Query_getSect(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.Sect)
 	fc.Result = res
-	return ec.marshalOSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐSect(ctx, field.Selections, res)
+	return ec.marshalOSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐSect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3855,7 +3855,7 @@ func (ec *executionContext) _Query_getTradition(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Tradition)
 	fc.Result = res
-	return ec.marshalOTradition2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTradition(ctx, field.Selections, res)
+	return ec.marshalOTradition2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTradition(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTradition(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3917,7 +3917,7 @@ func (ec *executionContext) _Query_getDiscipline(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Discipline)
 	fc.Result = res
-	return ec.marshalODiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx, field.Selections, res)
+	return ec.marshalODiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscipline(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDiscipline(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3979,7 +3979,7 @@ func (ec *executionContext) _Query_getClan(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.Clan)
 	fc.Result = res
-	return ec.marshalOClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
+	return ec.marshalOClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getClan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4063,7 +4063,7 @@ func (ec *executionContext) _Query_GenInfoByName(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.GeneralInfo)
 	fc.Result = res
-	return ec.marshalOGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneralInfo(ctx, field.Selections, res)
+	return ec.marshalOGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneralInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GenInfoByName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4123,7 +4123,7 @@ func (ec *executionContext) _Query_GenByID(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.GeneralInfo)
 	fc.Result = res
-	return ec.marshalOGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneralInfo(ctx, field.Selections, res)
+	return ec.marshalOGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneralInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GenByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4183,7 +4183,7 @@ func (ec *executionContext) _Query_getDiscAb(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.DiscAbilities)
 	fc.Result = res
-	return ec.marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscAbilities(ctx, field.Selections, res)
+	return ec.marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscAbilities(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDiscAb(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4250,7 +4250,7 @@ func (ec *executionContext) _Query_charByType(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristic(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristic(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_charByType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4572,7 +4572,7 @@ func (ec *executionContext) _Sect_titles(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Title)
 	fc.Result = res
-	return ec.marshalOTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTitleᚄ(ctx, field.Selections, res)
+	return ec.marshalOTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTitleᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Sect_titles(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5008,7 +5008,7 @@ func (ec *executionContext) _Tradition_traditions(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.GeneralInfo)
 	fc.Result = res
-	return ec.marshalOGeneralInfo2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneralInfoᚄ(ctx, field.Selections, res)
+	return ec.marshalOGeneralInfo2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneralInfoᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Tradition_traditions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5233,7 +5233,7 @@ func (ec *executionContext) _Vampire_player(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_player(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5283,7 +5283,7 @@ func (ec *executionContext) _Vampire_chronicle(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Campaign)
 	fc.Result = res
-	return ec.marshalNCampaign2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCampaign(ctx, field.Selections, res)
+	return ec.marshalNCampaign2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCampaign(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_chronicle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5460,7 +5460,7 @@ func (ec *executionContext) _Vampire_clan(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.Clan)
 	fc.Result = res
-	return ec.marshalNClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
+	return ec.marshalNClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_clan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5536,7 +5536,7 @@ func (ec *executionContext) _Vampire_generation(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Generation)
 	fc.Result = res
-	return ec.marshalNGeneration2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneration(ctx, field.Selections, res)
+	return ec.marshalNGeneration2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneration(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_generation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5585,7 +5585,7 @@ func (ec *executionContext) _Vampire_Sire(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.Vampire)
 	fc.Result = res
-	return ec.marshalOVampire2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐVampire(ctx, field.Selections, res)
+	return ec.marshalOVampire2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐVampire(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_Sire(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5657,7 +5657,7 @@ func (ec *executionContext) _Vampire_attributes(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_attributes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5713,7 +5713,7 @@ func (ec *executionContext) _Vampire_abilities(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_abilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5769,7 +5769,7 @@ func (ec *executionContext) _Vampire_advantages(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Characteristic)
 	fc.Result = res
-	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
+	return ec.marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristicᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Vampire_advantages(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9287,7 +9287,7 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNArchetypes2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐArchetypes(ctx context.Context, sel ast.SelectionSet, v []*model.Archetypes) graphql.Marshaler {
+func (ec *executionContext) marshalNArchetypes2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐArchetypes(ctx context.Context, sel ast.SelectionSet, v []*model.Archetypes) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9311,7 +9311,7 @@ func (ec *executionContext) marshalNArchetypes2ᚕᚖgithubᚗcomᚋeᚑmbrown�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOArchetypes2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐArchetypes(ctx, sel, v[i])
+			ret[i] = ec.marshalOArchetypes2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐArchetypes(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9340,7 +9340,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCampaign2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCampaign(ctx context.Context, sel ast.SelectionSet, v []*model.Campaign) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaign2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCampaign(ctx context.Context, sel ast.SelectionSet, v []*model.Campaign) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9364,7 +9364,7 @@ func (ec *executionContext) marshalNCampaign2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋr
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOCampaign2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCampaign(ctx, sel, v[i])
+			ret[i] = ec.marshalOCampaign2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCampaign(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9378,7 +9378,7 @@ func (ec *executionContext) marshalNCampaign2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋr
 	return ret
 }
 
-func (ec *executionContext) marshalNCharacter2githubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacter(ctx context.Context, sel ast.SelectionSet, v model.Character) graphql.Marshaler {
+func (ec *executionContext) marshalNCharacter2githubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacter(ctx context.Context, sel ast.SelectionSet, v model.Character) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9388,7 +9388,7 @@ func (ec *executionContext) marshalNCharacter2githubᚗcomᚋeᚑmbrownᚋrollWO
 	return ec._Character(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v []*model.Characteristic) graphql.Marshaler {
+func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v []*model.Characteristic) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9412,7 +9412,7 @@ func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbro
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOCharacteristic2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristic(ctx, sel, v[i])
+			ret[i] = ec.marshalOCharacteristic2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristic(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9426,7 +9426,7 @@ func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbro
 	return ret
 }
 
-func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristicᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Characteristic) graphql.Marshaler {
+func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristicᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Characteristic) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9450,7 +9450,7 @@ func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbro
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCharacteristic2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristic(ctx, sel, v[i])
+			ret[i] = ec.marshalNCharacteristic2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristic(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9470,7 +9470,7 @@ func (ec *executionContext) marshalNCharacteristic2ᚕᚖgithubᚗcomᚋeᚑmbro
 	return ret
 }
 
-func (ec *executionContext) marshalNCharacteristic2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v *model.Characteristic) graphql.Marshaler {
+func (ec *executionContext) marshalNCharacteristic2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v *model.Characteristic) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9480,7 +9480,7 @@ func (ec *executionContext) marshalNCharacteristic2ᚖgithubᚗcomᚋeᚑmbrown�
 	return ec._Characteristic(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v []*model.Clan) graphql.Marshaler {
+func (ec *executionContext) marshalNClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v []*model.Clan) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9504,7 +9504,7 @@ func (ec *executionContext) marshalNClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx, sel, v[i])
+			ret[i] = ec.marshalOClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9518,7 +9518,7 @@ func (ec *executionContext) marshalNClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 	return ret
 }
 
-func (ec *executionContext) marshalNClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v *model.Clan) graphql.Marshaler {
+func (ec *executionContext) marshalNClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v *model.Clan) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9528,7 +9528,7 @@ func (ec *executionContext) marshalNClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWOD�
 	return ec._Clan(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx context.Context, sel ast.SelectionSet, v []*model.Discipline) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscipline(ctx context.Context, sel ast.SelectionSet, v []*model.Discipline) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9552,7 +9552,7 @@ func (ec *executionContext) marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrown�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODiscipline2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx, sel, v[i])
+			ret[i] = ec.marshalODiscipline2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscipline(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9566,7 +9566,7 @@ func (ec *executionContext) marshalNDiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrown�
 	return ret
 }
 
-func (ec *executionContext) marshalNGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneralInfo(ctx context.Context, sel ast.SelectionSet, v *model.GeneralInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneralInfo(ctx context.Context, sel ast.SelectionSet, v *model.GeneralInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9576,7 +9576,7 @@ func (ec *executionContext) marshalNGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋr
 	return ec._GeneralInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGeneration2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneration(ctx context.Context, sel ast.SelectionSet, v *model.Generation) graphql.Marshaler {
+func (ec *executionContext) marshalNGeneration2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneration(ctx context.Context, sel ast.SelectionSet, v *model.Generation) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9616,7 +9616,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v []*model.Sect) graphql.Marshaler {
+func (ec *executionContext) marshalNSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v []*model.Sect) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9640,7 +9640,7 @@ func (ec *executionContext) marshalNSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSect2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐSect(ctx, sel, v[i])
+			ret[i] = ec.marshalOSect2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐSect(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9701,7 +9701,7 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
-func (ec *executionContext) marshalNTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTitle(ctx context.Context, sel ast.SelectionSet, v []*model.Title) graphql.Marshaler {
+func (ec *executionContext) marshalNTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTitle(ctx context.Context, sel ast.SelectionSet, v []*model.Title) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9725,7 +9725,7 @@ func (ec *executionContext) marshalNTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋroll
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTitle(ctx, sel, v[i])
+			ret[i] = ec.marshalOTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTitle(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9739,7 +9739,7 @@ func (ec *executionContext) marshalNTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋroll
 	return ret
 }
 
-func (ec *executionContext) marshalNTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTitle(ctx context.Context, sel ast.SelectionSet, v *model.Title) graphql.Marshaler {
+func (ec *executionContext) marshalNTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTitle(ctx context.Context, sel ast.SelectionSet, v *model.Title) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9749,7 +9749,7 @@ func (ec *executionContext) marshalNTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWOD
 	return ec._Title(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTradition2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTradition(ctx context.Context, sel ast.SelectionSet, v []*model.Tradition) graphql.Marshaler {
+func (ec *executionContext) marshalNTradition2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTradition(ctx context.Context, sel ast.SelectionSet, v []*model.Tradition) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9773,7 +9773,7 @@ func (ec *executionContext) marshalNTradition2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTradition2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTradition(ctx, sel, v[i])
+			ret[i] = ec.marshalOTradition2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTradition(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9787,7 +9787,7 @@ func (ec *executionContext) marshalNTradition2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -10050,17 +10050,17 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) unmarshalNcharType2githubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharType(ctx context.Context, v interface{}) (model.CharType, error) {
+func (ec *executionContext) unmarshalNcharType2githubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharType(ctx context.Context, v interface{}) (model.CharType, error) {
 	var res model.CharType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNcharType2githubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharType(ctx context.Context, sel ast.SelectionSet, v model.CharType) graphql.Marshaler {
+func (ec *executionContext) marshalNcharType2githubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharType(ctx context.Context, sel ast.SelectionSet, v model.CharType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalOArchetypes2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐArchetypes(ctx context.Context, sel ast.SelectionSet, v *model.Archetypes) graphql.Marshaler {
+func (ec *executionContext) marshalOArchetypes2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐArchetypes(ctx context.Context, sel ast.SelectionSet, v *model.Archetypes) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10093,14 +10093,14 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOCampaign2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCampaign(ctx context.Context, sel ast.SelectionSet, v *model.Campaign) graphql.Marshaler {
+func (ec *executionContext) marshalOCampaign2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCampaign(ctx context.Context, sel ast.SelectionSet, v *model.Campaign) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Campaign(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOCharacter2ᚕgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacterᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Character) graphql.Marshaler {
+func (ec *executionContext) marshalOCharacter2ᚕgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacterᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Character) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10127,7 +10127,7 @@ func (ec *executionContext) marshalOCharacter2ᚕgithubᚗcomᚋeᚑmbrownᚋrol
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCharacter2githubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacter(ctx, sel, v[i])
+			ret[i] = ec.marshalNCharacter2githubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacter(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10147,14 +10147,14 @@ func (ec *executionContext) marshalOCharacter2ᚕgithubᚗcomᚋeᚑmbrownᚋrol
 	return ret
 }
 
-func (ec *executionContext) marshalOCharacteristic2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v *model.Characteristic) graphql.Marshaler {
+func (ec *executionContext) marshalOCharacteristic2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharacteristic(ctx context.Context, sel ast.SelectionSet, v *model.Characteristic) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Characteristic(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v []*model.Clan) graphql.Marshaler {
+func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v []*model.Clan) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10181,7 +10181,7 @@ func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx, sel, v[i])
+			ret[i] = ec.marshalOClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10195,14 +10195,14 @@ func (ec *executionContext) marshalOClan2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 	return ret
 }
 
-func (ec *executionContext) marshalOClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v *model.Clan) graphql.Marshaler {
+func (ec *executionContext) marshalOClan2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐClan(ctx context.Context, sel ast.SelectionSet, v *model.Clan) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Clan(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscAbilities(ctx context.Context, sel ast.SelectionSet, v []*model.DiscAbilities) graphql.Marshaler {
+func (ec *executionContext) marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscAbilities(ctx context.Context, sel ast.SelectionSet, v []*model.DiscAbilities) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10229,7 +10229,7 @@ func (ec *executionContext) marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrow
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODiscAbilities2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscAbilities(ctx, sel, v[i])
+			ret[i] = ec.marshalODiscAbilities2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscAbilities(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10243,14 +10243,14 @@ func (ec *executionContext) marshalODiscAbilities2ᚕᚖgithubᚗcomᚋeᚑmbrow
 	return ret
 }
 
-func (ec *executionContext) marshalODiscAbilities2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscAbilities(ctx context.Context, sel ast.SelectionSet, v *model.DiscAbilities) graphql.Marshaler {
+func (ec *executionContext) marshalODiscAbilities2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscAbilities(ctx context.Context, sel ast.SelectionSet, v *model.DiscAbilities) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._DiscAbilities(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx context.Context, sel ast.SelectionSet, v []*model.Discipline) graphql.Marshaler {
+func (ec *executionContext) marshalODiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscipline(ctx context.Context, sel ast.SelectionSet, v []*model.Discipline) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10277,7 +10277,7 @@ func (ec *executionContext) marshalODiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrown�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODiscipline2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx, sel, v[i])
+			ret[i] = ec.marshalODiscipline2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscipline(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10291,14 +10291,14 @@ func (ec *executionContext) marshalODiscipline2ᚕᚖgithubᚗcomᚋeᚑmbrown�
 	return ret
 }
 
-func (ec *executionContext) marshalODiscipline2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐDiscipline(ctx context.Context, sel ast.SelectionSet, v *model.Discipline) graphql.Marshaler {
+func (ec *executionContext) marshalODiscipline2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐDiscipline(ctx context.Context, sel ast.SelectionSet, v *model.Discipline) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Discipline(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOGeneralInfo2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneralInfoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.GeneralInfo) graphql.Marshaler {
+func (ec *executionContext) marshalOGeneralInfo2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneralInfoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.GeneralInfo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10325,7 +10325,7 @@ func (ec *executionContext) marshalOGeneralInfo2ᚕᚖgithubᚗcomᚋeᚑmbrown�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneralInfo(ctx, sel, v[i])
+			ret[i] = ec.marshalNGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneralInfo(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10345,7 +10345,7 @@ func (ec *executionContext) marshalOGeneralInfo2ᚕᚖgithubᚗcomᚋeᚑmbrown�
 	return ret
 }
 
-func (ec *executionContext) marshalOGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐGeneralInfo(ctx context.Context, sel ast.SelectionSet, v *model.GeneralInfo) graphql.Marshaler {
+func (ec *executionContext) marshalOGeneralInfo2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐGeneralInfo(ctx context.Context, sel ast.SelectionSet, v *model.GeneralInfo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10368,7 +10368,7 @@ func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalOSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v []*model.Sect) graphql.Marshaler {
+func (ec *executionContext) marshalOSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v []*model.Sect) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10395,7 +10395,7 @@ func (ec *executionContext) marshalOSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSect2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐSect(ctx, sel, v[i])
+			ret[i] = ec.marshalOSect2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐSect(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10409,7 +10409,7 @@ func (ec *executionContext) marshalOSect2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 	return ret
 }
 
-func (ec *executionContext) marshalOSect2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v *model.Sect) graphql.Marshaler {
+func (ec *executionContext) marshalOSect2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐSect(ctx context.Context, sel ast.SelectionSet, v *model.Sect) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10502,7 +10502,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTitleᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Title) graphql.Marshaler {
+func (ec *executionContext) marshalOTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTitleᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Title) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10529,7 +10529,7 @@ func (ec *executionContext) marshalOTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋroll
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTitle(ctx, sel, v[i])
+			ret[i] = ec.marshalNTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTitle(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10549,21 +10549,21 @@ func (ec *executionContext) marshalOTitle2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋroll
 	return ret
 }
 
-func (ec *executionContext) marshalOTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTitle(ctx context.Context, sel ast.SelectionSet, v *model.Title) graphql.Marshaler {
+func (ec *executionContext) marshalOTitle2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTitle(ctx context.Context, sel ast.SelectionSet, v *model.Title) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Title(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOTradition2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐTradition(ctx context.Context, sel ast.SelectionSet, v *model.Tradition) graphql.Marshaler {
+func (ec *executionContext) marshalOTradition2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐTradition(ctx context.Context, sel ast.SelectionSet, v *model.Tradition) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Tradition(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10590,7 +10590,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -10610,7 +10610,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋeᚑmbrownᚋrollW
 	return ret
 }
 
-func (ec *executionContext) marshalOVampire2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐVampire(ctx context.Context, sel ast.SelectionSet, v *model.Vampire) graphql.Marshaler {
+func (ec *executionContext) marshalOVampire2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐVampire(ctx context.Context, sel ast.SelectionSet, v *model.Vampire) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -10819,7 +10819,7 @@ func (ec *executionContext) marshalO__Type2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	return ec.___Type(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOcharType2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharType(ctx context.Context, v interface{}) (*model.CharType, error) {
+func (ec *executionContext) unmarshalOcharType2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharType(ctx context.Context, v interface{}) (*model.CharType, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -10828,7 +10828,7 @@ func (ec *executionContext) unmarshalOcharType2ᚖgithubᚗcomᚋeᚑmbrownᚋro
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOcharType2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋgraphᚋmodelᚐCharType(ctx context.Context, sel ast.SelectionSet, v *model.CharType) graphql.Marshaler {
+func (ec *executionContext) marshalOcharType2ᚖgithubᚗcomᚋeᚑmbrownᚋrollWODᚋpkgᚋgraphᚋmodelᚐCharType(ctx context.Context, sel ast.SelectionSet, v *model.CharType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
