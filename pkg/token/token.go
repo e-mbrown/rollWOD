@@ -3,32 +3,43 @@ package token
 type TokenType string
 
 type Token struct {
-	Type TokenType
+	Type    TokenType
 	Literal []byte
 }
 
 const (
 	ILLEGAL = "ILLEGAL"
-	EOF = "EOF"
-	
+	EOF     = "EOF"
+
 	//IDENT & LITERALS
 	IDENT = "IDENT"
-	INT = "INT"
+	INT   = "INT"
 	FLOAT = "FLOAT"
 
 	// KEYWORDS
 	FUNCTION = "FN"
-	DECLARE = "DCL"
-	CREATE = "CREATE"
-	
+	DECLARE  = "DCL"
+	CREATE   = "CREATE"
+	IF = "IF"
+	ELSE = "ELSE"
+	TRUE = "TRUE"
+	FALSE = "FALSE"
+	RETURN = "RETURN"	
+
 	//OP
-	ASSIGN = "="
-	PLUS = "+"
-	MINUS = "-"
+	ASSIGN   = "="
+	PLUS     = "+"
+	MINUS    = "-"
 	ASTERISK = "*"
+	SLASH = "/"
+	LCARET = "<"
+	RCARET = ">"
+	BANG = "!"
+	EQ = "=="
+	N_EQ = "!="
 
 	// DELIMITER
-	COMMA = ","
+	COMMA     = ","
 	SEMICOLON = ";"
 
 	LPAREN = "("
@@ -37,3 +48,20 @@ const (
 	RBRACE = "}"
 )
 
+var keywords = map[string]TokenType{
+	"fn":  FUNCTION,
+	"dcl": DECLARE,
+	"if" : IF,
+	"else": ELSE,
+	"true": TRUE,
+	"false": FALSE,
+	"return": RETURN,
+}
+
+func LookupIdent(lit []byte) TokenType {
+	if tok, ok := keywords[string(lit)]; ok {
+		return tok
+	}
+
+	return IDENT
+}
