@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 
 	"github.com/e-mbrown/rollWOD/pkg/token"
@@ -83,7 +82,6 @@ func (l *Lexer) NextToken() token.Token {
 	case byte('}'):
 		tok = newToken(token.RBRACE, l.ch)
 	case byte('!'):
-		fmt.Println(string(l.peekChar()))
 		if l.peekChar() == '=' {
 			ch := l.ch
 			l.readChar()
@@ -92,9 +90,21 @@ func (l *Lexer) NextToken() token.Token {
 			tok = newToken(token.BANG, l.ch)
 		}
 	case byte('<'):
-		tok = newToken(token.LCARET, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.N_EQ, Literal: []byte{ch, l.ch}}
+		} else {
+			tok = newToken(token.LCARET, l.ch)
+		}
 	case byte('>'):
-		tok = newToken(token.RCARET, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.N_EQ, Literal: []byte{ch, l.ch}}
+		} else {
+			tok = newToken(token.RCARET, l.ch)
+		}
 	case 0:
 		tok.Literal = []byte{0}
 		tok.Type = token.EOF

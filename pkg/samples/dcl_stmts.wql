@@ -1,0 +1,3 @@
+dcl x2 = 5;
+dcl BigGuy = 10;
+dcl snake_case = 400;

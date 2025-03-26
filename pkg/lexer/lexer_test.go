@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/e-mbrown/rollWOD/pkg/lexer/samples"
+	"github.com/e-mbrown/rollWOD/pkg/samples"
 	"github.com/e-mbrown/rollWOD/pkg/token"
 )
 
