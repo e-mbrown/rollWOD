@@ -8,7 +8,8 @@ import (
 )
 
 type Lexer struct {
-	filename string
+	Filename string
+	FileLn   int
 	reader   *bufio.Reader // might not be needed
 	input    []byte
 	pos      int
@@ -20,10 +21,11 @@ func NewLexer(input *os.File) (*Lexer, error) {
 	var l *Lexer
 	var err error
 	if input == nil {
-		l = &Lexer{}
+		l = &Lexer{FileLn: 1}
 	} else {
 		l = &Lexer{
-			filename: input.Name(),
+			Filename: input.Name(),
+			FileLn:   1,
 			reader:   bufio.NewReader(input),
 		}
 		// TODO: This may need to be a scanner, not a reader. The purpose
@@ -170,6 +172,9 @@ func (l *Lexer) readNum() ([]byte, bool) {
 
 func (l *Lexer) skipWhitespace() {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		if l.ch == '\n' {
+			l.FileLn++
+		}
 		l.readChar()
 	}
 }

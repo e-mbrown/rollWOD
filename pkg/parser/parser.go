@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/e-mbrown/rollWOD/pkg/lexer"
 	"github.com/e-mbrown/rollWOD/pkg/token"
 	"github.com/e-mbrown/rollWOD/pkg/wql"
@@ -11,10 +13,12 @@ type Parser struct {
 
 	currTok token.Token
 	peekTok token.Token
+
+	errs []string
 }
 
 func NewParser(l *lexer.Lexer) *Parser {
-	p := &Parser{l:l}
+	p := &Parser{l:l, errs: []string{}}
 
 	p.nextToken()
 	p.nextToken()
@@ -46,6 +50,8 @@ func (p *Parser) parseStmt() wql.Stmt{
 	switch p.currTok.Type {
 	case token.DECLARE:
 		return p.parseDeclareStmt()
+	case token.RETURN:
+		return p.parseReturnStmt()
 	default:
 		return nil
 	}
@@ -74,6 +80,18 @@ func (p *Parser) parseDeclareStmt() *wql.DeclareStmt {
 	return stmt
 }
 
+func (p *Parser) parseReturnStmt() *wql.ReturnStmt {
+	stmt := &wql.ReturnStmt{Token: p.currTok}
+	
+	p.nextToken()
+
+	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
 func(p *Parser) curTokenIs(t token.TokenType) bool {
 	return p.currTok.Type == t
 }
@@ -87,6 +105,16 @@ func(p *Parser) expectPeek(t token.TokenType) bool {
 		p.nextToken()
 		return true
 	} else {
+		p.peekError(t)
 		return false
 	}
+}
+
+func(p *Parser) Errors() []string {
+	return p.errs
+}
+
+func(p *Parser) peekError(t token.TokenType) {
+	msg := fmt.Sprintf("%s.ln %d--expected next token to be %s, got %s instead", p.l.Filename, p.l.FileLn ,t, p.peekTok.Type)
+	p.errs = append(p.errs, msg)
 }
