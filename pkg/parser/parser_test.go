@@ -154,6 +154,102 @@ func TestParsingPrefixExpr(t *testing.T) {
 	}
 }
 
+func TestParsingInfixExpr(t *testing.T) {
+	infixTest := []struct {
+		input string
+		lVal int64
+		op string
+		rVal int64
+	}{
+		{"5 + 5;", 5, "+", 5},
+		{"5 - 5;", 5, "-", 5},
+		{"5 == 5;", 5, "==", 5},
+		{"5 != 5;", 5, "!=", 5},
+		{"5 < 5;", 5, "<", 5},
+		{"5 <= 5;", 5, "<=", 5},
+	}
+
+	for _, tt := range infixTest {
+		p := prepareStringParseTest(t, tt.input)
+		root := p.ParseWQL()
+		checkParserErrors(t, p)
+
+		if len(root.Stmts) != 1 {
+			t.Fatalf("root should have 1 statement. got=%d", len(root.Stmts))
+		}
+
+		stmt, ok := root.Stmts[0].(*wql.ExprStmt)
+		if !ok {
+			t.Fatalf("wql.Stmt[0] is not a wql.ExprStmt. got:%T", root.Stmts[0])
+		}
+
+		expr, ok := stmt.Expr.(*wql.InfixExpr)
+		if !ok {
+			t.Fatalf("expr not wql.InfixExpr. got:%T", expr)
+		}
+
+		if !testIntLit(t, expr.Left, tt.lVal) {
+			return
+		}
+
+		if expr.Op != tt.op {
+			t.Errorf("literal.op not %s. got:%s", expr.Op, tt.op)
+		}
+
+		if !testIntLit(t, expr.Right, tt.rVal) {
+			return
+		}
+	}
+}
+
+func TestOpPrecedenceParse(t *testing.T) {
+	tests := []struct {
+		input string
+		expected string
+	}{
+		{
+			"-a * b",
+			"((-a) * b)",
+		},
+		{
+			"!-a",
+			"(!(-a))",
+		},
+		{
+			"a + b - c",
+			"((a + b) - c)",
+		},
+		{
+			"a + b * c + d / e -f",
+			"(((a + (b * c)) + (d / e)) - f)",
+		},
+		{
+			"3 + 4; -5 * 5",
+			"(3 + 4)((-5) * 5)",
+		},
+		{
+			"5 < 4 != 3 > 4",
+			"((5 < 4) != (3 > 4))",
+		},
+		{
+			"3 + 4 * 5 == 3 * 1 + 4 * 5",
+			"((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
+		},
+	}
+
+	for _, tt := range tests {
+		p := prepareStringParseTest(t, tt.input)
+		root := p.ParseWQL()
+		checkParserErrors(t, p)
+
+		res := root.String()
+
+		if res != tt.expected {
+			t.Errorf("expected=%q, got=%q", tt.expected, res)
+		}
+	}
+}
+
 /* HELPERS */
 
 func prepareFileParseTest(t *testing.T, fn string) *parser.Parser {
