@@ -22,13 +22,13 @@ const (
 )
 
 var precedences = map[token.TokenType]int{
-	token.EQ: EQUALS,
-	token.N_EQ: EQUALS,
-	token.LCARET: LESSGREATER,
-	token.RCARET: LESSGREATER,
-	token.PLUS: SUM,
-	token.MINUS: SUM,
-	token.SLASH: PRODUCT,
+	token.EQ:       EQUALS,
+	token.N_EQ:     EQUALS,
+	token.LCARET:   LESSGREATER,
+	token.RCARET:   LESSGREATER,
+	token.PLUS:     SUM,
+	token.MINUS:    SUM,
+	token.SLASH:    PRODUCT,
 	token.ASTERISK: PRODUCT,
 }
 
@@ -101,12 +101,14 @@ func (p *Parser) parseDeclareStmt() *wql.DeclareStmt {
 	}
 
 	stmt.Name = &wql.Identifier{Token: p.currTok, Val: p.currTok.Literal}
+	
 	//predict assign
 	if !p.expectPeek(token.ASSIGN) {
 		return nil
 	}
 
-	//TODO ...
+	p.nextToken()
+	stmt.Val = p.parseExpr(LOWEST)
 
 	for !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
@@ -164,6 +166,10 @@ func (p *Parser) parseIdent() wql.Expr {
 	return &wql.Identifier{Token: p.currTok, Val: p.currTok.Literal}
 }
 
+func (p *Parser) parseBool() wql.Expr {
+	return &wql.BoolLiteral{Token: p.currTok, Val: p.curTokenIs(token.TRUE)}
+}
+
 func (p *Parser) parseIntLiteral() wql.Expr {
 	lit := &wql.IntLiteral{Token: p.currTok}
 
@@ -181,7 +187,7 @@ func (p *Parser) parseIntLiteral() wql.Expr {
 func (p *Parser) parsePreExpr() wql.Expr {
 	expr := &wql.PrefixExpr{
 		Token: p.currTok,
-		Op: string(p.currTok.Literal),
+		Op:    string(p.currTok.Literal),
 	}
 
 	p.nextToken()
@@ -193,8 +199,8 @@ func (p *Parser) parsePreExpr() wql.Expr {
 func (p *Parser) parseInExpr(left wql.Expr) wql.Expr {
 	expr := &wql.InfixExpr{
 		Token: p.currTok,
-		Op: string(p.currTok.Literal),
-		Left: left,
+		Op:    string(p.currTok.Literal),
+		Left:  left,
 	}
 
 	precedence := p.curPrecedence()
@@ -203,7 +209,6 @@ func (p *Parser) parseInExpr(left wql.Expr) wql.Expr {
 
 	return expr
 }
-
 
 /*HELPER FUNCTIONS*/
 
@@ -214,11 +219,13 @@ func (p *Parser) regPrefix(t token.TokenType, fn prefixParse) {
 	p.preParse[t] = fn
 }
 
-func registerFn(p *Parser){
+func registerFn(p *Parser) {
 	p.regPrefix(token.IDENT, p.parseIdent)
 	p.regPrefix(token.INT, p.parseIntLiteral)
 	p.regPrefix(token.BANG, p.parsePreExpr)
 	p.regPrefix(token.MINUS, p.parsePreExpr)
+	p.regPrefix(token.TRUE, p.parseBool)
+	p.regPrefix(token.FALSE, p.parseBool)
 
 	p.regInfix(token.MINUS, p.parseInExpr)
 	p.regInfix(token.PLUS, p.parseInExpr)
@@ -242,7 +249,6 @@ func (p *Parser) curPrecedence() int {
 	return LOWEST
 }
 
-
 func (p *Parser) peekTokenIs(t token.TokenType) bool {
 	return p.peekTok.Type == t
 }
@@ -254,7 +260,6 @@ func (p *Parser) peekPrecedence() int {
 
 	return LOWEST
 }
-
 
 func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
@@ -276,6 +281,6 @@ func (p *Parser) peekError(t token.TokenType) {
 }
 
 func (p *Parser) noPreParseErr(t token.Token) {
-	msg:= fmt.Sprintf("no prefix parse func for %s found. Literal=%s", t, string(t.Literal))
+	msg := fmt.Sprintf("no prefix parse func for %s found. Literal=%s", t, string(t.Literal))
 	p.errs = append(p.errs, msg)
 }

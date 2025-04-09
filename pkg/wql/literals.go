@@ -10,3 +10,12 @@ type IntLiteral struct {
 func (il *IntLiteral) exprNode()            {}
 func (il *IntLiteral) TokenLiteral() []byte { return il.Token.Literal }
 func (il *IntLiteral) String() string       { return string(il.Token.Literal) }
+
+type BoolLiteral struct {
+	Token token.Token
+	Val bool
+}
+
+func (b *BoolLiteral) exprNode()            {}
+func (b *BoolLiteral) TokenLiteral() []byte { return b.Token.Literal }
+func (b *BoolLiteral) String() string       { return string(b.Token.Literal) }

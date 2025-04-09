@@ -75,19 +75,9 @@ func TestIdentExpr(t *testing.T) {
 		t.Fatalf("wqlRoot.Stmt[0] is not a wql.ExprStmt. got:%T", wqlRoot.Stmts[0])
 	}
 
-	ident, ok := stmt.Expr.(*wql.Identifier)
-	if !ok {
-		t.Fatalf("wqlRoot.Stmt[0] is not a wql.ExprStmt. got:%T", wqlRoot.Stmts[0])
+	if !testIdent(t, stmt.Expr, "isIdent"){
+		return
 	}
-
-	if string(ident.Val) != "isIdent" {
-		t.Errorf("ident.Val is not:%s. got:%s", "isIdent", string(ident.Val))
-	}
-
-	if string(ident.TokenLiteral()) != "isIdent" {
-		t.Errorf("ident.TokenLiteral is not:%s. got:%s", "isIdent", string(ident.TokenLiteral()))
-	}
-
 }
 
 func TestIntLit(t *testing.T) {
@@ -103,16 +93,45 @@ func TestIntLit(t *testing.T) {
 		t.Fatalf("wqlRoot.Stmt[0] is not a wql.ExprStmt. got:%T", wqlRoot.Stmts[0])
 	}
 
-	literal, ok := stmt.Expr.(*wql.IntLiteral)
-	if !ok {
-		t.Fatalf("expr not wql.IntLiteral. got:%T", literal)
+	testIntLit(t, stmt.Expr, 24)
+}
+func TestBoolLit(t *testing.T) {
+	p := prepareFileParseTest(t, "bool_stmt")
+	wqlRoot := p.ParseWQL()
+	checkParserErrors(t, p)
+	if len(wqlRoot.Stmts) != 4 {
+		t.Fatalf("root should have 4 statement. got=%d", len(wqlRoot.Stmts))
 	}
 
-	if literal.Val != 24 {
-		t.Errorf("literal.Val not %d. got:%d", 24, literal.Val)
+	tests := []struct {
+		expectedIdentifier bool
+	}{
+		{true},
+		{false},
+		{true},
+		{false},
 	}
-	if string(literal.TokenLiteral()) != "24" {
-		t.Errorf("literal.TokenLiteral not %s, got:%s", "24", literal.TokenLiteral())
+
+	for i, tt := range tests {
+		var skipExprStmt bool
+		stmt := wqlRoot.Stmts[i]
+		exprStmt, ok := stmt.(*wql.ExprStmt)
+		if !ok {
+			dStmt, ok := stmt.(*wql.DeclareStmt)
+			if !ok{
+				t.Errorf("stmt is not a declare stmt or exprStmt. got=%T", stmt)
+				return
+			}
+			t.Log(dStmt)
+			if !testBoolLit(t, dStmt.Val, tt.expectedIdentifier) {
+				return
+			}
+			skipExprStmt = true
+		}
+
+		if !skipExprStmt && !testBoolLit(t, exprStmt.Expr, tt.expectedIdentifier) {
+			return
+		}
 	}
 }
 
@@ -183,20 +202,7 @@ func TestParsingInfixExpr(t *testing.T) {
 			t.Fatalf("wql.Stmt[0] is not a wql.ExprStmt. got:%T", root.Stmts[0])
 		}
 
-		expr, ok := stmt.Expr.(*wql.InfixExpr)
-		if !ok {
-			t.Fatalf("expr not wql.InfixExpr. got:%T", expr)
-		}
-
-		if !testIntLit(t, expr.Left, tt.lVal) {
-			return
-		}
-
-		if expr.Op != tt.op {
-			t.Errorf("literal.op not %s. got:%s", expr.Op, tt.op)
-		}
-
-		if !testIntLit(t, expr.Right, tt.rVal) {
+		if !testInfixExpr(t, stmt.Expr, tt.lVal, tt.op, tt.rVal){
 			return
 		}
 	}
@@ -278,6 +284,50 @@ func prepareStringParseTest(t *testing.T, input string) *parser.Parser {
 	return parser.NewParser(l)
 }
 
+func testLiteralExpr(
+	t *testing.T,
+	expr wql.Expr,
+	expect interface{},
+) bool {
+	switch v := expect.(type) {
+	case int:
+		return testIntLit(t, expr, int64(v))
+	case int64:
+		return testIntLit(t, expr, v)
+	case string:
+		return testIdent(t, expr, v)
+	}
+	t.Errorf("type of expr not handled. got=%T", expr)
+	return false
+}
+
+func testInfixExpr(
+	t *testing.T,
+	expr wql.Expr,
+	left interface{},
+	op string,
+	right interface{},
+) bool {
+	opExpr, ok := expr.(*wql.InfixExpr)
+	if !ok{
+		t.Errorf("expr isn't wql.OperatorExpr. got=%T(%s)", expr, expr)
+	}
+
+	if !testLiteralExpr(t, opExpr.Left, left) {
+		return false
+	}
+
+	if opExpr.Op != op {
+		t.Errorf("expr.Op isn't '%s'. got=%q", op, opExpr.Op)
+	}
+
+	if !testLiteralExpr(t, opExpr.Right, right) {
+		return false
+	}
+
+	return true
+}
+
 func testDeclareStmt(t *testing.T, s wql.Stmt, name string) bool {
 	if string(s.TokenLiteral()) != "dcl" {
 		t.Errorf("Token literal not 'dcl'. got=%q", s.TokenLiteral())
@@ -289,14 +339,7 @@ func testDeclareStmt(t *testing.T, s wql.Stmt, name string) bool {
 		t.Errorf("current stmt isn't dcl stmt. got: %T", s)
 	}
 
-	if string(dclStmt.Name.Val) != name {
-		t.Errorf("dclStmt name val not: '%s'. got=%s", name, dclStmt.Name.Val)
-	}
-
-	if string(dclStmt.Name.TokenLiteral()) != name {
-		t.Errorf("dclStmt name token literal not: '%s'. got=%q, %s", name, dclStmt.Name.TokenLiteral(), string(dclStmt.TokenLiteral()))
-	}
-	return true
+	return testLiteralExpr(t, dclStmt.Name, name)
 }
 
 func testIntLit(t *testing.T, il wql.Expr, val int64) bool {
@@ -320,6 +363,48 @@ func testIntLit(t *testing.T, il wql.Expr, val int64) bool {
 	return true
 }
 
+func testBoolLit(t *testing.T, il wql.Expr, val bool) bool {
+	bLit, ok := il.(*wql.BoolLiteral)
+	if !ok {
+		t.Errorf("il not wql.BoolLiteral, got=%T", il)
+		return false
+	}
+
+	if bLit.Val != val {
+		t.Errorf("intLit.Val not %t. got=%t", val, bLit.Val)
+		return false
+	}
+
+	str := fmt.Sprintf("%t", val)
+	if string(bLit.TokenLiteral()) != str {
+		t.Errorf("intLit.Val not %s. got=%s", str, string(bLit.TokenLiteral()))
+		return false
+	}
+
+	return true
+}
+
+func testIdent(t *testing.T, expr wql.Expr, val string) bool {
+	ident, ok := expr.(*wql.Identifier)
+	if !ok {
+		t.Errorf("expr isn't *wql.Identifier, got=%T", expr)
+		return false
+	}
+
+	if string(ident.Val) != val {
+		t.Errorf("ident.Val != %s. got=%s", val, string(ident.Val))
+		return false
+	}
+
+	if string(ident.TokenLiteral()) != val {
+		t.Errorf("ident.Val != %s. got=%s", val, string(ident.TokenLiteral()))
+		return false
+	}
+
+
+	return true
+}
+
 func checkParserErrors(t *testing.T, psr *parser.Parser) {
 	errors := psr.Errors()
 
@@ -334,3 +419,4 @@ func checkParserErrors(t *testing.T, psr *parser.Parser) {
 
 	t.FailNow()
 }
+
