@@ -101,7 +101,7 @@ func (p *Parser) parseDeclareStmt() *wql.DeclareStmt {
 	}
 
 	stmt.Name = &wql.Identifier{Token: p.currTok, Val: p.currTok.Literal}
-	
+
 	//predict assign
 	if !p.expectPeek(token.ASSIGN) {
 		return nil
@@ -184,6 +184,30 @@ func (p *Parser) parseIntLiteral() wql.Expr {
 	return lit
 }
 
+func (p *Parser) parseIfExpr() wql.Expr {
+	expr := &wql.IfExpr{Token: p.currTok}
+
+	p.nextToken()
+	expr.Cond = p.parseExpr(LOWEST)
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	expr.IfBlock = p.parseBlockStmt()
+	
+	if p.peekTokenIs(token.ELSE){
+		p.nextToken()
+
+		if !p.expectPeek(token.LBRACE){
+			return nil
+		}
+
+		expr.ElBlock = p.parseBlockStmt()
+	}
+	return expr
+}
+
 func (p *Parser) parsePreExpr() wql.Expr {
 	expr := &wql.PrefixExpr{
 		Token: p.currTok,
@@ -192,6 +216,18 @@ func (p *Parser) parsePreExpr() wql.Expr {
 
 	p.nextToken()
 	expr.Right = p.parseExpr(PREFIX)
+
+	return expr
+}
+
+func (p *Parser) parseGroupedExpr() wql.Expr {
+	p.nextToken()
+
+	expr := p.parseExpr(LOWEST)
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
 
 	return expr
 }
@@ -210,6 +246,23 @@ func (p *Parser) parseInExpr(left wql.Expr) wql.Expr {
 	return expr
 }
 
+func (p *Parser) parseBlockStmt() *wql.BlockStmt {
+	block := &wql.BlockStmt{Token: p.currTok}
+	block.Stmts = []wql.Stmt{}
+
+	p.nextToken()
+
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+		stmt := p.parseStmt()
+		if stmt != nil {
+			block.Stmts = append(block.Stmts, stmt)
+		}
+		p.nextToken()
+	}
+
+	return block
+}
+
 /*HELPER FUNCTIONS*/
 
 func (p *Parser) regInfix(t token.TokenType, fn infixParse) {
@@ -226,6 +279,8 @@ func registerFn(p *Parser) {
 	p.regPrefix(token.MINUS, p.parsePreExpr)
 	p.regPrefix(token.TRUE, p.parseBool)
 	p.regPrefix(token.FALSE, p.parseBool)
+	p.regPrefix(token.LPAREN, p.parseGroupedExpr)
+	p.regPrefix(token.IF, p.parseIfExpr)
 
 	p.regInfix(token.MINUS, p.parseInExpr)
 	p.regInfix(token.PLUS, p.parseInExpr)

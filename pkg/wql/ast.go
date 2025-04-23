@@ -51,3 +51,21 @@ type Identifier struct {
 func (i *Identifier) exprNode()            {}
 func (i *Identifier) String() string       { return string(i.Val) }
 func (i *Identifier) TokenLiteral() []byte { return i.Token.Literal }
+
+type BlockStmt struct {
+	Token token.Token
+	Stmts []Stmt
+}
+
+func (bs *BlockStmt) stmtNode()            {}
+func (bs *BlockStmt) String() string {
+	var output bytes.Buffer
+
+	for _, s := range bs.Stmts {
+		output.WriteString(s.String())
+	}
+
+	return output.String()
+}
+
+func (bs *BlockStmt) TokenLiteral() []byte { return bs.Token.Literal }
