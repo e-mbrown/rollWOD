@@ -1,12 +1,17 @@
 package parser_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/e-mbrown/rollWOD/pkg/parser"
 	"github.com/e-mbrown/rollWOD/pkg/wql"
 )
+
+type testInfix struct {
+	left  interface{}
+	op    string
+	right interface{}
+}
 
 func TestDeclare(t *testing.T) {
 	psr := parser.PrepareFileParseTest(t, "dcl_stmts")
@@ -21,16 +26,23 @@ func TestDeclare(t *testing.T) {
 	}
 
 	tests := []struct {
-		expectedIdentifier []byte
+		expectIdent string
+		expectVal   interface{}
 	}{
-		{[]byte("x2")},
-		{[]byte("BigGuy")},
-		{[]byte("snake_case")},
+		{"x", 5},
+		{"BigGuy", true},
+		{"snake_case", "y"},
 	}
 
 	for i, tt := range tests {
 		stmt := wqlRoot.Stmts[i]
-		if !parser.TestDeclareStmt(t, stmt, string(tt.expectedIdentifier)) {
+
+		if !parser.TestDeclareStmt(t, stmt, tt.expectIdent) {
+			return
+		}
+
+		val := stmt.(*wql.DeclareStmt).Val
+		if !parser.TestLiteralExpr(t, val, tt.expectVal) {
 			return
 		}
 	}
@@ -48,14 +60,27 @@ func TestReturnStmt(t *testing.T) {
 		t.Fatalf("Expected 3 parsed statements, got: %d", len(wqlRoot.Stmts))
 	}
 
-	for _, stmt := range wqlRoot.Stmts {
-		returnStmt, ok := stmt.(*wql.ReturnStmt)
+	tests := []struct {
+		expectVal interface{}
+	}{
+		{nil},
+		{5},
+		{"Jim"},
+	}
+
+	for i, tt := range tests {
+		returnStmt, ok := wqlRoot.Stmts[i].(*wql.ReturnStmt)
 		if !ok {
-			t.Errorf("stmt not *wql.ReturnStmt. got: %T", stmt)
+			t.Errorf("stmt not *wql.ReturnStmt. got: %T", wqlRoot.Stmts[i])
 			continue
 		}
+
 		if string(returnStmt.TokenLiteral()) != "return" {
 			t.Errorf("returnstmt.TokenLiteral not 'return'. got %q", returnStmt.TokenLiteral())
+		}
+
+		if !parser.TestLiteralExpr(t, returnStmt.ReturnVal, tt.expectVal) {
+			return
 		}
 	}
 }
@@ -266,8 +291,16 @@ func TestOpPrecedenceParse(t *testing.T) {
 			"(-(5 + 5))",
 		},
 		{
-			"!(true == true)",
-			"(!(true == true))",
+			"a + add(b * c) + d",
+			"((a + add((b * c))) + d)",
+		},
+		{
+			"add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))",
+			"add(a, b, 1, (2 * 3), (4 + 5), add(6, (7 * 8)))",
+		},
+		{
+			"add(a + b + c * d / f + g)",
+			"add((((a + b) + ((c * d) / f)) + g))",
 		},
 	}
 
@@ -279,7 +312,7 @@ func TestOpPrecedenceParse(t *testing.T) {
 		res := root.String()
 
 		if res != tt.expected {
-			t.Errorf("expected=%q, got=%q", tt.expected, res)
+			t.Errorf("expected=%q, got=%q \n", tt.expected, res)
 		}
 	}
 }
@@ -300,7 +333,7 @@ func TestParseIfExpr(t *testing.T) {
 		{"x", "<", "y", []string{"x"}, ""},
 		{"x", "!=", "y", []string{"x"}, "y"},
 	}
-	fmt.Println(wqlRoot.Stmts)
+
 	if len(wqlRoot.Stmts) != len(tests) {
 		t.Fatalf("Wql body does not contain %d stmts. got=%d", len(tests), len(wqlRoot.Stmts))
 	}
@@ -316,7 +349,6 @@ func TestParseIfExpr(t *testing.T) {
 			t.Fatalf("expr is not an wql.IfStmt. got=%T", expr)
 		}
 
-		fmt.Println(expr.String())
 		if !parser.TestInfixExpr(
 			t, expr.Cond, tt.expectCondLeft, tt.op, tt.expectCondRight) {
 			return
@@ -340,4 +372,131 @@ func TestParseIfExpr(t *testing.T) {
 
 	}
 
+}
+
+func TestFuncLitParse(t *testing.T) {
+	p := parser.PrepareFileParseTest(t, "func_lit")
+
+	wqlRoot := p.ParseWQL()
+	parser.CheckParserErrors(t, p)
+
+	tests := []struct {
+		params []string
+		body   int
+		left   string
+		op     string
+		right  string
+	}{
+		{[]string{"x", "y"}, 1, "x", "+", "y"},
+	}
+
+	if len(wqlRoot.Stmts) != len(tests) {
+		t.Fatalf("Wql body does not contain %d stmts. got=%d", len(tests), len(wqlRoot.Stmts))
+	}
+
+	for i, tt := range tests {
+		stmt, ok := wqlRoot.Stmts[i].(*wql.ExprStmt)
+		if !ok {
+			t.Fatalf("wqlRoot.stmt[%d] is not an wql.ExprStmt. got=%T", i, stmt)
+		}
+
+		fn, ok := stmt.Expr.(*wql.FuncLit)
+		if !ok {
+			t.Fatalf("expr is not an wql.FuncLit. got=%T", fn)
+		}
+
+		if len(fn.Params) != len(tt.params) {
+			t.Fatalf("FuncLit does not have %d params. got=%d", len(tt.params), len(fn.Params))
+		}
+
+		for i, ident := range tt.params {
+			parser.TestLiteralExpr(t, fn.Params[i], ident)
+		}
+
+		if len(fn.Body.Stmts) != tt.body {
+			t.Fatalf("FuncLit body len is not %d. got=%d", tt.body, len(fn.Body.Stmts))
+		}
+
+		body, ok := fn.Body.Stmts[i].(*wql.ExprStmt)
+		if !ok {
+			t.Fatalf("body.stmt[%d] is not an wql.ExprStmt. got=%T", i, body)
+		}
+
+		parser.TestInfixExpr(t, body.Expr, tt.left, tt.op, tt.right)
+
+	}
+}
+
+func TestFuncParamParse(t *testing.T) {
+	tests := []struct {
+		input        string
+		expectParams []string
+	}{
+		{input: "func() {}", expectParams: []string{}},
+		{input: "func(x) {}", expectParams: []string{"x"}},
+		{input: "func(x, y, z) {}", expectParams: []string{"x", "y", "z"}},
+	}
+
+	for _, tt := range tests {
+		p := parser.PrepareStringParseTest(t, tt.input)
+		wqlRoot := p.ParseWQL()
+		parser.CheckParserErrors(t, p)
+
+		stmt := wqlRoot.Stmts[0].(*wql.ExprStmt)
+		fn := stmt.Expr.(*wql.FuncLit)
+
+		if len(fn.Params) != len(tt.expectParams) {
+			t.Fatalf("FuncLit does not have %d params. got=%d", len(tt.expectParams), len(fn.Params))
+		}
+
+		for i, ident := range tt.expectParams {
+			parser.TestLiteralExpr(t, fn.Params[i], ident)
+		}
+	}
+}
+
+func TestCallExprParse(t *testing.T) {
+	p := parser.PrepareFileParseTest(t, "call_stmt")
+	wqlRoot := p.ParseWQL()
+	parser.CheckParserErrors(t, p)
+
+	tests := []struct {
+		ident string
+		args  []interface{}
+	}{
+		{ident: "add", args: []interface{}{1, testInfix{2, "*", 3}, testInfix{4, "+", 5}}},
+	}
+
+	if len(wqlRoot.Stmts) != len(tests) {
+		t.Fatalf("WqlRoot.stmt does not contain %d stmts. got=%d\n", len(tests), len(wqlRoot.Stmts))
+	}
+
+	for i, tt := range tests {
+		stmt, ok := wqlRoot.Stmts[i].(*wql.ExprStmt)
+		if !ok {
+			t.Fatalf("wqlRoot.stmt[%d] is not an wql.ExprStmt. got=%T", i, stmt)
+		}
+
+		call, ok := stmt.Expr.(*wql.CallExpr)
+		if !ok {
+			t.Fatalf("expr is not an wql.CallExpr. got=%T", call)
+		}
+
+		if !parser.TestIdent(t, call.Func, tt.ident) {
+			return
+		}
+
+		if len(call.Args) != len(tt.args) {
+			t.Fatalf("FuncLit body len is not %d. got=%d", len(tt.args), len(call.Args))
+		}
+
+		for i, arg := range tt.args {
+			switch v := arg.(type) {
+			case testInfix:
+				parser.TestInfixExpr(t, call.Args[i], v.left, v.op, v.right)
+			default:
+				parser.TestLiteralExpr(t, call.Args[i], arg)
+			}
+		}
+	}
 }

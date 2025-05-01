@@ -10,7 +10,7 @@ type IfExpr struct {
 	Token token.Token
 	Cond Expr
 	IfBlock *BlockStmt
-	ElBlock	* BlockStmt
+	ElBlock	*BlockStmt
 }
 
 

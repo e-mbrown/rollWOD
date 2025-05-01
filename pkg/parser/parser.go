@@ -30,6 +30,7 @@ var precedences = map[token.TokenType]int{
 	token.MINUS:    SUM,
 	token.SLASH:    PRODUCT,
 	token.ASTERISK: PRODUCT,
+	token.LPAREN:   CALL,
 }
 
 type (
@@ -122,7 +123,12 @@ func (p *Parser) parseReturnStmt() *wql.ReturnStmt {
 
 	p.nextToken()
 
-	for !p.curTokenIs(token.SEMICOLON) {
+	if p.curTokenIs(token.SEMICOLON) {
+		return stmt
+	}
+
+	stmt.ReturnVal = p.parseExpr(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
 
@@ -195,11 +201,11 @@ func (p *Parser) parseIfExpr() wql.Expr {
 	}
 
 	expr.IfBlock = p.parseBlockStmt()
-	
-	if p.peekTokenIs(token.ELSE){
+
+	if p.peekTokenIs(token.ELSE) {
 		p.nextToken()
 
-		if !p.expectPeek(token.LBRACE){
+		if !p.expectPeek(token.LBRACE) {
 			return nil
 		}
 
@@ -246,6 +252,54 @@ func (p *Parser) parseInExpr(left wql.Expr) wql.Expr {
 	return expr
 }
 
+func (p *Parser) parseFuncLit() wql.Expr {
+	fnLit := &wql.FuncLit{Token: p.currTok}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	fnLit.Params = p.parseFuncParams()
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	fnLit.Body = p.parseBlockStmt()
+
+	return fnLit
+}
+
+func (p *Parser) parseCallExpr(function wql.Expr) wql.Expr {
+	expr := &wql.CallExpr{Token: p.currTok, Func: function}
+	expr.Args = p.parseCallArgs()
+	return expr
+}
+
+func (p *Parser) parseCallArgs() []wql.Expr {
+	args := []wql.Expr{}
+
+	if p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
+		return args
+	}
+
+	p.nextToken()
+	args = append(args, p.parseExpr(LOWEST))
+
+	for p.peekTokenIs(token.COMMA) {
+		p.nextToken()
+		p.nextToken()
+		args = append(args, p.parseExpr(LOWEST))
+	}
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	return args
+}
+
 func (p *Parser) parseBlockStmt() *wql.BlockStmt {
 	block := &wql.BlockStmt{Token: p.currTok}
 	block.Stmts = []wql.Stmt{}
@@ -261,6 +315,33 @@ func (p *Parser) parseBlockStmt() *wql.BlockStmt {
 	}
 
 	return block
+}
+
+func (p *Parser) parseFuncParams() []*wql.Identifier {
+	idents := []*wql.Identifier{}
+
+	if p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
+		return idents
+	}
+
+	p.nextToken()
+
+	ident := &wql.Identifier{Token: p.currTok, Val: p.currTok.Literal}
+	idents = append(idents, ident)
+
+	for p.peekTokenIs(token.COMMA) {
+		p.nextToken()
+		p.nextToken()
+		ident := &wql.Identifier{Token: p.currTok, Val: p.currTok.Literal}
+		idents = append(idents, ident)
+	}
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	return idents
 }
 
 /*HELPER FUNCTIONS*/
@@ -281,6 +362,7 @@ func registerFn(p *Parser) {
 	p.regPrefix(token.FALSE, p.parseBool)
 	p.regPrefix(token.LPAREN, p.parseGroupedExpr)
 	p.regPrefix(token.IF, p.parseIfExpr)
+	p.regPrefix(token.FUNCTION, p.parseFuncLit)
 
 	p.regInfix(token.MINUS, p.parseInExpr)
 	p.regInfix(token.PLUS, p.parseInExpr)
@@ -290,6 +372,7 @@ func registerFn(p *Parser) {
 	p.regInfix(token.N_EQ, p.parseInExpr)
 	p.regInfix(token.LCARET, p.parseInExpr)
 	p.regInfix(token.RCARET, p.parseInExpr)
+	p.regInfix(token.LPAREN, p.parseCallExpr)
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {

@@ -49,6 +49,8 @@ func TestLiteralExpr(
 		return TestIdent(t, expr, v)
 	case bool:
 		return TestBoolLit(t, expr, v)
+	case nil:
+		return expr == v
 	}
 	t.Errorf("type of expr not handled. got=%T", expr)
 	return false

@@ -17,7 +17,7 @@ const (
 	FLOAT = "FLOAT"
 
 	// KEYWORDS
-	FUNCTION = "FN"
+	FUNCTION = "FUNC"
 	DECLARE  = "DCL"
 	CREATE   = "CREATE"
 	IF = "IF"
@@ -49,7 +49,7 @@ const (
 )
 
 var keywords = map[string]TokenType{
-	"fn":  FUNCTION,
+	"func":  FUNCTION,
 	"dcl": DECLARE,
 	"if" : IF,
 	"else": ELSE,
