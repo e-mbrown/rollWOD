@@ -16,10 +16,9 @@ const (
 	INT   = "INT"
 	FLOAT = "FLOAT"
 
-	// KEYWORDS
+	// GENERAL KEYWORDS
 	FUNCTION = "FUNC"
 	DECLARE  = "DCL"
-	CREATE   = "CREATE"
 	IF = "IF"
 	ELSE = "ELSE"
 	TRUE = "TRUE"
@@ -46,6 +45,10 @@ const (
 	RPAREN = ")"
 	LBRACE = "{"
 	RBRACE = "}"
+
+	//QUERY KEYWORDS
+	QUERY = "QUERY"
+	CREATE = "CREATE"
 )
 
 var keywords = map[string]TokenType{
@@ -56,6 +59,8 @@ var keywords = map[string]TokenType{
 	"true": TRUE,
 	"false": FALSE,
 	"return": RETURN,
+	"query": QUERY,
+	"create": CREATE,
 }
 
 func LookupIdent(lit []byte) TokenType {

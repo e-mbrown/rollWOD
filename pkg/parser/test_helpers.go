@@ -12,7 +12,8 @@ import (
 func PrepareFileParseTest(t *testing.T, fn string) *Parser {
 	fl, err := samples.ServeSample(fn)
 	if err != nil {
-		t.Fatal("Sample `test_tokens.wql` has been altered, deleted or moved. Delete or update test")
+		t.Fatalf(
+			"Sample `%s` may have been altered, deleted, moved or may not exist.Check test name and file",fn)
 	}
 	defer fl.Close()
 
@@ -64,7 +65,7 @@ func TestInfixExpr(
 	right interface{},
 ) bool {
 	opExpr, ok := expr.(*wql.InfixExpr)
-	if !ok{
+	if !ok {
 		t.Errorf("expr isn't wql.OperatorExpr. got=%T(%s)", expr, expr)
 	}
 
@@ -156,10 +157,8 @@ func TestIdent(t *testing.T, expr wql.Expr, val string) bool {
 		return false
 	}
 
-
 	return true
 }
-
 
 func CheckParserErrors(t *testing.T, psr *Parser) {
 	errors := psr.Errors()
@@ -175,4 +174,3 @@ func CheckParserErrors(t *testing.T, psr *Parser) {
 
 	t.FailNow()
 }
-

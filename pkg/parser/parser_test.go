@@ -48,6 +48,44 @@ func TestDeclare(t *testing.T) {
 	}
 }
 
+func TestQueryBlock(t *testing.T) {
+	psr := parser.PrepareFileParseTest(t, "query_block")
+	wqlRoot := psr.ParseWQL()
+	parser.CheckParserErrors(t, psr)
+	if wqlRoot == nil {
+		t.Fatalf("ParseWQL returned nil")
+	}
+	if len(wqlRoot.Stmts) != 2 {
+		t.Fatalf("Expected 2 parsed statements, got: %d", len(wqlRoot.Stmts))
+	}
+
+	tests := []struct {
+		body       int
+		Expectstmt []string
+	}{
+		{0, []string{"10"}},
+		{2, []string{"x", "5"}},
+	}
+
+	for i, tt := range tests {
+		query, ok := wqlRoot.Stmts[i].(*wql.QueryStmt)
+		if !ok {
+			t.Fatalf("wqlRoot.stmt[%d] is not an wql.QueryStmt. got=%T", i, query)
+		}
+
+		for i, tstmt := range tt.Expectstmt{
+			body, ok := query.Body.Stmts[i].(*wql.ExprStmt)
+			if !ok {
+				t.Fatalf("body.stmt[%d] is not an wql.ExprStmt. got=%T", i, body)
+			}
+
+			if body.String() != tstmt {
+				return
+			}
+		}
+	}
+}
+
 func TestReturnStmt(t *testing.T) {
 	psr := parser.PrepareFileParseTest(t, "return_stmts")
 	wqlRoot := psr.ParseWQL()
