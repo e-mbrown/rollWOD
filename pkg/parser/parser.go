@@ -367,6 +367,7 @@ func registerFn(p *Parser) {
 	p.regPrefix(token.LPAREN, p.parseGroupedExpr)
 	p.regPrefix(token.IF, p.parseIfExpr)
 	p.regPrefix(token.FUNCTION, p.parseFuncLit)
+	p.regPrefix(token.FUNCTION, p.parseFuncLit)
 
 	p.regInfix(token.MINUS, p.parseInExpr)
 	p.regInfix(token.PLUS, p.parseInExpr)

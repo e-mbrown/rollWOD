@@ -25,7 +25,7 @@ func TestCreateStmt(t *testing.T) {
 			t.Fatalf("qs.Body.Stmts[%d] is not an wql.CreateStmt. got=%T", i, create)
 		}
 
-		if string(create.Stmt.String()) != tt.expectType {
+		if string(create.Stmt.TokenLiteral()) != tt.expectType {
 			t.Fatalf("create.StmtType is not %s. got=%s", tt.expectType, create.Stmt.String())
 		} 
 	}

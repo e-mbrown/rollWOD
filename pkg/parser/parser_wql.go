@@ -22,21 +22,42 @@ func (p *Parser) parseQueryStmt() *wql.QueryStmt {
 }
 
 func (p *Parser) parseCreateStmt() *wql.CreateStmt {
-	create := &wql.CreateStmt{Token: p.currTok}
+	stmt := &wql.CreateStmt{Token: p.currTok}
 
-	obj := &wql.ObjStmt{}
+	if !p.expectPeek(token.USER) && !p.expectPeek(token.CHARACTER) && !p.expectPeek(token.CAMPAIGN) {
+		return nil
+	}
+
+	stmt.Stmt = p.parseUserStmt()
 	
-	p.nextToken()
-	obj.StmtType =  p.currTok.Literal
-	create.Stmt = obj
+	for p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
 
-	//Probably diff parse functions
-	// switch string(p.currTok.Literal) {
-	// case "user":
-	// 	create.Stmt = obj
-	// case "campaign":
-	// case "character":
-	// }
-	p.nextToken()
-	return create
+	return stmt
+}
+
+
+
+func (p *Parser) parseUserStmt() *wql.UserStmt {
+	expr := &wql.UserStmt{Token: p.currTok}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	expr.Params = p.parseFuncParams()
+
+	if !p.expectPeek(token.VALUES) {
+		return nil
+	}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	expr.Args = p.parseCallArgs()
+
+
+	return expr
 }

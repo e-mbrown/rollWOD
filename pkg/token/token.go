@@ -49,6 +49,12 @@ const (
 	//QUERY KEYWORDS
 	QUERY = "QUERY"
 	CREATE = "CREATE"
+	USER = "USER"
+	CAMPAIGN = "CAMPAIGN"
+	CHARACTER = "CHARACTER"
+
+	// FILLER KEYWORDS
+	VALUES = "VALUES"
 )
 
 var keywords = map[string]TokenType{
