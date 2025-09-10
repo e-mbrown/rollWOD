@@ -9,7 +9,7 @@ import (
 
 type CreateStmt struct {
 	Token token.Token
-	Stmt  ObjExpr
+	Stmt  Expr
 }
 
 func (cs *CreateStmt) stmtNode()            {}
@@ -23,35 +23,25 @@ func (cs *CreateStmt) String() string {
 	return out.String()
 }
 
-type Obj interface {
-	TokenLiteral() []byte
-	String() string
-}
-type ObjExpr interface {
-	Obj
-	ObjNode()
-}
-
-type UserStmt struct {
+type CreateObjStmt struct {
 	Token  token.Token
-	Params [] *Identifier
-	Args   [] Expr
+	Params []*Identifier
+	Args   []Expr
 }
 
-func (ue UserStmt) ObjNode()              {}
-func (ue *UserStmt) ExprNode()            {}
-func (ue *UserStmt) TokenLiteral() []byte { return ue.Token.Literal }
-func (ue *UserStmt) String() string {
+func (cos *CreateObjStmt) exprNode()            {}
+func (cos *CreateObjStmt) TokenLiteral() []byte { return cos.Token.Literal }
+func (cos *CreateObjStmt) String() string {
 	var out bytes.Buffer
 
 	params := []string{}
 	args := []string{}
-	for i := 0; i < len(ue.Params); i++ {
-		params = append(params, ue.Params[i].String())
-		args = append(args, ue.Args[i].String())
+	for i := 0; i < len(cos.Params); i++ {
+		params = append(params, cos.Params[i].String())
+		args = append(args, cos.Args[i].String())
 	}
 
-	out.WriteString(string(ue.Token.Literal))
+	out.WriteString(string(cos.Token.Literal))
 	out.WriteString("(")
 	out.WriteString(strings.Join(params, ","))
 	out.WriteString(") Values")

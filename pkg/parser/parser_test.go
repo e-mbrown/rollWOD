@@ -13,6 +13,10 @@ type testInfix struct {
 	right interface{}
 }
 
+type testList struct {
+	data []any
+}
+
 func TestDeclare(t *testing.T) {
 	psr := parser.PrepareFileParseTest(t, "dcl_stmts")
 
@@ -500,9 +504,9 @@ func TestCallExprParse(t *testing.T) {
 
 	tests := []struct {
 		ident string
-		args  []interface{}
+		args  []any
 	}{
-		{ident: "add", args: []interface{}{1, testInfix{2, "*", 3}, testInfix{4, "+", 5}}},
+		{ident: "add", args: []any{1, testInfix{2, "*", 3}, testInfix{4, "+", 5}}},
 	}
 
 	if len(wqlRoot.Stmts) != len(tests) {
@@ -535,6 +539,36 @@ func TestCallExprParse(t *testing.T) {
 			default:
 				parser.TestLiteralExpr(t, call.Args[i], arg)
 			}
+		}
+	}
+}
+
+func TestListExpr(t *testing.T) {
+	p := parser.PrepareFileParseTest(t, "list_stmt")
+	wqlRoot := p.ParseWQL()
+	parser.CheckParserErrors(t, p)
+
+	tests := []struct {
+		args  []any
+	}{
+		{args: []any{1, 2, 3}},
+		{args: []any{"a", "b", "c"}},
+	}
+
+	for i, tt := range tests {
+		stmt, ok := wqlRoot.Stmts[i].(*wql.ExprStmt)
+		if !ok {
+			t.Fatalf("wqlRoot.stmt[%d] is not an wql.ExprStmt. got=%T", i, stmt)
+		}
+
+		list, ok := stmt.Expr.(*wql.ListLiteral)
+		if !ok {
+			t.Fatalf("expr is not an wql.ListLiteral. got=%T", list)
+		}
+
+		
+		for i, arg := range tt.args {
+			parser.TestLiteralExpr(t, list.Val[i], arg)
 		}
 	}
 }

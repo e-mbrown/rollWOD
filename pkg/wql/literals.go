@@ -19,3 +19,12 @@ type BoolLiteral struct {
 func (b *BoolLiteral) exprNode()            {}
 func (b *BoolLiteral) TokenLiteral() []byte { return b.Token.Literal }
 func (b *BoolLiteral) String() string       { return string(b.Token.Literal) }
+
+type ListLiteral struct {
+	Token token.Token
+	Val []Expr
+}
+
+func (l *ListLiteral) exprNode()            {}
+func (l *ListLiteral) TokenLiteral() []byte { return l.Token.Literal }
+func (l *ListLiteral) String() string       { return string(l.Token.Literal) }

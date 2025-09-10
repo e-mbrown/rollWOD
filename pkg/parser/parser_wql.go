@@ -24,11 +24,9 @@ func (p *Parser) parseQueryStmt() *wql.QueryStmt {
 func (p *Parser) parseCreateStmt() *wql.CreateStmt {
 	stmt := &wql.CreateStmt{Token: p.currTok}
 
-	if !p.expectPeek(token.USER) && !p.expectPeek(token.CHARACTER) && !p.expectPeek(token.CAMPAIGN) {
-		return nil
-	}
-
-	stmt.Stmt = p.parseUserStmt()
+	p.nextToken()
+	
+	stmt.Stmt = p.parseExpr(LOWEST)
 	
 	for p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
@@ -39,8 +37,8 @@ func (p *Parser) parseCreateStmt() *wql.CreateStmt {
 
 
 
-func (p *Parser) parseUserStmt() *wql.UserStmt {
-	expr := &wql.UserStmt{Token: p.currTok}
+func (p *Parser) parseCreateObjStmt() wql.Expr {
+	expr := &wql.CreateObjStmt{Token: p.currTok}
 
 	if !p.expectPeek(token.LPAREN) {
 		return nil
@@ -58,6 +56,12 @@ func (p *Parser) parseUserStmt() *wql.UserStmt {
 
 	expr.Args = p.parseCallArgs()
 
-
 	return expr
+}
+ 
+
+func registerQfn(p *Parser){
+	p.regPrefix(token.USER, p.parseCreateObjStmt)
+	p.regPrefix(token.CAMPAIGN,p.parseCreateObjStmt)
+	p.regPrefix(token.CHARACTER,p.parseCreateObjStmt)
 }

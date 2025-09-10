@@ -45,6 +45,8 @@ const (
 	RPAREN = ")"
 	LBRACE = "{"
 	RBRACE = "}"
+	LBRACKET = "["
+	RBRACKET = "]"
 
 	//QUERY KEYWORDS
 	QUERY = "QUERY"
@@ -67,6 +69,10 @@ var keywords = map[string]TokenType{
 	"return": RETURN,
 	"query": QUERY,
 	"create": CREATE,
+	"user": USER,
+	"campaign": CAMPAIGN,
+	"character": CHARACTER,
+	"values": VALUES,
 }
 
 func LookupIdent(lit []byte) TokenType {

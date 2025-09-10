@@ -55,6 +55,7 @@ func NewParser(l *lexer.Lexer) *Parser {
 	p.preParse = make(map[token.TokenType]prefixParse)
 	p.inParse = make(map[token.TokenType]infixParse)
 	registerFn(p)
+	registerQfn(p)
 
 	p.nextToken()
 	p.nextToken()
@@ -348,6 +349,36 @@ func (p *Parser) parseFuncParams() []*wql.Identifier {
 	return idents
 }
 
+func (p *Parser) parseListLiteral() wql.Expr {
+	expr := &wql.ListLiteral{Token: p.currTok}
+	expr.Val = p.parseListArgs()
+	return expr
+}
+
+func (p *Parser) parseListArgs() []wql.Expr {
+	args := []wql.Expr{}
+
+	if p.peekTokenIs(token.RBRACKET) {
+		p.nextToken()
+		return args
+	}
+
+	p.nextToken()
+	args = append(args, p.parseExpr(LOWEST))
+
+	for p.peekTokenIs(token.COMMA) {
+		p.nextToken()
+		p.nextToken()
+		args = append(args, p.parseExpr(LOWEST))
+	}
+
+	if !p.expectPeek(token.RBRACKET) {
+		return nil
+	}
+
+	return args
+}
+
 /*HELPER FUNCTIONS*/
 
 func (p *Parser) regInfix(t token.TokenType, fn infixParse) {
@@ -368,6 +399,7 @@ func registerFn(p *Parser) {
 	p.regPrefix(token.IF, p.parseIfExpr)
 	p.regPrefix(token.FUNCTION, p.parseFuncLit)
 	p.regPrefix(token.FUNCTION, p.parseFuncLit)
+	p.regPrefix(token.LBRACKET, p.parseListLiteral)
 
 	p.regInfix(token.MINUS, p.parseInExpr)
 	p.regInfix(token.PLUS, p.parseInExpr)
@@ -378,6 +410,7 @@ func registerFn(p *Parser) {
 	p.regInfix(token.LCARET, p.parseInExpr)
 	p.regInfix(token.RCARET, p.parseInExpr)
 	p.regInfix(token.LPAREN, p.parseCallExpr)
+
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {

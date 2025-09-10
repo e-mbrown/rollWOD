@@ -1,9 +1,11 @@
 query {
-    create character;
+    create character (test) values (yippie);
+    
+    create campaign (name, creator, members) values (test, 5, [1, 2, 3]);
 
-    create campaign;
+    create campaign (members, creator, name) values ([1], 5, testing);
     
     create user (user, ic, pass) values (steve, xdfv, supastar);
 
-    create user (ic, user, pass) values (awed, meev, );
+    create user (ic, user) values (awed, meev);
 };
