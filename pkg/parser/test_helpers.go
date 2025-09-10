@@ -50,6 +50,12 @@ func TestLiteralExpr(
 		return TestIdent(t, expr, v)
 	case bool:
 		return TestBoolLit(t, expr, v)
+	case []any:
+		return TestListItems(t, expr, v)
+	case []string:
+		return TestListItems(t,expr, v)
+	case []int:
+		return TestListItems(t,expr, v)
 	case nil:
 		return expr == v
 	}
@@ -158,6 +164,20 @@ func TestIdent(t *testing.T, expr wql.Expr, val string) bool {
 	}
 
 	return true
+}
+
+func TestListItems[T any](t *testing.T, expr wql.Expr, val []T) bool {
+	list, ok := expr.(*wql.ListLiteral)
+		if !ok {
+			t.Fatalf("expr is not an wql.ListLiteral. got=%T", list)
+		}
+
+		
+		for i, arg := range val {
+			TestLiteralExpr(t, list.Val[i], arg)
+		}
+
+		return true
 }
 
 func CheckParserErrors(t *testing.T, psr *Parser) {

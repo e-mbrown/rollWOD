@@ -13,10 +13,6 @@ type testInfix struct {
 	right interface{}
 }
 
-type testList struct {
-	data []any
-}
-
 func TestDeclare(t *testing.T) {
 	psr := parser.PrepareFileParseTest(t, "dcl_stmts")
 
@@ -561,14 +557,6 @@ func TestListExpr(t *testing.T) {
 			t.Fatalf("wqlRoot.stmt[%d] is not an wql.ExprStmt. got=%T", i, stmt)
 		}
 
-		list, ok := stmt.Expr.(*wql.ListLiteral)
-		if !ok {
-			t.Fatalf("expr is not an wql.ListLiteral. got=%T", list)
-		}
-
-		
-		for i, arg := range tt.args {
-			parser.TestLiteralExpr(t, list.Val[i], arg)
-		}
+		parser.TestListItems(t, stmt.Expr, tt.args)
 	}
 }

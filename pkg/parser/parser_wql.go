@@ -21,8 +21,8 @@ func (p *Parser) parseQueryStmt() *wql.QueryStmt {
 	return query
 }
 
-func (p *Parser) parseCreateStmt() *wql.CreateStmt {
-	stmt := &wql.CreateStmt{Token: p.currTok}
+func (p *Parser) parseCreateAlterStmt() *wql.CreateAlterStmt {
+	stmt := &wql.CreateAlterStmt{Token: p.currTok}
 
 	p.nextToken()
 	
@@ -38,7 +38,7 @@ func (p *Parser) parseCreateStmt() *wql.CreateStmt {
 
 
 func (p *Parser) parseCreateObjStmt() wql.Expr {
-	expr := &wql.CreateObjStmt{Token: p.currTok}
+	expr := &wql.ObjStmt{Token: p.currTok}
 
 	if !p.expectPeek(token.LPAREN) {
 		return nil

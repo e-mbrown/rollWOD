@@ -91,8 +91,8 @@ func (p *Parser) parseStmt() wql.Stmt {
 		return p.parseReturnStmt()
 	case token.QUERY:
 		return p.parseQueryStmt()
-	case token.CREATE:
-		return p.parseCreateStmt()
+	case token.CREATE, token.ALTER:
+		return p.parseCreateAlterStmt()
 	default:
 		return p.parseExprStmt()
 	}

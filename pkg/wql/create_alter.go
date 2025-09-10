@@ -7,14 +7,14 @@ import (
 	"github.com/e-mbrown/rollWOD/pkg/token"
 )
 
-type CreateStmt struct {
+type CreateAlterStmt struct {
 	Token token.Token
 	Stmt  Expr
 }
 
-func (cs *CreateStmt) stmtNode()            {}
-func (cs *CreateStmt) TokenLiteral() []byte { return cs.Token.Literal }
-func (cs *CreateStmt) String() string {
+func (cs *CreateAlterStmt) stmtNode()            {}
+func (cs *CreateAlterStmt) TokenLiteral() []byte { return cs.Token.Literal }
+func (cs *CreateAlterStmt) String() string {
 	var out bytes.Buffer
 
 	out.WriteString(string(cs.TokenLiteral()))
@@ -23,15 +23,15 @@ func (cs *CreateStmt) String() string {
 	return out.String()
 }
 
-type CreateObjStmt struct {
+type ObjStmt struct {
 	Token  token.Token
 	Params []*Identifier
 	Args   []Expr
 }
 
-func (cos *CreateObjStmt) exprNode()            {}
-func (cos *CreateObjStmt) TokenLiteral() []byte { return cos.Token.Literal }
-func (cos *CreateObjStmt) String() string {
+func (cos *ObjStmt) exprNode()            {}
+func (cos *ObjStmt) TokenLiteral() []byte { return cos.Token.Literal }
+func (cos *ObjStmt) String() string {
 	var out bytes.Buffer
 
 	params := []string{}

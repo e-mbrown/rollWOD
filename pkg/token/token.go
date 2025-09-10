@@ -50,6 +50,7 @@ const (
 
 	//QUERY KEYWORDS
 	QUERY = "QUERY"
+	ALTER = "ALTER"
 	CREATE = "CREATE"
 	USER = "USER"
 	CAMPAIGN = "CAMPAIGN"
@@ -68,6 +69,7 @@ var keywords = map[string]TokenType{
 	"false": FALSE,
 	"return": RETURN,
 	"query": QUERY,
+	"alter": ALTER,
 	"create": CREATE,
 	"user": USER,
 	"campaign": CAMPAIGN,

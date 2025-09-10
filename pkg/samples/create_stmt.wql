@@ -8,4 +8,12 @@ query {
     create user (user, ic, pass) values (steve, xdfv, supastar);
 
     create user (ic, user) values (awed, meev);
+
+    alter character (test) values (yippie);
+    
+    alter campaign (name, creator, members) values (test, 5, [1, 2, 3]);
+    
+    alter user (user, ic, pass) values (steve, xdfv, supastar);
+
+    alter user (ic, user) values (awed, meev);
 };
