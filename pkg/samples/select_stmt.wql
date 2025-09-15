@@ -1,0 +1,5 @@
+query {
+    select (test) from obj where item = 2;
+    select (test) from obj where item = [2,3];
+    select (test) from obj where item = 2;
+}

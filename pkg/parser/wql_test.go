@@ -7,23 +7,6 @@ import (
 	"github.com/e-mbrown/rollWOD/pkg/wql"
 )
 
-var createAlterTest = []struct {
-	token          string
-	expectType     string
-	expectedParams []string
-	expectedArgs   []any
-}{
-	{"CREATE", "character", []string{"test"}, []any{"yippie"}},
-	{"CREATE", "campaign", []string{"name", "creator", "members"}, []any{"test", 5, []int{1, 2, 3}}},
-	{"CREATE", "campaign", []string{"members", "creator", "name"}, []any{[]int{1}, 5, "testing"}},
-	{"CREATE", "user", []string{"user", "ic", "pass"}, []any{"steve", "xdfv", "supastar"}},
-	{"CREATE", "user", []string{"ic", "user"}, []any{"awed", "meev"}},
-	{"ALTER","character", []string{"test"}, []any{"yippie"}},
-	{"ALTER","campaign", []string{"name", "creator", "members"},[]any{"test", 5, []int{1, 2, 3}}},
-	{"ALTER","user", []string{"user", "ic", "pass"}, []any{"steve", "xdfv", "supastar"}},
-	{"ALTER","user", []string{"ic", "user"}, []any{"awed", "meev"}},
-}
-
 func getQueryStmt(t *testing.T, psr *parser.Parser) *wql.QueryStmt {
 	wqlRoot := psr.ParseWQL()
 	parser.CheckParserErrors(t, psr)
@@ -47,7 +30,24 @@ func TestCreateAlterStmt(t *testing.T) {
 	psr := parser.PrepareFileParseTest(t, "create_stmt")
 	qs := getQueryStmt(t, psr)
 
-	for i, tt := range createAlterTest {
+	 test := []struct {
+		token          string
+		expectType     string
+		expectedParams []string
+		expectedArgs   []any
+	}{
+		{"CREATE", "character", []string{"test"}, []any{"yippie"}},
+		{"CREATE", "campaign", []string{"name", "creator", "members"}, []any{"test", 5, []int{1, 2, 3}}},
+		{"CREATE", "campaign", []string{"members", "creator", "name"}, []any{[]int{1}, 5, "testing"}},
+		{"CREATE", "user", []string{"user", "ic", "pass"}, []any{"steve", "xdfv", "supastar"}},
+		{"CREATE", "user", []string{"ic", "user"}, []any{"awed", "meev"}},
+		{"ALTER","character", []string{"test"}, []any{"yippie"}},
+		{"ALTER","campaign", []string{"name", "creator", "members"},[]any{"test", 5, []int{1, 2, 3}}},
+		{"ALTER","user", []string{"user", "ic", "pass"}, []any{"steve", "xdfv", "supastar"}},
+		{"ALTER","user", []string{"ic", "user"}, []any{"awed", "meev"}},
+	}
+
+	for i, tt := range test {
 		createAlt, ok := qs.Body.Stmts[i].(*wql.CreateAlterStmt)
 		if !ok {
 			t.Fatalf("qs.Body.Stmts[%d] is not an wql.CreateAlterStmt. got=%T", i, createAlt)
@@ -70,5 +70,14 @@ func TestCreateAlterStmt(t *testing.T) {
 			parser.TestLiteralExpr(t, objStmt.Args[i], args)
 		}
 	}
+}
+
+func TestSelectStmt(t *testing.T){
+	psr := parser.PrepareFileParseTest(t, "select_stmt")
+	qs := getQueryStmt(t, psr)
+
+	 test := []struct {
+		expectedArgs   []any
+	}{}
 }
 

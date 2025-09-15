@@ -1,6 +1,10 @@
 package wql
 
-import "github.com/e-mbrown/rollWOD/pkg/token"
+import (
+	"bytes"
+
+	"github.com/e-mbrown/rollWOD/pkg/token"
+)
 
 type IntLiteral struct {
 	Token token.Token
@@ -27,4 +31,16 @@ type ListLiteral struct {
 
 func (l *ListLiteral) exprNode()            {}
 func (l *ListLiteral) TokenLiteral() []byte { return l.Token.Literal }
-func (l *ListLiteral) String() string       { return string(l.Token.Literal) }
+func (l *ListLiteral) String() string       {
+	var out bytes.Buffer
+
+	out.WriteString("[")
+	for i, val := range l.Val {
+		out.WriteString(val.String())
+		if i != len(l.Val) -1 {
+			out.WriteString(",")
+		}
+	}
+	out.WriteString("]")
+	return out.String()
+ }

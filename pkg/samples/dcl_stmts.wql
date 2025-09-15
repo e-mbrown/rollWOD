@@ -1,3 +1,4 @@
 dcl x = 5;
 dcl BigGuy = true;
 dcl snake_case = y;
+dcl list = [1,2,3]

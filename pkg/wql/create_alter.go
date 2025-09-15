@@ -2,7 +2,6 @@ package wql
 
 import (
 	"bytes"
-	"strings"
 
 	"github.com/e-mbrown/rollWOD/pkg/token"
 )
@@ -29,24 +28,27 @@ type ObjStmt struct {
 	Args   []Expr
 }
 
-func (cos *ObjStmt) exprNode()            {}
-func (cos *ObjStmt) TokenLiteral() []byte { return cos.Token.Literal }
-func (cos *ObjStmt) String() string {
+func (os *ObjStmt) exprNode()            {}
+func (os *ObjStmt) TokenLiteral() []byte { return os.Token.Literal }
+func (os *ObjStmt) String() string {
 	var out bytes.Buffer
 
-	params := []string{}
-	args := []string{}
-	for i := 0; i < len(cos.Params); i++ {
-		params = append(params, cos.Params[i].String())
-		args = append(args, cos.Args[i].String())
-	}
-
-	out.WriteString(string(cos.Token.Literal))
+	out.WriteString(string(os.Token.Literal))
 	out.WriteString("(")
-	out.WriteString(strings.Join(params, ","))
+	for i, val := range os.Params {
+		out.WriteString(val.String())
+		if i != len(os.Params)-1 {
+			out.WriteString(",")
+		}
+	}
 	out.WriteString(") Values")
 	out.WriteString("(")
-	out.WriteString(strings.Join(args, ","))
+	for i, val := range os.Args {
+		out.WriteString(val.String())
+		if i != len(os.Args)-1 {
+			out.WriteString(",")
+		}
+	}
 	out.WriteString(") ")
 
 	return out.String()

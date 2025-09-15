@@ -52,6 +52,9 @@ const (
 	QUERY = "QUERY"
 	ALTER = "ALTER"
 	CREATE = "CREATE"
+	SELECT = "SELECT"
+	WHERE = "WHERE"
+	FROM = "FROM"
 	USER = "USER"
 	CAMPAIGN = "CAMPAIGN"
 	CHARACTER = "CHARACTER"
@@ -71,6 +74,9 @@ var keywords = map[string]TokenType{
 	"query": QUERY,
 	"alter": ALTER,
 	"create": CREATE,
+	"select": SELECT,
+	"from": FROM,
+	"where": WHERE,
 	"user": USER,
 	"campaign": CAMPAIGN,
 	"character": CHARACTER,
