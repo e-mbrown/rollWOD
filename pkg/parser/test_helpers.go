@@ -39,7 +39,7 @@ func PrepareStringParseTest(t *testing.T, input string) *Parser {
 func TestLiteralExpr(
 	t *testing.T,
 	expr wql.Expr,
-	expect interface{},
+	expect any,
 ) bool {
 	switch v := expect.(type) {
 	case int:

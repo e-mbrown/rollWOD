@@ -1,5 +1,5 @@
 query {
-    select (test) from obj where item = 2;
-    select (test) from obj where item = [2,3];
-    select (test) from obj where item = 2;
+    select (test) from user where item = 2;
+    select (test1, test2) from campaign where list = [2,3];
+    select (yippie) from character where exclamation = yahoo;
 }

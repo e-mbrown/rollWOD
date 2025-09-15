@@ -40,9 +40,9 @@ func (fc *WhereClause) String() string {return fmt.Sprint(fc.Token.Type, " ", fc
 // Expr or stmt??
 type FromClause struct {
 	Token token.Token
-	ObjTok token.Token
+	Obj Expr
 }
 
 func (fc *FromClause) stmtNode()            {}
 func (fc *FromClause) TokenLiteral() []byte { return fc.Token.Literal }
-func (fc *FromClause) String() string {return fmt.Sprint(fc.Token.Type, " ", fc.ObjTok.Type)}
+func (fc *FromClause) String() string {return fmt.Sprint(fc.Token.Type, " ", fc.Obj.String())}

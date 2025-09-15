@@ -27,7 +27,7 @@ func TestDeclare(t *testing.T) {
 
 	tests := []struct {
 		expectIdent string
-		expectVal   interface{}
+		expectVal   any
 	}{
 		{"x", 5},
 		{"BigGuy", true},
