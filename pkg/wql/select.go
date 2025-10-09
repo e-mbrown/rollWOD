@@ -9,9 +9,9 @@ import (
 
 type SelectStmt struct {
 	Token token.Token
-	Args []Expr
-	From FromClause
-	Where WhereClause
+	Params []*Identifier
+	From *FromClause
+	Where *WhereClause
 }
 
 func (ss *SelectStmt) stmtNode()            {}

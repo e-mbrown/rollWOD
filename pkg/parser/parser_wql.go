@@ -21,6 +21,30 @@ func (p *Parser) parseQueryStmt() *wql.QueryStmt {
 	return query
 }
 
+func (p *Parser) parseSelectStmt() *wql.SelectStmt {
+	stmt := &wql.SelectStmt{Token: p.currTok}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	stmt.Params = p.parseFuncParams()
+	// TODO: Finish predictive parsing of From and where
+	
+	// from := &wql.FromClause{
+	// 	Token: p.currTok,
+	// 	// Obj: wql.Expr{},
+	// }
+
+	for !p.peekTokenIs(token.SEMICOLON){
+		p.nextToken()
+	}
+
+	p.nextToken()
+	return stmt
+}
+
+
 func (p *Parser) parseCreateAlterStmt() *wql.CreateAlterStmt {
 	stmt := &wql.CreateAlterStmt{Token: p.currTok}
 
@@ -34,8 +58,6 @@ func (p *Parser) parseCreateAlterStmt() *wql.CreateAlterStmt {
 
 	return stmt
 }
-
-
 
 func (p *Parser) parseCreateObjStmt() wql.Expr {
 	expr := &wql.ObjStmt{Token: p.currTok}
@@ -58,6 +80,7 @@ func (p *Parser) parseCreateObjStmt() wql.Expr {
 
 	return expr
 }
+
  
 
 func registerQfn(p *Parser){

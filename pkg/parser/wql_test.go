@@ -82,7 +82,7 @@ func TestSelectStmt(t *testing.T) {
 	qs := getQueryStmt(t, psr)
 
 	tests := []struct {
-		expectedArgs []string
+		expectedParms []string
 		fc           string
 		expectIdent  string
 		expectVal    any
@@ -98,8 +98,12 @@ func TestSelectStmt(t *testing.T) {
 			t.Fatalf("qs.Body.Stmts[%d] is not an wql.CreateAlterStmt. got=%T", i, sel)
 		}
 
-		if len(tt.expectedArgs) != len(sel.Args) {
-			t.Fatalf("Mismatched Select args not %d. got=%d", len(tt.expectedArgs), len(sel.Args))
+		if len(tt.expectedParms) != len(sel.Params) {
+			t.Fatalf("Mismatched Select args not %d. got=%d", len(tt.expectedParms), len(sel.Params))
+		}
+
+		for i, parms := range tt.expectedParms {
+			parser.TestIdent(t, sel.Params[i], parms)
 		}
 
 		if !parser.TestIdent(t, sel.From.Obj, tt.expectIdent){
