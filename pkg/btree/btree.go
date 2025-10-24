@@ -1,12 +1,7 @@
 package btree
 
 /*
-	Reminder
-	50
-	root 2-m Children, 1 - m-1 Keys
-	nonroot m/2 -m Children, m-1 Keys
-
-	Working on redistribution, and clearing cases....Then complete deletion then test each part of the b-tree. Then attach data pointers.
+	I dont think Nk is being properly updated to replace and just check len keys
 */
 
 type Node struct {
@@ -36,7 +31,7 @@ func createNode(leaf bool, keys ...string) *Node {
 func CreateBTree(deg int) *BTree {
 	return &BTree{
 		Root:   nil,
-		Count:  1,
+		Count:  0,
 		Height: 0,
 		MinDeg: deg,
 	}
@@ -115,18 +110,20 @@ func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int) {
 func (b *BTree) Insert(key string) {
 	if b.Root == nil {
 		b.Root = createNode(true, key)
-		return
-	}
+		b.Height++
+	} else {	
+		if b.Root.Nk > b.MinDeg*2-1 {
+			b.Root = b.splitRoot()
+		}
 
-	if b.Root.Nk > b.MinDeg*2 {
-		b.Root = b.splitRoot()
+		b.insertNotFull(b.Root, key)
 	}
-
-	b.insertNotFull(b.Root, key)
+	
+	b.Count++
 }
 
-func (b *BTree) insertNotFull(node *Node, k string) {
-	n, i := b.searchInsertPos(node, k)
+func (b *BTree) insertNotFull(root *Node, k string) {
+	n, i := b.searchInsertPos(root, k)
 
 	var left []string
 	if i == n.Nk {
@@ -145,8 +142,8 @@ func (b *BTree) insertNotFull(node *Node, k string) {
 		left = append(left, n.Keys[i+1:]...)
 	}
 
-	node.Keys = left
-	node.Nk++
+	n.Keys = left
+	n.Nk++
 	// disk write?
 }
 
@@ -224,20 +221,17 @@ func (b *BTree) splitChild(n *Node, i int) {
 	fullNode := n.Children[i]
 	nNode := createNode(fullNode.IsLeaf)
 	nNode.Nk = b.MinDeg - 1
-	//Taking greater Keys
 	nNode.Keys = fullNode.Keys[b.MinDeg:]
 
+	fullNode.Nk = b.MinDeg - 1
+	n.insertChild(nNode, i+1)
+	n.insertKey(i, fullNode.Keys[b.MinDeg - 1])
+	fullNode.Keys = fullNode.Keys[:b.MinDeg-1]
+	
 	if !fullNode.IsLeaf {
 		nNode.Children = fullNode.Children[b.MinDeg:]
+		fullNode.Children = fullNode.Children[:b.MinDeg]
 	}
-
-	fullNode.Nk = b.MinDeg - 1
-	// TODO: What is this
-	// n.insertChild(i+1,nNode)
-	// n.insertKey(i, fullNode.Keys[b.MinDeg - 1])
-	fullNode.Keys = fullNode.Keys[:b.MinDeg-1]
-	fullNode.Children = fullNode.Children[:b.MinDeg]
-	//write? fullNode, nnode and n
 }
 
 func (b *BTree) mergeChild(n *Node, i int) {
@@ -317,4 +311,31 @@ func (b *BTree) findMerge(key string, pn *Node) {
 		}
 	}
 	b.mergeChild(pn, cPos)
+}
+
+func (n *Node) insertChild(child *Node, i int) {
+	if len(n.Children) == i {
+		n.Children = append(n.Children, child)
+		return
+	}
+
+	left := n.Children[:i]
+	left = append(left, child)
+	left = append(left, n.Children[i:]...)
+	n.Children = left
+}
+
+//
+func (n *Node) insertKey(pos int, key string){
+	//might just need one of these
+	if len(n.Keys) == 0 || pos == len(n.Keys) {
+		n.Keys = append(n.Keys, key)
+		n.Nk++
+		return
+	}
+	left := n.Keys[:pos]
+	left = append(left, key)
+	left = append(left, n.Keys[pos:]...)
+	n.Keys = left
+	n.Nk++
 }
