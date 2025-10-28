@@ -47,7 +47,7 @@ func TestBTreeInsert(t *testing.T) {
 func TestBTreeSplitRoot(t *testing.T) {
 	tests := []struct{
 		minDeg int
-		noSplit []string
+		init []string
 		xh int
 		insert []string
 		xkeyOrder []string
@@ -73,7 +73,7 @@ func TestBTreeSplitRoot(t *testing.T) {
 	for _, tt := range tests {	
 		tbt := btree.CreateBTree(tt.minDeg)
 
-		for _, v := range tt.noSplit{
+		for _, v := range tt.init {
 			tbt.Insert(v)
 		}
 
@@ -109,7 +109,56 @@ func TestBTreeSplitRoot(t *testing.T) {
 }
 
 func TestBTreeSplitChild(t *testing.T) {
-	
+	tests := []struct{
+		minDeg int
+		init []string
+		xh int
+		numC int
+		order []string
+	}{
+		{
+			3, 
+			[]string{"101", "20", "457", "500", "100", "30", "45","102","1000", "103", "104", "105"},
+			2,
+			3,
+			[]string{"100", "1000", "101", "102", "103", "104", "105", "20", "30", "45","457", "500"},
+		},
+		{
+			2, 
+			[]string{"101", "20", "457", "500", "100", "50", "51", "53"},
+			2,
+			3,
+			[]string{"100", "101", "20", "457", "50", "500", "51", "53"},
+		},
+	}
+
+	for _, tt := range tests {
+		tbt := btree.CreateBTree(tt.minDeg)
+
+		for _, v := range tt.init {
+			tbt.Insert(v)
+		}
+
+		
+		if tbt.Height != tt.xh {
+			t.Errorf("expected height %d; got [%d], #keys:[%d]", tt.xh, tbt.Height, tbt.Root.Nk)
+		}
+
+		if len(tbt.Root.Children) != tt.numC {
+			t.Errorf("expected number of children %d; got [%d]", tt.numC, len(tbt.Root.Children))
+		}
+
+		tOrder := inOrderTrav(tbt.Root)
+
+		for i, v := range tt.order {
+			if tOrder[i] != v {
+				t.Errorf("keys out of order. Expected [%s] at idx [%d]; got [%s]", v, i, tOrder[i])
+				t.Log(tOrder)
+				return
+			}
+		}
+
+	}
 }
 
 func inOrderTrav(node *btree.Node) []string {

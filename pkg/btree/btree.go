@@ -100,8 +100,10 @@ func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int) {
 		return n, low
 	}
 
-	if n.Children[low].Nk == 2*b.MinDeg-1 {
+	if n.Children[low].Nk > 2*b.MinDeg-1 {
 		b.splitChild(n, low)
+		// moving target might be incorrect
+		// Should be 
 		if key > n.Keys[low] {
 			low++
 		}
@@ -320,7 +322,8 @@ func (n *Node) insertChild(child *Node, i int) {
 		return
 	}
 
-	left := n.Children[:i]
+	left := make([]*Node, len(n.Children[:i]))
+	copy(left,n.Children[:i])
 	left = append(left, child)
 	left = append(left, n.Children[i:]...)
 	n.Children = left
@@ -328,15 +331,25 @@ func (n *Node) insertChild(child *Node, i int) {
 
 //
 func (n *Node) insertKey(pos int, key string){
-	//might just need one of these
-	if len(n.Keys) == 0 || pos == len(n.Keys) {
+	if len(n.Keys) == 0 || pos > n.Nk-1 {
 		n.Keys = append(n.Keys, key)
 		n.Nk++
 		return
 	}
-	left := n.Keys[:pos]
-	left = append(left, key)
-	left = append(left, n.Keys[pos:]...)
+
+	var left []string
+	if key < n.Keys[pos]{
+		left = make([]string, len(n.Keys[:pos]))
+		copy(left, n.Keys[:pos])
+		left = append(left, key)
+		left = append(left, n.Keys[pos:]...)
+	} else {
+		left = make([]string, len(n.Keys[:pos+1]))
+		copy(left,n.Keys[:pos+1])
+		left = append(left, key)
+		left = append(left, n.Keys[pos+1:]...)
+	}
+	
 	n.Keys = left
 	n.Nk++
 }
