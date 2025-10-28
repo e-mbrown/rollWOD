@@ -2,6 +2,10 @@ package btree
 
 /*
 	I dont think Nk is being properly updated to replace and just check len keys
+	
+	Also delete node mindeg
+
+	Also add Errors
 */
 
 type Node struct {
@@ -67,8 +71,9 @@ func (b *BTree) search(n *Node, key string, pn *Node) (*Node, int, *Node) {
 	return b.search(n.Children[low], key, n)
 }
 
-// Similar to search, returns node and an insert position. Will
-// split target nodes Children. Errors if detects duplicates
+// Similar to search, returns node and an insert position. 
+// Will split target nodes children. 
+// Errors if detects duplicates
 // TODO: Refresh on split reasoning.
 func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int) {
 	low, high := 0, n.Nk
@@ -95,7 +100,6 @@ func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int) {
 		return n, low
 	}
 
-	// TODO: Refresh why split
 	if n.Children[low].Nk == 2*b.MinDeg-1 {
 		b.splitChild(n, low)
 		if key > n.Keys[low] {
@@ -126,6 +130,7 @@ func (b *BTree) insertNotFull(root *Node, k string) {
 	n, i := b.searchInsertPos(root, k)
 
 	var left []string
+	//To insert before or after end
 	if i == n.Nk {
 		left = append(n.Keys, k)
 
@@ -147,10 +152,8 @@ func (b *BTree) insertNotFull(root *Node, k string) {
 	// disk write?
 }
 
-// case: reach leaf node, reach internal contains target,
-// reach internal no target
-// If Children are lacking min node
-// 3. if root is deleted? and has Children 1 vs more
+// I suspect that this function has all the moving parts
+// but isnt truly doing its job. Requires thorough testing
 func (b *BTree) Delete(n *Node, key string, pn *Node) {
 	tNode, kpos, pNode := b.search(n, key, pn)
 	//TODO: Error no key
@@ -168,12 +171,10 @@ func (b *BTree) Delete(n *Node, key string, pn *Node) {
 	}
 
 	if len(tNode.Children[kpos].Keys) >= n.mindeg {
-
 		predk := b.getPred(tNode, kpos)
 		b.Delete(tNode.Children[kpos], predk, pNode)
 		tNode.Keys[kpos] = predk
 	} else if len(tNode.Children[kpos+1].Keys) >= n.mindeg {
-
 		succk := b.getSucc(tNode, kpos)
 		b.Delete(tNode.Children[kpos+1], succk, nil)
 		tNode.Keys[kpos] = succk
@@ -220,7 +221,7 @@ func (b *BTree) splitRoot() *Node {
 func (b *BTree) splitChild(n *Node, i int) {
 	fullNode := n.Children[i]
 	nNode := createNode(fullNode.IsLeaf)
-	nNode.Nk = b.MinDeg - 1
+	nNode.Nk = b.MinDeg 
 	nNode.Keys = fullNode.Keys[b.MinDeg:]
 
 	fullNode.Nk = b.MinDeg - 1

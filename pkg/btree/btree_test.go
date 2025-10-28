@@ -6,6 +6,19 @@ import (
 	"github.com/e-mbrown/rollWOD/pkg/btree"
 )
 
+/* 
+TODO: Test
+	Insert and split child
+	Search
+	Split Child(not root)
+	Delete
+		Redistro case left vs right
+			Redistro leaf vs internal
+		Merge after redistro case
+
+
+*/
+
 func TestBTreeInsert(t *testing.T) {
 	tbt := btree.CreateBTree(5)
 
@@ -36,13 +49,23 @@ func TestBTreeSplitRoot(t *testing.T) {
 		minDeg int
 		noSplit []string
 		xh int
+		insert []string
 		xkeyOrder []string
 	}{
 		{
 			5, 
 			[]string{"101", "20", "457", "500", "100", "30", "45", "50", "60", "66"},
 			2,
+			[]string{"1000"},
 			[]string{"100", "1000", "101", "20", "30", "45", "457", "50","500", "60", "66"},
+		},
+		{
+			5, 
+			[]string{"101", "20", "457", "500", "100", "30", "45", "50", "60", "66"},
+			2,
+			[]string{"1000", "2000", "3000", "4000", "5000", "6000"},
+			[]string{"100", "1000", "101", "20","2000", "30", "3000", "4000","45", 
+			"457", "50","500","5000", "60", "6000", "66"},
 		},
 	}
 
@@ -58,7 +81,9 @@ func TestBTreeSplitRoot(t *testing.T) {
 			t.Errorf("expected height 1; got [%d], #keys:[%d]", tbt.Height, tbt.Root.Nk)
 		}
 
-		tbt.Insert("1000")
+		for _, v := range tt.insert {
+			tbt.Insert(v)
+		}
 
 		if tbt.Height != tt.xh {
 			t.Log(tbt.Root.Keys)
@@ -81,6 +106,10 @@ func TestBTreeSplitRoot(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestBTreeSplitChild(t *testing.T) {
+	
 }
 
 func inOrderTrav(node *btree.Node) []string {
