@@ -1,19 +1,18 @@
 package btree
 
-/*
-	I dont think Nk is being properly updated to replace and just check len keys
-	
-	Also delete node mindeg
+import "errors"
 
-	Also add Errors
-*/
+
+const (
+	ErrDuplicateKey = "duplicate key found"
+	ErrKeyDoesntExist = "key does not exist"
+)
 
 type Node struct {
 	Nk       int
 	Keys     []string
 	Children []*Node
 	IsLeaf   bool
-	mindeg   int
 }
 
 type BTree struct {
@@ -33,6 +32,7 @@ func createNode(leaf bool, keys ...string) *Node {
 }
 
 func CreateBTree(deg int) *BTree {
+	//min
 	return &BTree{
 		Root:   nil,
 		Count:  0,
@@ -41,17 +41,16 @@ func CreateBTree(deg int) *BTree {
 	}
 }
 
-// Recursive Binary search returns node and the key position.
+// Recursive Binary Search returns node and the key position.
 // If key does not exist return error. Keeps track of the parent
 // for deletion cases.
-// TODO: Write test and return error
-func (b *BTree) search(n *Node, key string, pn *Node) (*Node, int, *Node) {
+func (b *BTree) Search(n *Node, key string, pn *Node) (*Node, int, *Node, error) {
 	low, high := 0, n.Nk
 
 	for low < high {
 		mid := low + (high-low)/2
 		if key == n.Keys[mid] {
-			return n, mid, pn
+			return n, mid, pn, nil
 		} else if key < n.Keys[mid] {
 			high = mid
 		} else {
@@ -60,29 +59,27 @@ func (b *BTree) search(n *Node, key string, pn *Node) (*Node, int, *Node) {
 	}
 
 	if low < n.Nk && key == n.Keys[low] {
-		return n, low, pn
+		return n, low, pn, nil
 	}
 
 	if n.IsLeaf {
-		//key doesnt exist so maybe return error type
-		return nil, -1, pn
+		//TODO: Consider better error building or handling
+		return nil, -1, pn, errors.New(ErrKeyDoesntExist)
 	}
 
-	return b.search(n.Children[low], key, n)
+	return b.Search(n.Children[low], key, n)
 }
 
-// Similar to search, returns node and an insert position. 
-// Will split target nodes children. 
-// Errors if detects duplicates
-// TODO: Refresh on split reasoning.
-func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int) {
+// Similar to Search, returns node and an insert position. 
+// Will split target nodes children and rebalance tree as
+// the Search descends.
+func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int, error) {
 	low, high := 0, n.Nk
 
 	for low < high {
 		mid := low + (high-low)/2
 		if key == n.Keys[mid] {
-			// Duplicate key, error?
-			return nil, -1
+			return nil, -1, errors.New(ErrDuplicateKey)
 		} else if key < n.Keys[mid] {
 			high = mid
 		} else {
@@ -91,19 +88,17 @@ func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int) {
 	}
 
 	if low < n.Nk && key == n.Keys[low] {
-		// Duplicate
-		return nil, -1
+		return nil, -1, errors.New(ErrDuplicateKey)
 	}
 
 	if n.IsLeaf {
-		// return and insert in out func
-		return n, low
+		return n, low, nil
 	}
 
 	if n.Children[low].Nk > 2*b.MinDeg-1 {
+		// Split before any insert also potential rebalance
+		// tree as descend.
 		b.splitChild(n, low)
-		// moving target might be incorrect
-		// Should be 
 		if key > n.Keys[low] {
 			low++
 		}
@@ -113,7 +108,8 @@ func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int) {
 }
 
 // TODO: Insert tuple k string, v record
-func (b *BTree) Insert(key string) {
+func (b *BTree) Insert(key string) error {
+	var err error
 	if b.Root == nil {
 		b.Root = createNode(true, key)
 		b.Height++
@@ -122,14 +118,18 @@ func (b *BTree) Insert(key string) {
 			b.Root = b.splitRoot()
 		}
 
-		b.insertNotFull(b.Root, key)
+		err = b.insertNotFull(b.Root, key)
 	}
 	
 	b.Count++
+	return err
 }
 
-func (b *BTree) insertNotFull(root *Node, k string) {
-	n, i := b.searchInsertPos(root, k)
+func (b *BTree) insertNotFull(root *Node, k string) error {
+	n, i, err := b.searchInsertPos(root, k)
+	if err != nil {
+		return err
+	}
 
 	var left []string
 	//To insert before or after end
@@ -152,33 +152,46 @@ func (b *BTree) insertNotFull(root *Node, k string) {
 	n.Keys = left
 	n.Nk++
 	// disk write?
+	return nil
 }
 
 // I suspect that this function has all the moving parts
 // but isnt truly doing its job. Requires thorough testing
-func (b *BTree) Delete(n *Node, key string, pn *Node) {
-	tNode, kpos, pNode := b.search(n, key, pn)
-	//TODO: Error no key
+func (b *BTree) Delete(n *Node, key string, pn *Node) error {
+	var err error
+	
+	tNode, kpos, pNode, err := b.Search(n, key, pn)
+	if err != nil {
+		return err
+	}
 
 	if tNode.IsLeaf {
 		tNode.Keys = append(tNode.Keys[:kpos], tNode.Keys[kpos+1:]...)
 		tNode.Nk--
 		if tNode.Nk < b.MinDeg-1 && pNode != nil {
 			//redistro might still result in less keys than desired
-			if ok := pn.redistributeChild(tNode); !ok || tNode.Nk < b.MinDeg {
+			if ok := pn.redistributeChild(tNode, b.MinDeg); !ok || tNode.Nk < b.MinDeg {
 				b.findMerge(tNode.Keys[0], pn)
 			}
 		}
-		return
+		return nil
 	}
 
-	if len(tNode.Children[kpos].Keys) >= n.mindeg {
+	if len(tNode.Children[kpos].Keys) >= b.MinDeg {
 		predk := b.getPred(tNode, kpos)
-		b.Delete(tNode.Children[kpos], predk, pNode)
+		err = b.Delete(tNode.Children[kpos], predk, pNode)
+		if err !=nil {
+			return err
+		}
+
 		tNode.Keys[kpos] = predk
-	} else if len(tNode.Children[kpos+1].Keys) >= n.mindeg {
+	} else if len(tNode.Children[kpos+1].Keys) >= b.MinDeg {
 		succk := b.getSucc(tNode, kpos)
-		b.Delete(tNode.Children[kpos+1], succk, nil)
+		err := b.Delete(tNode.Children[kpos+1], succk, nil)
+		if err != nil {
+			return err
+		}
+
 		tNode.Keys[kpos] = succk
 	} else {
 
@@ -187,8 +200,13 @@ func (b *BTree) Delete(n *Node, key string, pn *Node) {
 			b.Root = tNode.Children[0]
 		}
 
-		b.Delete(tNode.Children[kpos], key, nil)
+		err = b.Delete(tNode.Children[kpos], key, nil)
+		if err != nil {
+			return err
+		}
 	}
+
+	return nil
 }
 
 func (b *BTree) getPred(n *Node, idx int) string {
@@ -253,7 +271,7 @@ func (b *BTree) mergeChild(n *Node, i int) {
 
 }
 
-func (n *Node) redistributeChild(child *Node) bool {
+func (n *Node) redistributeChild(child *Node, mindeg int) bool {
 	var childpos int
 	var lsib, rsib *Node
 
@@ -274,7 +292,7 @@ func (n *Node) redistributeChild(child *Node) bool {
 	//take sibling key make parent separator / place parent separater within child
 	// Adjust Children?
 	// Q How do you insert Keys
-	if lsib != nil && len(lsib.Keys) > n.mindeg-1 {
+	if lsib != nil && len(lsib.Keys) > mindeg-1 {
 		l := len(lsib.Keys) - 1
 		pk := []string{n.Keys[childpos-1]}
 		lk := lsib.Keys[l]
@@ -289,7 +307,7 @@ func (n *Node) redistributeChild(child *Node) bool {
 			n.Children[childpos-1] = lsib.Children[l]
 		}
 		return true
-	} else if rsib != nil && len(rsib.Keys) > n.mindeg-1 {
+	} else if rsib != nil && len(rsib.Keys) > mindeg-1 {
 		rk := rsib.Keys[0]
 		pk := n.Keys[childpos+1]
 
