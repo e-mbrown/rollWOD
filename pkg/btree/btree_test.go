@@ -1,6 +1,7 @@
 package btree_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/e-mbrown/rollWOD/pkg/btree"
@@ -90,6 +91,9 @@ func TestBTreeInsert(t *testing.T) {
 
 	for _, v := range []string{"101", "20", "457", "500"} {
 		err = tbt.Insert(v)
+		if err := validateBTree(tbt.Root, tbt.MinDeg); err != nil {
+			t.Fatalf("after insert %q: %v", v, err)
+		}
 	}
 
 	assert.Nil(t, err)
@@ -137,9 +141,9 @@ func TestBTreeSplitRoot(t *testing.T) {
 			[]string{"101", "20", "457", "500"},
 			3,
 			[]string{"1000", "2000", "3000", "4000", "5000", "6000", "7",
-				"70", "100", "30", "45", "50", "60", "66", "67", "68"},
+			"70", "100", "30", "45", "50", "60", "66", "67", "68"},
 			[]string{"100", "1000", "101", "20", "2000", "30", "3000", "4000", "45",
-				"457", "50", "500", "5000", "60", "6000", "66", "67", "68", "7", "70"},
+			"457", "50", "500", "5000", "60", "6000", "66", "67", "68", "7", "70"},
 		},
 	}
 
@@ -211,6 +215,9 @@ func TestBTreeSplitChild(t *testing.T) {
 
 		for _, v := range tt.init {
 			tbt.Insert(v)
+			if err := validateBTree(tbt.Root, tbt.MinDeg); err != nil {
+				t.Fatalf("after inserting %q: %v", v, err)
+			}
 		}
 
 		if tbt.Height != tt.xh {
@@ -230,11 +237,69 @@ func TestBTreeSplitChild(t *testing.T) {
 				return
 			}
 		}
-
 	}
 }
 
-func inOrderTrav(node *btree.Node) []string {
+func TestDelete(t *testing.T) {
+	tbt := btree.CreateBTree(2)
+
+	tests := []struct {
+		caseName string
+		init []string
+		toDelete []string
+		xOrder []string
+	}{
+		{
+			"deleteAll",
+			[]string{"101", "20", "457", "500", "1000", "2000", "3000", "4000", "5000", "6000", "7",
+			"70", "100", "30", "45", "50", "60", "66", "67", "68"},
+			[]string{"101", "20", "457", "500", "1000", "2000", "3000", "4000", "5000", "6000", "7",
+			"70", "100", "30", "45", "50", "60", "66", "67", "68"},
+			[]string{},
+		},
+		{
+			"Delete Leaf no underflow",
+			[]string{"10","20","30"},
+			[]string{"20"},
+			[]string{"10", "30"},
+		},
+	}
+
+	for _, tt := range tests {
+		for _, v := range tt.init {
+			_ = tbt.Insert(v)
+		}
+
+		var err error
+		for _, v := range tt.toDelete {
+			err = tbt.Delete(tbt.Root, v, nil)
+			assert.Equal(t, nil, err)
+
+			if err := validateBTree(tbt.Root, tbt.MinDeg); err != nil {
+				t.Fatalf("after deleting %q: %v", v, err)
+			}
+		}
+
+		if tbt.Root == nil{
+			if tt.caseName != "deleteAll" {
+				t.Errorf("Case [%s]: Root is nil. Unexpected", tt.caseName)
+			}else {
+				continue
+			}
+		}
+
+		tOrder := inOrderTrav(tbt.Root)
+		for i, v := range tt.xOrder {
+			if tOrder[i] != v {
+				t.Errorf("Case [%s]: keys out of order. Expected [%s] at idx [%d]; got [%s]", tt.caseName, v, i, tOrder[i])
+				t.Log(tOrder)
+				return
+			}
+		}
+	}
+}
+
+func inOrderTrav(node *btree.Node) []string { 
 	if len(node.Children) == 0 {
 		return node.Keys
 	}
@@ -250,4 +315,56 @@ func inOrderTrav(node *btree.Node) []string {
 	}
 
 	return res
+}
+
+func validateBTree(root *btree.Node, t int) error {
+	var leafDepth *int
+	var check func(n *btree.Node, isRoot bool, depth int) error 
+	check = func(n *btree.Node, isRoot bool, depth int) error {
+		// k count
+		if n.Nk != len(n.Keys) {
+			return fmt.Errorf("Nk mismatch: Nk=%d len(Keys)=%d", n.Nk, len(n.Keys))
+		}
+
+		// Max k constraint
+		if n.Nk > 2*t-1 {
+			return fmt.Errorf("too many keys: %d", n.Nk)
+		}
+
+		//  min k count exclude root
+		if !isRoot && n.Nk < t-1 {
+			return fmt.Errorf("too few keys: %d", n.Nk)
+		}
+
+		if n.IsLeaf {
+			// 4. All leaves must be same depth
+			if leafDepth == nil {
+				leafDepth = &depth
+			} else if *leafDepth != depth {
+				return fmt.Errorf(
+					"leaf depth mismatch: expected %d, got %d",
+					*leafDepth, depth,
+				)
+			}
+			return nil
+		}
+
+		// internal child count
+		if len(n.Children) != len(n.Keys)+1 {
+			return fmt.Errorf(
+				"child count mismatch: keys=%d children=%d",
+				len(n.Keys), len(n.Children),
+			)
+		}
+
+		for _, child := range n.Children {
+			if err := check(child, false, depth+1); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	}
+
+	return check(root, true, 0)
 }

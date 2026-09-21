@@ -17,9 +17,9 @@ type Node struct {
 
 type BTree struct {
 	Root   *Node
-	Count  int
+	Count  int // num of nodes?
 	Height int
-	MinDeg int
+	MinDeg int // defines lower and upper bound
 }
 
 func createNode(leaf bool, keys ...string) *Node {
@@ -44,6 +44,7 @@ func CreateBTree(deg int) *BTree {
 // Recursive Binary Search returns node and the key position.
 // If key does not exist return error. Keeps track of the parent
 // for deletion cases.
+// Returns Node, Node position, Parent Node and error
 func (b *BTree) Search(n *Node, key string, pn *Node) (*Node, int, *Node, error) {
 	low, high := 0, n.Nk
 
@@ -95,7 +96,7 @@ func (b *BTree) searchInsertPos(n *Node, key string) (*Node, int, error) {
 		return n, low, nil
 	}
 
-	if n.Children[low].Nk > 2*b.MinDeg-1 {
+	if n.Children[low].Nk == 2*b.MinDeg-1 {
 		// Split before any insert also potential rebalance
 		// tree as descend.
 		b.splitChild(n, low)
@@ -114,7 +115,7 @@ func (b *BTree) Insert(key string) error {
 		b.Root = createNode(true, key)
 		b.Height++
 	} else {	
-		if b.Root.Nk > b.MinDeg*2-1 {
+		if b.Root.Nk == b.MinDeg*2-1 {
 			b.Root = b.splitRoot()
 		}
 
@@ -157,56 +158,86 @@ func (b *BTree) insertNotFull(root *Node, k string) error {
 
 // I suspect that this function has all the moving parts
 // but isnt truly doing its job. Requires thorough testing
+// Seems like pn purpose is to ensure that search has a parent
+// node to return for case when it doesnt recurse.
 func (b *BTree) Delete(n *Node, key string, pn *Node) error {
 	var err error
-	
-	tNode, kpos, pNode, err := b.Search(n, key, pn)
-	if err != nil {
-		return err
+	kpos := 0
+	for kpos < n.Nk && key > n.Keys[kpos] {
+		kpos++
 	}
 
-	if tNode.IsLeaf {
-		tNode.Keys = append(tNode.Keys[:kpos], tNode.Keys[kpos+1:]...)
-		tNode.Nk--
-		if tNode.Nk < b.MinDeg-1 && pNode != nil {
-			//redistro might still result in less keys than desired
-			if ok := pn.redistributeChild(tNode, b.MinDeg); !ok || tNode.Nk < b.MinDeg {
-				b.findMerge(tNode.Keys[0], pn)
+	//  Key is in current node
+	if kpos < n.Nk && n.Keys[kpos] == key {
+		if n.IsLeaf {
+			n.Keys = append(n.Keys[:kpos], n.Keys[kpos+1:]...)
+			n.Nk--
+			b.Count--
+			return nil
+		}
+
+		// Internal node handling
+		left, right := n.Children[kpos], n.Children[kpos+1]
+		if left.Nk >= b.MinDeg{
+			predk := b.getPred(n, kpos)
+			err = b.Delete(left, predk, n)
+			if err !=nil {
+				return err
+			}
+
+			n.Keys[kpos] = predk
+			return nil
+		}
+
+		
+		if right.Nk >= b.MinDeg {
+		 	succk := b.getSucc(n, kpos)
+			err := b.Delete(right , succk, n)
+			if err != nil {
+				return err
+			}
+
+			n.Keys[kpos] = succk
+			return nil
+		}
+
+		// Both children have a deficit
+		b.mergeChild(n, kpos)
+		if b.Root == n && n.Nk == 0 {
+			b.Root = n.Children[0]
+			n = b.Root
+		}
+
+		return b.Delete(n.Children[kpos], key, n)
+	}
+
+	if n.IsLeaf {
+		return errors.New(ErrKeyDoesntExist)
+	}
+
+	child := n.Children[kpos]
+	
+	// correct child
+	if child.Nk == b.MinDeg-1 {
+		ok := n.redistributeChild(child, b.MinDeg)
+		if !ok {
+			if kpos == n.Nk{
+				b.mergeChild(n, kpos-1)
+				kpos--
+			} else{
+				b.mergeChild(n, kpos)
+			}
+
+			child = n.Children[kpos]
+
+			if n == b.Root && n.Nk == 0 {
+				b.Root = child
 			}
 		}
-		return nil
 	}
 
-	if len(tNode.Children[kpos].Keys) >= b.MinDeg {
-		predk := b.getPred(tNode, kpos)
-		err = b.Delete(tNode.Children[kpos], predk, pNode)
-		if err !=nil {
-			return err
-		}
 
-		tNode.Keys[kpos] = predk
-	} else if len(tNode.Children[kpos+1].Keys) >= b.MinDeg {
-		succk := b.getSucc(tNode, kpos)
-		err := b.Delete(tNode.Children[kpos+1], succk, nil)
-		if err != nil {
-			return err
-		}
-
-		tNode.Keys[kpos] = succk
-	} else {
-
-		b.findMerge(tNode.Keys[0], pn)
-		if b.Root == tNode && b.Root.Nk == 0 {
-			b.Root = tNode.Children[0]
-		}
-
-		err = b.Delete(tNode.Children[kpos], key, nil)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return b.Delete(child, key, n)
 }
 
 func (b *BTree) getPred(n *Node, idx int) string {
@@ -241,46 +272,71 @@ func (b *BTree) splitRoot() *Node {
 func (b *BTree) splitChild(n *Node, i int) {
 	fullNode := n.Children[i]
 	nNode := createNode(fullNode.IsLeaf)
-	nNode.Nk = b.MinDeg 
-	nNode.Keys = fullNode.Keys[b.MinDeg:]
+	t := b.MinDeg
 
-	fullNode.Nk = b.MinDeg - 1
-	n.insertChild(nNode, i+1)
-	n.insertKey(i, fullNode.Keys[b.MinDeg - 1])
+	promoted := fullNode.Keys[t-1]
+	
+	nNode.Keys = make([]string, len(fullNode.Keys[t:]))
+	copy(nNode.Keys, fullNode.Keys[t:])
+	nNode.Nk = len(nNode.Keys)
+
+	fullNode.Keys = fullNode.Keys[:t-1]
+	fullNode.Nk = len(fullNode.Keys)
+
 	fullNode.Keys = fullNode.Keys[:b.MinDeg-1]
 	
 	if !fullNode.IsLeaf {
-		nNode.Children = fullNode.Children[b.MinDeg:]
-		fullNode.Children = fullNode.Children[:b.MinDeg]
+		nNode.Children = make([]*Node, len(fullNode.Children[:t]))
+		copy(nNode.Children, fullNode.Children[t:])
+
+		fullNode.Children = fullNode.Children[:t]
 	}
+
+	n.insertChild(nNode, i+1)
+	n.insertKey(i, promoted)
 }
 
 func (b *BTree) mergeChild(n *Node, i int) {
-	//What is we are at last child
-	child, sibling := n.Children[i], n.Children[i+1]
-
-	for i, key := range sibling.Keys {
-		child.Keys[(b.MinDeg-1)+i] = key
+	
+	if i == len(n.Children)-1 {
+		i--
 	}
 
-	if !child.IsLeaf {
-		for i, child := range sibling.Children {
-			child.Children[b.MinDeg+i] = child
-		}
+	left, right := n.Children[i], n.Children[i+1]
+	parentKey := n.Keys[i]
+
+
+	left.Keys = append(left.Keys,parentKey)
+	left.Keys = append(left.Keys,right.Keys...)
+
+	if !left.IsLeaf{
+		left.Children = append(left.Children, right.Children...)
 	}
 
+	n.Keys = append(n.Keys[:i], n.Keys[i+1:]...)
+	n.Nk--
+
+	n.Children = append(n.Children[:i+1],n.Children[i+2:]...)
+	left.Nk = len(left.Keys)
+	b.Count--
+
+	if len(n.Children) != len(n.Keys)+1 {
+    	panic("B-tree invariant violated")
+	}
 }
 
 func (n *Node) redistributeChild(child *Node, mindeg int) bool {
 	var childpos int
 	var lsib, rsib *Node
 
-	for _, key := range n.Keys {
-		if child.Keys[0] > key {
-			childpos++
+	if len(child.Keys) != 0 {
+		for _, key := range n.Keys {
+			if child.Keys[0] > key {
+				childpos++
+			}
 		}
 	}
-
+	
 	if childpos > 0 {
 		lsib = n.Children[childpos-1]
 	}
@@ -290,48 +346,46 @@ func (n *Node) redistributeChild(child *Node, mindeg int) bool {
 	}
 
 	//take sibling key make parent separator / place parent separater within child
-	// Adjust Children?
-	// Q How do you insert Keys
-	if lsib != nil && len(lsib.Keys) > mindeg-1 {
+	if lsib != nil && len(lsib.Keys) >= mindeg {
 		l := len(lsib.Keys) - 1
 		pk := []string{n.Keys[childpos-1]}
 		lk := lsib.Keys[l]
 
+		// Movinf sibling key into parent to make it a separator
 		lsib.Keys = lsib.Keys[:l]
 		n.Keys[childpos-1] = lk
-		//append to beginning
 		child.Keys = append(pk, child.Keys...)
 
-		//siblings child given to child
+		//Adjust children
 		if !lsib.IsLeaf {
-			n.Children[childpos-1] = lsib.Children[l]
+			child.Children = append([]*Node{lsib.Children[l]}, child.Children...)
+			lsib.Children = lsib.Children[:l]
 		}
+		
+		lsib.Nk--
+		child.Nk++
+
 		return true
-	} else if rsib != nil && len(rsib.Keys) > mindeg-1 {
+	} else if rsib != nil && len(rsib.Keys) >= mindeg {
 		rk := rsib.Keys[0]
-		pk := n.Keys[childpos+1]
+		pk := n.Keys[childpos]
 
 		rsib.Keys = rsib.Keys[1:]
-		n.Keys[childpos+1] = rk
+		n.Keys[childpos] = rk
 		child.Keys = append(child.Keys, pk)
 
 		if !rsib.IsLeaf {
-			n.Children[childpos+1] = rsib.Children[0]
+			child.Children = append(child.Children, rsib.Children[0])
+			rsib.Children = rsib.Children[1:]
 		}
+
+		rsib.Nk--
+		child.Nk++
+
 		return true
 	}
 
 	return false
-}
-
-func (b *BTree) findMerge(key string, pn *Node) {
-	var cPos int
-	for k, v := range pn.Children {
-		if v.Keys[0] == key {
-			cPos = k
-		}
-	}
-	b.mergeChild(pn, cPos)
 }
 
 func (n *Node) insertChild(child *Node, i int) {
@@ -351,7 +405,8 @@ func (n *Node) insertChild(child *Node, i int) {
 func (n *Node) insertKey(pos int, key string){
 	if len(n.Keys) == 0 || pos > n.Nk-1 {
 		n.Keys = append(n.Keys, key)
-		n.Nk++
+
+		n.Nk = len(n.Keys)
 		return
 	}
 
