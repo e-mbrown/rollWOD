@@ -3,8 +3,8 @@ package lexer
 import (
 	"testing"
 
-	"github.com/e-mbrown/rollWOD/pkg/samples"
-	"github.com/e-mbrown/rollWOD/pkg/token"
+	"github.com/e-mbrown/rollWOD/pkg/wql/samples"
+	"github.com/e-mbrown/rollWOD/pkg/wql/token"
 )
 
 func TestNextToken(t *testing.T) {

@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/e-mbrown/rollWOD/pkg/lexer"
-	"github.com/e-mbrown/rollWOD/pkg/token"
+	"github.com/e-mbrown/rollWOD/pkg/wql/lexer"
+	"github.com/e-mbrown/rollWOD/pkg/wql/token"
 )
 
 const PROMPT = ">> "

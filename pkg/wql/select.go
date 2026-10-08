@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/e-mbrown/rollWOD/pkg/token"
+	"github.com/e-mbrown/rollWOD/pkg/wql/token"
 )
 
 type SelectStmt struct {

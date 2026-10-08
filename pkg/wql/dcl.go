@@ -3,7 +3,7 @@ package wql
 import (
 	"bytes"
 
-	"github.com/e-mbrown/rollWOD/pkg/token"
+	"github.com/e-mbrown/rollWOD/pkg/wql/token"
 )
 
 

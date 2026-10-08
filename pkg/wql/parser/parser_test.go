@@ -3,8 +3,9 @@ package parser_test
 import (
 	"testing"
 
-	"github.com/e-mbrown/rollWOD/pkg/parser"
+	"github.com/e-mbrown/rollWOD/pkg/wql/parser"
 	"github.com/e-mbrown/rollWOD/pkg/wql"
+
 )
 
 type testInfix struct {

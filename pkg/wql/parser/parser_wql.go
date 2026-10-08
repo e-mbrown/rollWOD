@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/e-mbrown/rollWOD/pkg/token"
+	"github.com/e-mbrown/rollWOD/pkg/wql/token"
 	"github.com/e-mbrown/rollWOD/pkg/wql"
 )
 

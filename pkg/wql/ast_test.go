@@ -3,8 +3,9 @@ package wql_test
 import (
 	"testing"
 
-	"github.com/e-mbrown/rollWOD/pkg/token"
 	"github.com/e-mbrown/rollWOD/pkg/wql"
+	"github.com/e-mbrown/rollWOD/pkg/wql/token"
+
 )
 
 func TestString(t *testing.T) {

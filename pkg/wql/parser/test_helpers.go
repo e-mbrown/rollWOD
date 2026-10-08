@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/e-mbrown/rollWOD/pkg/lexer"
-	"github.com/e-mbrown/rollWOD/pkg/samples"
+	"github.com/e-mbrown/rollWOD/pkg/wql/lexer"
+	"github.com/e-mbrown/rollWOD/pkg/wql/samples"
 	"github.com/e-mbrown/rollWOD/pkg/wql"
 )
 

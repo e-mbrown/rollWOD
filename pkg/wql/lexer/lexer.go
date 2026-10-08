@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"os"
 
-	"github.com/e-mbrown/rollWOD/pkg/token"
+	"github.com/e-mbrown/rollWOD/pkg/wql/token"
 )
 
 type Lexer struct {
