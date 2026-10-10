@@ -7,15 +7,14 @@ import (
 )
 
 type IfExpr struct {
-	Token token.Token
-	Cond Expr
+	Token   token.Token
+	Cond    Expr
 	IfBlock *BlockStmt
-	ElBlock	*BlockStmt
+	ElBlock *BlockStmt
 }
 
-
-func (ie *IfExpr) exprNode() {}
-func (ie *IfExpr) TokenLiteral()[]byte {return ie.Token.Literal}
+func (ie *IfExpr) exprNode()            {}
+func (ie *IfExpr) TokenLiteral() []byte { return ie.Token.Literal }
 func (ie *IfExpr) String() string {
 	var output bytes.Buffer
 

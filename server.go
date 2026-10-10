@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/e-mbrown/rollWOD/graph"
-	"github.com/e-mbrown/rollWOD/pkg/repl"
+	"github.com/e-mbrown/rollWOD/pkg/wql/repl"
 )
 
 const defaultPort = "8080"

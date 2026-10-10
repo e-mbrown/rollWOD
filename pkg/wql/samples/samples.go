@@ -12,6 +12,7 @@ func ServeSample(filename string) (*os.File, error) {
 	if !ok {
 		return nil, fmt.Errorf("no caller info; %s", fn)
 	}
+	
 	fp := fmt.Sprintf("%s/%s.wql", path.Dir(fn), filename)
 	file, err := os.Open(fp)
 	if err != nil {
